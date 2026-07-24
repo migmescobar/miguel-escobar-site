@@ -119,8 +119,8 @@ That's the whole workflow. Save the file, then [publish](#6-publish-changes-it-d
 **`src/consts.ts`**. Open it and edit the values in quotes — email, phone, LinkedIn, etc. It's
 commented so you can see what each one is.
 
-**Your CV.** Replace the file `public/MiguelEscobar_2026_CV_Resume.pdf` with your real CV,
-keeping the **same file name**. (The current file is a placeholder.) The "Download my CV" link
+**Your CV.** Your CV lives at `public/MiguelEscobar_2026_CV_Resume.pdf`. To update it later,
+replace that file with a new PDF, keeping the **same file name** — the "Download my CV" link
 then just works.
 
 **Page wording** (home, editorial, advertising) lives in the matching files under
@@ -299,8 +299,8 @@ committed). You normally never need these.
 npm run assets:video   # GIFs → MP4/WebM/poster in public/videos/
 npm run assets:og      # public/og-image.png (1200×630, design-matched)
 npm run assets:hero    # placeholder 16:9 hero for the seed post
+npm run assets:cards   # the two 3:4 placeholder card images (Age Checks, OSC)
 npm run assets:icons   # public/apple-touch-icon.png
-npm run assets:cv      # placeholder CV PDF
 ```
 
 ### Note on `npm audit`

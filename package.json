@@ -13,8 +13,8 @@
     "assets:video": "node scripts/convert-gifs.mjs",
     "assets:og": "node scripts/generate-og.mjs",
     "assets:hero": "node scripts/generate-placeholder-hero.mjs",
-    "assets:icons": "node scripts/generate-icons.mjs",
-    "assets:cv": "node scripts/generate-cv-placeholder.mjs"
+    "assets:cards": "node scripts/generate-card-placeholders.mjs",
+    "assets:icons": "node scripts/generate-icons.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.0",
