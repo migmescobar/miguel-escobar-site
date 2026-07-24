@@ -1,0 +1,85 @@
+---
+import ContactForm from './ContactForm.astro';
+import { CONTACT } from '../consts';
+---
+
+<footer id="contact" class="site-footer" aria-labelledby="contact-heading">
+  <div class="contact wrap" data-reveal>
+    <div class="contact-left">
+      <h2 id="contact-heading">Let’s talk</h2>
+      <p class="lede">Hiring, briefing, or looking to connect? Reach out to me for anything.</p>
+      <div class="links">
+        <a href={CONTACT.cv} download class="cv">Download my CV</a>
+        <a href={CONTACT.phoneHref} class="tel" set:html={CONTACT.phoneDisplay.replace(/ /g, '&nbsp;')}
+        ></a>
+        <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
+        <a href={CONTACT.linkedin} target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </div>
+
+    <ContactForm />
+  </div>
+
+  <div class="copyright wrap">
+    <span>© 2026 MIGUEL ESCOBAR</span>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--ink-30);
+    padding: clamp(48px, 7vw, 88px) var(--pad) clamp(40px, 5vw, 64px);
+  }
+  .contact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px 48px;
+  }
+  .contact-left {
+    flex: 1 1 320px;
+    min-width: 260px;
+  }
+  h2 {
+    margin: 0 0 16px;
+    font-size: clamp(38px, 5vw, 68px);
+    letter-spacing: -0.03em;
+  }
+  .lede {
+    margin: 0 0 28px;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--ink-80);
+    max-width: 400px;
+  }
+  .links {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-size: 16px;
+    align-items: flex-start;
+  }
+  .links .cv {
+    font-weight: 500;
+  }
+  .links .tel {
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+  }
+  .links .tel:hover {
+    border-bottom-color: var(--ink);
+  }
+
+  .copyright {
+    margin-top: clamp(40px, 6vw, 72px);
+    border-top: 1px solid var(--ink-20);
+    padding-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--ink-mute);
+  }
+</style>

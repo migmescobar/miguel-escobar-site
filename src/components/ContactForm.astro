@@ -1,0 +1,231 @@
+---
+import { FORMSPREE_ENDPOINT, FORMSPREE_READY, CONTACT } from '../consts';
+---
+
+<form
+  class="contact-form"
+  method="POST"
+  action={FORMSPREE_ENDPOINT}
+  data-endpoint={FORMSPREE_ENDPOINT}
+  data-ready={String(FORMSPREE_READY)}
+  data-email={CONTACT.email}
+  novalidate
+>
+  <p class="form-status" role="status" aria-live="polite" hidden></p>
+
+  <label class="field">
+    <span class="field-label">NAME</span>
+    <input id="cf-name" name="name" type="text" autocomplete="name" required />
+  </label>
+
+  <label class="field">
+    <span class="field-label">EMAIL</span>
+    <input id="cf-email" name="email" type="email" autocomplete="email" required />
+  </label>
+
+  <label class="field">
+    <span class="field-label">MESSAGE</span>
+    <textarea id="cf-message" name="message" rows="4" required></textarea>
+  </label>
+
+  <!-- Honeypot: real people never fill this; bots often do. -->
+  <div class="hp" aria-hidden="true">
+    <label>Leave this field empty<input type="text" name="_gotcha" tabindex="-1" autocomplete="off" /></label>
+  </div>
+  <input type="hidden" name="_subject" value="New message from miguel-escobar.com" />
+
+  <button type="submit">Send message</button>
+
+  <p class="form-fallback">
+    Prefer email? <a href={`mailto:${CONTACT.email}?subject=${encodeURIComponent('Hello Miguel')}`}
+      >Write to me directly</a
+    >.
+  </p>
+</form>
+
+<style>
+  .contact-form {
+    flex: 1 1 380px;
+    max-width: 560px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .field-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--ink-mute);
+  }
+  .contact-form input,
+  .contact-form textarea {
+    border: 0;
+    border-bottom: 1px solid var(--ink-40);
+    background: transparent;
+    padding: 8px 0;
+    font-family: var(--font-sans);
+    font-size: 17px;
+    color: var(--ink);
+    border-radius: 0;
+    outline: none;
+  }
+  .contact-form textarea {
+    resize: vertical;
+  }
+  .contact-form input:focus,
+  .contact-form textarea:focus {
+    border-bottom-color: var(--ink);
+    box-shadow: 0 1px 0 var(--ink);
+  }
+  .contact-form [aria-invalid='true'] {
+    border-bottom-color: #9b2c2c;
+    box-shadow: 0 1px 0 #9b2c2c;
+  }
+
+  button {
+    align-self: flex-start;
+    margin-top: 6px;
+    padding: 14px 28px;
+    background: var(--ink);
+    color: var(--paper);
+    border: 1px solid var(--ink);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    letter-spacing: 0.01em;
+  }
+  button:hover {
+    background: transparent;
+    color: var(--ink);
+  }
+  button[disabled] {
+    opacity: 0.55;
+    cursor: default;
+  }
+
+  .form-status {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.5;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--ink-30);
+  }
+  .form-status.error {
+    color: #9b2c2c;
+  }
+
+  .form-fallback {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink-mute);
+  }
+
+  /* Visually hide the honeypot without display:none (bots skip display:none). */
+  .hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+</style>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('.contact-form');
+  if (form) {
+    const status = form.querySelector<HTMLParagraphElement>('.form-status')!;
+    const button = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+    const endpoint = form.dataset.endpoint!;
+    const ready = form.dataset.ready === 'true';
+    const email = form.dataset.email!;
+    const fields = ['name', 'email', 'message'].map(
+      (n) => form.elements.namedItem(n) as HTMLInputElement | HTMLTextAreaElement
+    );
+
+    const show = (msg: string, isError: boolean) => {
+      status.textContent = msg;
+      status.classList.toggle('error', isError);
+      status.hidden = false;
+    };
+
+    const validate = () => {
+      let ok = true;
+      for (const el of fields) {
+        const invalid = !el.checkValidity();
+        el.setAttribute('aria-invalid', String(invalid));
+        if (invalid && ok) {
+          el.focus();
+          ok = false;
+        }
+      }
+      return ok;
+    };
+
+    // Clear the invalid flag as the visitor fixes a field.
+    fields.forEach((el) =>
+      el.addEventListener('input', () => {
+        if (el.checkValidity()) el.setAttribute('aria-invalid', 'false');
+      })
+    );
+
+    const mailtoFallback = () => {
+      const f = form as any;
+      const body = encodeURIComponent(`${f.message.value}\n\n— ${f.name.value} (${f.email.value})`);
+      window.location.href = `mailto:${email}?subject=${encodeURIComponent('Hello Miguel')}&body=${body}`;
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      status.hidden = true;
+
+      // Honeypot filled => silently drop (pretend success).
+      if ((form.elements.namedItem('_gotcha') as HTMLInputElement)?.value) {
+        show('Thanks — your message has been sent.', false);
+        form.reset();
+        return;
+      }
+
+      if (!validate()) {
+        show('Please fill in your name, a valid email, and a message.', true);
+        return;
+      }
+
+      // No Formspree endpoint configured yet: use the email-app fallback.
+      if (!ready) {
+        mailtoFallback();
+        return;
+      }
+
+      button.disabled = true;
+      const original = button.textContent;
+      button.textContent = 'Sending…';
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { Accept: 'application/json' },
+          body: new FormData(form),
+        });
+        if (res.ok) {
+          show('Thanks — your message has been sent. I’ll get back to you soon.', false);
+          form.reset();
+          fields.forEach((el) => el.setAttribute('aria-invalid', 'false'));
+        } else {
+          const data = await res.json().catch(() => null);
+          const msg = data?.errors?.map((x: any) => x.message).join(', ');
+          show(msg || 'Something went wrong. Please email me directly instead.', true);
+        }
+      } catch {
+        show('Network error. Please email me directly instead.', true);
+      } finally {
+        button.disabled = false;
+        button.textContent = original;
+      }
+    });
+  }
+</script>

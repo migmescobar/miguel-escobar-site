@@ -1,0 +1,200 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import WorkImage from '../components/WorkImage.astro';
+import { SITE_DESCRIPTION } from '../consts';
+
+import whitewash from '../assets/images/home_01_whitewash_marcos.png';
+import pastors from '../assets/images/home_02_pastors.png';
+import eddie from '../assets/images/home_03_editorial_eddie_garcia.jpg';
+import alconFilm from '../assets/images/home_04_advertising_alcon_film.jpg';
+
+const cards = [
+  {
+    title: 'How to Whitewash a Dictator',
+    href: 'https://www.esquiremag.ph/politics/opinion/fighting-for-history-on-the-wikipedia-battlefield-a00207-20170817-lfrm2',
+    blurb:
+      'An investigative feature on an invisible war for Philippine history, waged by Wikipedia editors on hotly contested pages.',
+    image: whitewash,
+    alt: 'Collage key art for the feature “How to Whitewash a Dictator,” referencing Ferdinand Marcos.',
+  },
+  {
+    title: 'A Pulpit for Pastors of Porn',
+    href: 'https://www.esquiremag.ph/long-reads/notes-and-essays/the-rise-of-pastor-culture-and-why-it-must-end-a1513-20170629-lfrm',
+    blurb:
+      'An exposé that dug deep into a social media subculture of sexual predators in the Philippines, sparking a nationwide reckoning.',
+    image: pastors,
+    alt: 'Blue-toned collage key art for the exposé “A Pulpit for Pastors of Porn.”',
+  },
+  {
+    title: 'More Editorial Work →',
+    href: '/editorial-work/',
+    blurb:
+      'A selection of articles published with my byline, including for Esquire Philippines, Tatler Asia, and Smile Magazine.',
+    image: eddie,
+    alt: 'Editorial cover portrait of the late Filipino actor Eddie Garcia.',
+  },
+  {
+    title: 'More Advertising Work →',
+    href: '/advertising-work/',
+    blurb:
+      'A selection of ads and campaigns I’ve worked on, including for the NBA, Trust Bank, and Alcon.',
+    image: alconFilm,
+    alt: 'Still from the Alcon Precision1 advertising film.',
+  },
+];
+
+const isExternal = (href: string) => href.startsWith('http');
+---
+
+<BaseLayout title="Miguel Escobar — Strategic Communications & Editorial" description={SITE_DESCRIPTION} personSchema>
+  <section class="hero wrap" data-reveal>
+    <h1 class="hero-title">
+      Strategic Communications. Content Governance. Editorial Operations. APAC&nbsp;Markets.
+    </h1>
+  </section>
+
+  <section class="intro wrap" data-reveal>
+    <div class="rule-col"><div class="hairline"></div></div>
+    <div class="intro-text">
+      <p>
+        A Singapore-based communications professional with a journalist’s instincts. Intellectually
+        curious, plugged into culture and tech, and — for better and worse — terminally online.
+      </p>
+      <p>
+        At Esquire Philippines, I covered culture, politics, and current affairs, writing, producing,
+        and editing everything from daily articles to investigative features. Over 12+ years I’ve moved
+        across editorial, content operations, and strategic communications, working with brands like the
+        NBA, Trust Bank, Samsung, and Toyota across the Philippines and Singapore. I’ve managed
+        high-volume content projects, enforced editorial standards across several publications, and built
+        communications strategies and content governance frameworks for brands.
+      </p>
+      <p class="last">In all I do, I find purpose in telling stories that are honest, helpful, and human.</p>
+    </div>
+  </section>
+
+  <div class="wrap rule"></div>
+
+  <section class="work wrap">
+    <div class="work-head" data-reveal>
+      <h2>Some work</h2>
+    </div>
+    <div class="grid">
+      {
+        cards.map((card) => (
+          <article class="card" data-reveal>
+            <WorkImage
+              image={card.image}
+              alt={card.alt}
+              ratio="3 / 4"
+              sizes="(max-width: 640px) 92vw, (max-width: 1080px) 45vw, 320px"
+              widths={[320, 480, 760]}
+            />
+            <h3>
+              <a
+                href={card.href}
+                target={isExternal(card.href) ? '_blank' : undefined}
+                rel={isExternal(card.href) ? 'noopener' : undefined}
+              >
+                {card.title}
+              </a>
+            </h3>
+            <p>{card.blurb}</p>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding: clamp(40px, 8vh, 96px) 0 clamp(48px, 7vw, 96px);
+  }
+  .hero-title {
+    margin: 0 0 0 min(12vw, 240px);
+    font-size: clamp(40px, 7.2vw, 104px);
+    line-height: 1.02;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+  }
+
+  .intro {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px 48px;
+    padding-bottom: clamp(56px, 9vw, 120px);
+  }
+  .rule-col {
+    flex: 0 1 200px;
+    min-width: 120px;
+    padding-top: 14px;
+  }
+  .hairline {
+    height: 1px;
+    background: var(--ink);
+    width: 100%;
+    max-width: 190px;
+  }
+  .intro-text {
+    flex: 1 1 380px;
+    max-width: 640px;
+    font-size: 17px;
+    line-height: 1.65;
+  }
+  .intro-text p {
+    margin: 0 0 1.4em;
+  }
+  .intro-text p.last {
+    margin: 0;
+    font-weight: 400;
+  }
+
+  .work {
+    padding: clamp(40px, 6vw, 72px) 0 clamp(64px, 9vw, 128px);
+  }
+  .work-head {
+    margin-bottom: clamp(24px, 3vw, 40px);
+  }
+  .work-head h2 {
+    margin: 0;
+    font-size: clamp(38px, 5.4vw, 72px);
+    letter-spacing: -0.03em;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
+    gap: clamp(40px, 4vw, 56px) 40px;
+  }
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .card h3 {
+    margin: 0;
+    font-size: 22px;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+  }
+  .card p {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--ink-80);
+    text-wrap: pretty;
+  }
+
+  @media (max-width: 760px) {
+    .hero-title {
+      margin-left: 0;
+      font-size: clamp(30px, 8.5vw, 104px);
+    }
+    .rule-col {
+      flex: 1 1 100%;
+      padding-top: 4px;
+    }
+    .hairline {
+      max-width: none;
+    }
+  }
+</style>

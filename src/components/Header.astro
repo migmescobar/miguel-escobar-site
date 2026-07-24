@@ -1,0 +1,164 @@
+---
+import { NAV_LINKS, SITE_TITLE } from '../consts';
+
+const path = Astro.url.pathname;
+
+function isActive(href: string): boolean {
+  if (href.startsWith('#')) return false; // Contact anchor is never "current"
+  const base = href.replace(/\/$/, '');
+  const here = path.replace(/\/$/, '');
+  return here === base || (base !== '' && here.startsWith(base + '/'));
+}
+---
+
+<header>
+  <div class="bar wrap">
+    <a class="wordmark" href="/">{SITE_TITLE}</a>
+
+    <nav class="nav-desktop" aria-label="Primary">
+      {
+        NAV_LINKS.map(({ href, label }) => (
+          <a
+            href={href}
+            class:list={['nav-link', { active: isActive(href) }]}
+            aria-current={isActive(href) ? 'page' : undefined}
+          >
+            {label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <button
+      class="nav-burger"
+      type="button"
+      aria-label="Toggle menu"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+    >
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <nav id="mobile-menu" class="nav-mobile" aria-label="Primary mobile" hidden>
+    {
+      NAV_LINKS.map(({ href, label }) => (
+        <a
+          href={href}
+          class:list={['m-link', { active: isActive(href) }]}
+          aria-current={isActive(href) ? 'page' : undefined}
+        >
+          {label}
+        </a>
+      ))
+    }
+  </nav>
+</header>
+
+<style>
+  header {
+    padding: 26px var(--pad);
+  }
+  .bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px 28px;
+  }
+  .wordmark {
+    font-size: 17px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+  }
+
+  .nav-desktop {
+    display: flex;
+    gap: clamp(18px, 3vw, 40px);
+  }
+  .nav-link {
+    font-size: 15px;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    padding-bottom: 2px;
+  }
+  .nav-link:hover,
+  .nav-link.active {
+    border-bottom-color: var(--ink);
+  }
+
+  .nav-burger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 30px;
+    height: 30px;
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+  }
+  .nav-burger span {
+    display: block;
+    height: 1.5px;
+    width: 24px;
+    background: var(--ink);
+  }
+
+  .nav-mobile {
+    display: none;
+    flex-direction: column;
+    margin-top: 18px;
+  }
+  .nav-mobile.open {
+    display: flex;
+  }
+  .m-link {
+    font-size: 19px;
+    font-weight: 400;
+    color: var(--ink-75);
+    text-decoration: none;
+    padding: 13px 0;
+    border-top: 1px solid var(--ink-15);
+  }
+  .m-link.active {
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  @media (max-width: 640px) {
+    .nav-desktop {
+      display: none;
+    }
+    .nav-burger {
+      display: flex;
+    }
+  }
+</style>
+
+<script>
+  const burger = document.querySelector<HTMLButtonElement>('.nav-burger');
+  const menu = document.getElementById('mobile-menu');
+
+  function setOpen(open: boolean) {
+    if (!burger || !menu) return;
+    menu.classList.toggle('open', open);
+    menu.hidden = !open;
+    burger.setAttribute('aria-expanded', String(open));
+  }
+
+  burger?.addEventListener('click', () => {
+    setOpen(!menu?.classList.contains('open'));
+  });
+
+  // Close when a menu item is tapped, or on Escape.
+  menu?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') setOpen(false);
+  });
+  // Reset when resizing up to desktop so the menu can't get stuck open.
+  window.matchMedia('(min-width: 641px)').addEventListener('change', (e) => {
+    if (e.matches) setOpen(false);
+  });
+</script>

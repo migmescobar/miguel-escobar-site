@@ -1,0 +1,33 @@
+{
+  "name": "miguel-escobar-site",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "validate:html": "html-validate \"dist/**/*.html\"",
+    "assets:video": "node scripts/convert-gifs.mjs",
+    "assets:og": "node scripts/generate-og.mjs",
+    "assets:hero": "node scripts/generate-placeholder-hero.mjs",
+    "assets:icons": "node scripts/generate-icons.mjs",
+    "assets:cv": "node scripts/generate-cv-placeholder.mjs"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.0",
+    "@fontsource/geist-mono": "^5.2.7",
+    "@fontsource/geist-sans": "^5.2.7",
+    "astro": "^5.14.0",
+    "sharp": "^0.34.2"
+  },
+  "devDependencies": {
+    "html-validate": "^9.7.1"
+  },
+  "optionalDependencies": {
+    "@resvg/resvg-js": "^2.6.2",
+    "ffmpeg-static": "^5.2.0"
+  }
+}

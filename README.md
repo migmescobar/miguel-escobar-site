@@ -1,0 +1,310 @@
+# miguel-escobar.com
+
+The personal portfolio of Miguel Escobar — Singapore-based communications professional.
+Built with [Astro](https://astro.build) as a fully static site (fast, no server, no
+database) and deployed free on GitHub Pages with the custom domain **www.miguel-escobar.com**.
+
+This README is written for a **non-developer**. You can run and update the whole site with a
+few copy-paste commands. If something here is unclear, hand this file to any developer (or to
+Claude) and they'll know exactly what to do.
+
+---
+
+## Table of contents
+
+1. [What you need once](#1-what-you-need-once)
+2. [Run it on your Mac (preview)](#2-run-it-on-your-mac-preview)
+3. [Add or edit a writing post](#3-add-or-edit-a-writing-post) ← the main thing you'll do
+4. [Change your details, links, and the CV](#4-change-your-details-links-and-the-cv)
+5. [Turn on the contact form and analytics](#5-turn-on-the-contact-form-and-analytics)
+6. [Publish changes (it deploys itself)](#6-publish-changes-it-deploys-itself)
+7. [First-time setup: GitHub + domain + DNS](#7-first-time-setup-github--domain--dns)
+8. [How the site is organised](#8-how-the-site-is-organised)
+9. [For developers](#9-for-developers)
+
+---
+
+## 1. What you need once
+
+- A Mac (these notes assume macOS).
+- **Node.js 20 or newer.** Check by opening the **Terminal** app and typing `node --version`.
+  If it's missing or old, install the "LTS" version from <https://nodejs.org>.
+- The first time, in Terminal, go to this folder and install the building blocks:
+
+  ```bash
+  cd path/to/this/folder
+  npm install
+  ```
+
+  (Drag the folder onto the Terminal window to paste its path.)
+
+---
+
+## 2. Run it on your Mac (preview)
+
+To see the site locally before publishing:
+
+```bash
+npm run dev
+```
+
+Then open the link it prints (usually <http://localhost:4321>). Edits you make to files are
+reflected in the browser automatically. Press `Ctrl + C` in Terminal to stop.
+
+To preview the **exact** files that get published (optional):
+
+```bash
+npm run build     # creates the finished site in the dist/ folder
+npm run preview   # serves that finished site
+```
+
+---
+
+## 3. Add or edit a writing post
+
+Every post is **one plain-text file** in the folder `src/content/writing/`. To add a post,
+create a new file there ending in `.md` — for example `my-first-post.md` — and start it with
+this block (the part between the `---` lines is the "front matter"):
+
+```markdown
+---
+title: The title of the post
+pubDate: 2026-08-01
+description: One or two sentences that appear as the post's subtitle and preview.
+draft: false
+---
+
+Write the post here in Markdown. A blank line starts a new paragraph.
+
+## A subheading
+
+- a bullet
+- another bullet
+
+**bold**, *italic*, and [a link](https://example.com) all work.
+```
+
+Field-by-field:
+
+| Field | What to put |
+|---|---|
+| `title` | The post title. It's also the clickable text on the Writing page. |
+| `pubDate` | The date, as `YYYY-MM-DD`. Posts are listed newest first by this date. |
+| `description` | A short summary. Shown as the subtitle on the post and in link previews. |
+| `draft` | `true` = hidden from the site (a private work-in-progress). `false` = live. |
+
+**Drafts:** set `draft: true` while you're still writing. A draft never appears in the Writing
+list, never gets its own web page, and is invisible to Google. When it's ready, change it to
+`draft: false`. (There's a live example of each in the folder: `welcome-to-my-writing.md` is
+published, `a-post-in-progress.md` is a draft.)
+
+**Optional header image for a post.** Put an image file in `src/assets/images/`, then add
+these two lines to the post's front matter:
+
+```markdown
+heroImage: ../../assets/images/your-photo.jpg
+heroAlt: A short description of the photo, for screen readers.
+```
+
+The image is automatically resized and optimised — just drop in a normal-sized photo.
+
+That's the whole workflow. Save the file, then [publish](#6-publish-changes-it-deploys-itself).
+(You can also just ask Claude to "add a post" and paste your text — it will create the file.)
+
+---
+
+## 4. Change your details, links, and the CV
+
+**Contact details, social links, site description** all live in one file:
+**`src/consts.ts`**. Open it and edit the values in quotes — email, phone, LinkedIn, etc. It's
+commented so you can see what each one is.
+
+**Your CV.** Replace the file `public/MiguelEscobar_2026_CV_Resume.pdf` with your real CV,
+keeping the **same file name**. (The current file is a placeholder.) The "Download my CV" link
+then just works.
+
+**Page wording** (home, editorial, advertising) lives in the matching files under
+`src/pages/` (e.g. `src/pages/index.astro` is the home page). The text is plain English inside
+the file; edit between the tags. If in doubt, ask a developer or Claude.
+
+---
+
+## 5. Turn on the contact form and analytics
+
+Both are optional and both are free. Until you set them up, the site still works: the contact
+form falls back to opening the visitor's email app, and analytics simply stay off.
+
+**Contact form (Formspree).**
+1. Sign up at <https://formspree.io> and create a new form (send submissions to your email).
+2. It gives you an endpoint that looks like `https://formspree.io/f/abcdwxyz`.
+3. Open `src/consts.ts`, find `FORMSPREE_ENDPOINT`, and paste your endpoint in place of the
+   placeholder. Save, then [publish](#6-publish-changes-it-deploys-itself).
+
+**Analytics (GoatCounter — privacy-friendly, no cookie banner needed).**
+1. Sign up at <https://www.goatcounter.com> and pick a site code (e.g. `miguelescobar`).
+2. Open `src/consts.ts`, find `GOATCOUNTER_CODE`, and put your code there. Save and publish.
+   (Analytics only load on the live site, never during local preview.)
+
+---
+
+## 6. Publish changes (it deploys itself)
+
+Once the site is on GitHub (see the next section), **publishing is automatic**: every time you
+save your changes to the `main` branch on GitHub, a robot rebuilds the site and puts it live in
+a couple of minutes. You can watch it happen under the **Actions** tab of your GitHub repo.
+
+If you're editing on your Mac, the sequence is:
+
+```bash
+git add -A
+git commit -m "Add a new post"   # describe what you changed
+git push
+```
+
+(Or use the GitHub Desktop app if you prefer buttons to commands.)
+
+---
+
+## 7. First-time setup: GitHub + domain + DNS
+
+This is a **one-time** setup. Do it in order.
+
+### a. Put the code on GitHub
+1. Create a free account at <https://github.com> if you don't have one.
+2. Create a **new empty repository** (e.g. named `miguel-escobar-site`). Don't add a README —
+   this project already has one.
+3. In Terminal, from this folder, connect and push (replace `YOUR-USERNAME`):
+
+   ```bash
+   git remote add origin https://github.com/YOUR-USERNAME/miguel-escobar-site.git
+   git branch -M main
+   git push -u origin main
+   ```
+
+   (If GitHub asks you to log in, follow the prompts. A developer or Claude can help with the
+   `gh` command-line tool if you'd rather.)
+
+### b. Turn on GitHub Pages
+1. In your repo on GitHub: **Settings → Pages**.
+2. Under **Build and deployment → Source**, choose **GitHub Actions**.
+   (The deploy workflow is already included at `.github/workflows/deploy.yml`; the first push
+   triggers it.)
+
+### c. Verify your domain (prevents anyone else claiming it)
+1. GitHub: click your avatar → **Settings → Pages** (your account-level page settings).
+2. Under **Verified domains**, add `miguel-escobar.com`, and add the **TXT record** GitHub
+   shows you at your registrar (Squarespace) — see the DNS steps below for where.
+
+### d. Point the domain at GitHub (custom domain)
+1. Back in the **repo's** Settings → Pages, set **Custom domain** to `www.miguel-escobar.com`
+   and save. (This, not the `public/CNAME` file, is what makes the domain stick — the file is
+   just a harmless backup.)
+2. Leave **Enforce HTTPS** for now; tick it once the certificate has issued (step f).
+
+### e. Enter DNS records at Squarespace
+In Squarespace: **Settings → Domains → miguel-escobar.com → DNS / DNS Settings** (labels vary
+slightly; look for "DNS settings" or "Custom records"). Add these records:
+
+**1) One CNAME so `www` points at GitHub** (replace `YOUR-USERNAME` with your GitHub username):
+
+| Type | Host / Name | Value / Data |
+|---|---|---|
+| CNAME | `www` | `YOUR-USERNAME.github.io` |
+
+**2) Four A records so the bare domain `miguel-escobar.com` reaches GitHub:**
+
+| Type | Host | Value |
+|---|---|---|
+| A | `@` | `185.199.108.153` |
+| A | `@` | `185.199.109.153` |
+| A | `@` | `185.199.110.153` |
+| A | `@` | `185.199.111.153` |
+
+**3) Four AAAA records (IPv6) for the same bare domain:**
+
+| Type | Host | Value |
+|---|---|---|
+| AAAA | `@` | `2606:50c0:8000::153` |
+| AAAA | `@` | `2606:50c0:8001::153` |
+| AAAA | `@` | `2606:50c0:8002::153` |
+| AAAA | `@` | `2606:50c0:8003::153` |
+
+(If Squarespace uses "Host" you can leave blank or `@` for the bare domain. Also add the
+**TXT** verification record from step c here.) With the A/AAAA records in place, the bare
+`miguel-escobar.com` will redirect to `www.miguel-escobar.com` automatically.
+
+### f. Finish
+- DNS changes can take anywhere from a few minutes to a day to take effect.
+- Once GitHub shows the domain as configured and the padlock/certificate is ready, go back to
+  **repo Settings → Pages** and tick **Enforce HTTPS**.
+- Your Squarespace **domain registration stays with Squarespace** — you're only changing where
+  it points. You can do this any time before the old Squarespace site expires.
+
+---
+
+## 8. How the site is organised
+
+```
+src/
+  pages/                     Each file = one web page
+    index.astro              Home (/)
+    editorial-work.astro     /editorial-work/
+    advertising-work.astro   /advertising-work/
+    writing/
+      index.astro            Writing list (/writing/)
+      [...slug].astro        The template every post uses
+    404.astro                "Page not found"
+  content/writing/           YOUR POSTS live here (one .md file each)
+  components/                Shared pieces (header, footer/contact, image, video)
+  layouts/                   Page shells
+  consts.ts                  ← contact details, links, Formspree & GoatCounter settings
+  styles/global.css          Colours, fonts, and shared styles
+  assets/images/             Photos used on the site (optimised automatically)
+public/                      Files served as-is: CV, favicon, OG image, robots.txt, videos/
+```
+
+---
+
+## 9. For developers
+
+- **Stack:** Astro 5 (static output, `output: 'static'`), zero client framework. Small vanilla
+  scripts only (mobile menu, contact form, scroll-reveal, lazy video). `@astrojs/sitemap` for
+  the sitemap.
+- **Fonts:** Geist + Geist Mono, self-hosted as woff2 via `@fontsource`, `font-display: swap`,
+  latin subset, weights 400/500/600 (sans) and 400/500 (mono).
+- **Images:** `astro:assets` `<Picture>` → responsive AVIF/WebP with a JPEG fallback + `srcset`,
+  explicit dimensions (no layout shift), lazy below the fold. See `src/components/WorkImage.astro`.
+- **Videos:** the two source GIFs were converted to muted, looping MP4 + WebM (with a poster
+  frame) — ~90% smaller. They autoplay only in view and only when motion is allowed. See
+  `src/components/WorkVideo.astro` and `public/videos/`.
+- **Motion:** scroll-reveal is opt-in via an inline head snippet + IntersectionObserver, fully
+  disabled under `prefers-reduced-motion`, with a guaranteed failsafe so content can't get stuck
+  hidden.
+- **SEO:** per-page title/description, Open Graph + Twitter tags, canonical URLs on
+  `www.miguel-escobar.com`, JSON-LD `Person` on the home page, `robots.txt`, generated sitemap,
+  and a design-matched OG image (`public/og-image.png`).
+- **Config knobs:** `src/consts.ts` (contact info, `FORMSPREE_ENDPOINT`, `GOATCOUNTER_CODE`).
+- **Build hook:** `integrations/prune-assets.mjs` deletes the untransformed original images
+  Astro emits on import but never references (~5–6 MB), so `dist/` stays lean.
+- **Checks:** `npm run build` then `npm run validate:html` (html-validate). Accessibility was
+  verified with axe-core (0 violations) and the home page scores 99/100/100/100 on Lighthouse
+  (perf / a11y / best-practices / SEO).
+
+### One-off asset scripts (already run; outputs are committed)
+These regenerate the derived assets. They need the optional dev tools
+(`@resvg/resvg-js`, `ffmpeg-static`) and the original GIFs in `_source/` (kept locally, not
+committed). You normally never need these.
+
+```bash
+npm run assets:video   # GIFs → MP4/WebM/poster in public/videos/
+npm run assets:og      # public/og-image.png (1200×630, design-matched)
+npm run assets:hero    # placeholder 16:9 hero for the seed post
+npm run assets:icons   # public/apple-touch-icon.png
+npm run assets:cv      # placeholder CV PDF
+```
+
+### Note on `npm audit`
+`npm audit` may report advisories in Astro/sharp. They concern server-side rendering and
+processing of *untrusted* images at runtime. This site is **fully static** (no server) and only
+processes Miguel's own images **at build time**, so they don't apply to what's deployed. Update
+Astro when convenient (`npm install astro@latest`) to clear them.

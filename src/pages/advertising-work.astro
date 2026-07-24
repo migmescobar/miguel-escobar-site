@@ -1,0 +1,119 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import WorkRow from '../components/WorkRow.astro';
+import WorkImage from '../components/WorkImage.astro';
+import WorkVideo from '../components/WorkVideo.astro';
+
+import trust from '../assets/images/ads_01_trust_ooh.jpg';
+import nba from '../assets/images/ads_02_nba.png';
+
+const imgSizes = '(max-width: 760px) 92vw, 620px';
+const imgWidths = [480, 800, 1240];
+---
+
+<BaseLayout
+  title="Advertising Work — Miguel Escobar"
+  description="Selected advertising work by Miguel Escobar — campaigns and copy for Trust Bank, the NBA, Alcon, and GoTyme."
+>
+  <div class="wrap">
+    <section class="page-title" data-reveal>
+      <h1>Advertising Work</h1>
+    </section>
+
+    <WorkRow>
+      <Fragment slot="text">
+        <h2>Trust Bank Singapore</h2>
+        <p>
+          Since the 2022 launch of Trust Bank, a digital bank in Singapore, I’ve worked on its
+          campaigns and always-on social. That includes creative leadership for the award-winning 2024
+          <a
+            href="https://www.marketing-interactive.com/trust-bank-million-dollars-campaign"
+            target="_blank"
+            rel="noopener">launch of its cashback card</a> — an above-the-line campaign involving <a
+            href="https://www.youtube.com/watch?v=nhxvOzenBR4"
+            target="_blank"
+            rel="noopener">a film</a> and islandwide out-of-home.
+        </p>
+      </Fragment>
+      <WorkImage
+        slot="media"
+        image={trust}
+        alt="Trust Bank cashback card out-of-home advertisement in Singapore."
+        ratio="4 / 3"
+        sizes={imgSizes}
+        widths={imgWidths}
+      />
+    </WorkRow>
+
+    <WorkRow>
+      <Fragment slot="text">
+        <h2>NBA Asia-Pacific Newsletters</h2>
+        <p>
+          I write copy for the weekly newsletters and direct mailers of the NBA in key Asia-Pacific
+          territories: Australia, New Zealand, Japan, and the Philippines. Day-to-day work for this
+          involves the application of cultural fluency and market-specific strategies to drive
+          click-through.
+        </p>
+      </Fragment>
+      <WorkImage
+        slot="media"
+        image={nba}
+        alt="NBA Asia-Pacific newsletter creative."
+        ratio="4 / 3"
+        sizes={imgSizes}
+        widths={imgWidths}
+      />
+    </WorkRow>
+
+    <WorkRow>
+      <Fragment slot="text">
+        <h2>Alcon Asia-Pacific Campaigns</h2>
+        <p>
+          I worked on the regional launch campaigns of Precision1 and Total — contact lens brands by
+          the global pharmaceutical and eye care company Alcon. These involved productions in South
+          Korea and Vietnam, for materials that would be used across Asia and beyond.
+        </p>
+      </Fragment>
+      <WorkVideo
+        slot="media"
+        name="alcon_bts"
+        alt="Behind-the-scenes footage from an Alcon Precision1 campaign production."
+        ratio="4 / 3"
+      />
+    </WorkRow>
+
+    <WorkRow last>
+      <Fragment slot="text">
+        <h2>GoTyme Bank Philippines</h2>
+        <p>
+          I worked on copy and concept for the 2023 launch campaign of GoTyme Bank, a digital bank in
+          the Philippines. Its unique proposition is the human quality of its customer service, so the
+          campaign reflected that, mainly through its <a
+            href="https://www.youtube.com/watch?v=MCDe-yLaxYE"
+            target="_blank"
+            rel="noopener">campaign film</a> and a trio of <a
+            href="https://www.youtube.com/watch?v=yBnokrkGRbM"
+            target="_blank"
+            rel="noopener">shorts</a>.
+        </p>
+      </Fragment>
+      <WorkVideo
+        slot="media"
+        name="gotyme"
+        alt="Still from the GoTyme Bank launch campaign film."
+        ratio="4 / 3"
+      />
+    </WorkRow>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-title {
+    padding: clamp(36px, 7vh, 80px) 0 clamp(40px, 5vw, 64px);
+  }
+  .page-title h1 {
+    margin: 0;
+    font-size: clamp(42px, 6.4vw, 88px);
+    letter-spacing: -0.035em;
+  }
+</style>

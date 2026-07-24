@@ -1,0 +1,60 @@
+---
+// Looping, muted video (converted from the original animated GIF). Plays only
+// when scrolled into view and only if the visitor allows motion; otherwise the
+// poster frame is shown as a still. Files live in /public/videos/<name>.{webm,mp4,jpg}.
+interface Props {
+  name: string;
+  alt: string;
+  ratio?: string;
+}
+const { name, alt, ratio = '4 / 3' } = Astro.props;
+const base = `/videos/${name}`;
+---
+
+<div class="frame" style={`aspect-ratio:${ratio}`}>
+  <video
+    class="work-video"
+    loop
+    muted
+    playsinline
+    preload="none"
+    poster={`${base}.jpg`}
+    role="img"
+    aria-label={alt}
+  >
+    <source src={`${base}.webm`} type="video/webm" />
+    <source src={`${base}.mp4`} type="video/mp4" />
+  </video>
+</div>
+
+<style>
+  .frame {
+    width: 100%;
+    overflow: hidden;
+    background: rgba(20, 20, 20, 0.05);
+  }
+  .frame video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+</style>
+
+<script>
+  const vids = document.querySelectorAll<HTMLVideoElement>('video.work-video');
+  const motionOK =
+    !window.matchMedia || window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
+  if (motionOK && vids.length) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const en of entries) {
+          const v = en.target as HTMLVideoElement;
+          if (en.isIntersecting) v.play().catch(() => {});
+          else v.pause();
+        }
+      },
+      { threshold: 0.25 }
+    );
+    vids.forEach((v) => io.observe(v));
+  }
+</script>

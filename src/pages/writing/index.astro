@@ -1,0 +1,88 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+// Published posts only (drafts excluded), newest first.
+const posts = (await getCollection('writing', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+const monthYear = (d: Date) =>
+  d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' }).toUpperCase();
+---
+
+<BaseLayout
+  title="Writing — Miguel Escobar"
+  description="Writing by Miguel Escobar on communications, editorial craft, content governance, culture, and tech."
+>
+  <div class="wrap">
+    <section class="page-title" data-reveal>
+      <h1>Writing</h1>
+    </section>
+
+    <section class="index" data-reveal>
+      {
+        posts.length > 0 ? (
+          <p class="entries">
+            {posts.map((post) => (
+              <>
+                <span class="date">{monthYear(post.data.pubDate)}</span>
+                <a href={`/writing/${post.id}/`}>{post.data.title}</a>{' '}
+              </>
+            ))}
+          </p>
+        ) : (
+          <p class="empty">No posts yet — check back soon.</p>
+        )
+      }
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-title {
+    padding: clamp(36px, 7vh, 80px) 0 clamp(40px, 5vw, 64px);
+  }
+  .page-title h1 {
+    margin: 0;
+    font-size: clamp(42px, 6.4vw, 88px);
+    letter-spacing: -0.035em;
+  }
+
+  .index {
+    border-top: 1px solid var(--ink-30);
+    padding: clamp(32px, 4vw, 56px) 0 clamp(64px, 10vw, 140px);
+  }
+  .entries {
+    margin: 0;
+    font-size: clamp(30px, 4vw, 48px);
+    line-height: 1.38;
+    letter-spacing: -0.02em;
+    font-weight: 500;
+    text-wrap: pretty;
+  }
+  .date {
+    font-family: var(--font-mono);
+    font-size: 0.3em;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    vertical-align: 0.62em;
+    color: var(--ink-mute);
+    margin-right: 0.45em;
+    white-space: nowrap;
+  }
+  .entries a {
+    text-decoration: none;
+    color: var(--ink-dormant);
+    transition: color 0.35s ease;
+  }
+  .entries a:hover,
+  .entries a:focus-visible {
+    color: var(--ink);
+  }
+  .empty {
+    margin: 0;
+    font-size: 18px;
+    color: var(--ink-60);
+  }
+</style>

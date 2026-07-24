@@ -1,0 +1,50 @@
+---
+// One editorial/advertising row: text left, media right. On narrow screens
+// `wrap-reverse` puts the media above the text.
+interface Props {
+  last?: boolean;
+}
+const { last = false } = Astro.props;
+---
+
+<article class:list={['work-row', { last }]} data-reveal>
+  <div class="text"><slot name="text" /></div>
+  <div class="media"><slot name="media" /></div>
+</article>
+
+<style>
+  .work-row {
+    border-top: 1px solid var(--ink-30);
+    padding: clamp(32px, 4vw, 56px) 0;
+    display: flex;
+    flex-wrap: wrap-reverse;
+    gap: 32px 56px;
+    align-items: center;
+  }
+  .work-row.last {
+    padding-bottom: clamp(56px, 8vw, 104px);
+  }
+  .text {
+    flex: 1 1 340px;
+    max-width: 560px;
+  }
+  .media {
+    flex: 1 1 380px;
+    min-width: min(100%, 320px);
+  }
+  .text :global(h2) {
+    margin: 10px 0 14px;
+    font-size: clamp(24px, 2.6vw, 32px);
+    letter-spacing: -0.015em;
+  }
+  .text :global(p) {
+    margin: 0 0 1em;
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--ink-85);
+    text-wrap: pretty;
+  }
+  .text :global(p:last-child) {
+    margin-bottom: 0;
+  }
+</style>

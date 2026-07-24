@@ -1,0 +1,133 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import WorkRow from '../components/WorkRow.astro';
+import WorkImage from '../components/WorkImage.astro';
+
+import leni from '../assets/images/editorial_01_leni.png';
+import anne from '../assets/images/editorial_02_anne_curtis.png';
+import tatler from '../assets/images/editorial_03_tatler.jpg';
+import smile from '../assets/images/editorial_04_smile_barotac.png';
+
+const imgSizes = '(max-width: 760px) 92vw, 620px';
+const imgWidths = [480, 800, 1240];
+---
+
+<BaseLayout
+  title="Editorial Work — Miguel Escobar"
+  description="Selected editorial work by Miguel Escobar — features and reporting for Esquire Philippines, Tatler Asia, and Smile Magazine."
+>
+  <div class="wrap">
+    <section class="page-title" data-reveal>
+      <h1>Editorial Work</h1>
+    </section>
+
+    <WorkRow>
+      <Fragment slot="text">
+        <h2>Politics in Esquire</h2>
+        <p>
+          In my time with Esquire, I produced and published features on politicians and politically
+          controversial figures. These include former presidential spokesperson <a
+            href="https://www.esquiremag.ph/long-reads/esqa/salvador-panelo-a1513-a1521-20160919-lfrm3"
+            target="_blank"
+            rel="noopener">Salvador Panelo</a>, former senator <a
+            href="https://www.esquiremag.ph/long-reads/what-ive-learned/richard-gordon-what-i-ve-learned-a00207-20170717-lfrm"
+            target="_blank"
+            rel="noopener">Dick Gordon</a>, and political influencer <a
+            href="https://www.esquiremag.ph/long-reads/profiles/mocha-uson-full-text-a1521-20161202-lfrm4"
+            target="_blank"
+            rel="noopener">Mocha Uson</a>.
+        </p>
+        <p>Through this work, I learned firsthand about the roles and responsibilities of media in a democracy.</p>
+      </Fragment>
+      <WorkImage
+        slot="media"
+        image={leni}
+        alt="Portrait of Leni Robredo, from Esquire Philippines political coverage."
+        ratio="4 / 3"
+        sizes={imgSizes}
+        widths={imgWidths}
+      />
+    </WorkRow>
+
+    <WorkRow>
+      <Fragment slot="text">
+        <h2>Other Big Esquire Features</h2>
+        <p>
+          Politics and current events were just among many areas we covered at Esquire. I was also
+          fortunate to write and produce features in style and entertainment, including <a
+            href="https://www.esquiremag.ph/life/women/anne-curtis-smith-is-a-woman-we-love-a00207-20171111"
+            target="_blank"
+            rel="noopener">big celebrity interviews</a>, <a
+            href="https://www.esquiremag.ph/culture/movies-and-tv/goyo-cinematographer-pong-ignacio-frame-epic-a00203-20180910-lfrm"
+            target="_blank"
+            rel="noopener">film reviews</a>, and <a
+            href="https://www.esquiremag.ph/style/fashion/local-denimheads-have-produced-the-first-filipino-made-raw-selvedge-jeans-a00207-20171024-lfrm2"
+            target="_blank"
+            rel="noopener">fashion editorials</a>.
+        </p>
+      </Fragment>
+      <WorkImage
+        slot="media"
+        image={anne}
+        alt="Black-and-white portrait of actress Anne Curtis for an Esquire feature."
+        ratio="4 / 3"
+        sizes={imgSizes}
+        widths={imgWidths}
+      />
+    </WorkRow>
+
+    <WorkRow>
+      <Fragment slot="text">
+        <h2>Tatler Asia’s Most Influential</h2>
+        <p>
+          Asia’s Most Influential is one of Tatler Asia’s signature editorial products. Every year,
+          Tatler publishes a list of profiles of over 500 influential people from various fields. In
+          2021 <a
+            href="https://www.tatlerasia.com/power-purpose/ideas-education/art-influence-and-the-purveyors-responsibility-according-to-top-auctioneer-jonathan-crockett"
+            target="_blank"
+            rel="noopener">I contributed</a> over 100 of those profiles, including honourees in Singapore
+          and the Philippines. It was, for me, a writing exercise that demanded quick writing and
+          fast-turnaround fact-checking.
+        </p>
+      </Fragment>
+      <WorkImage
+        slot="media"
+        image={tatler}
+        alt="Tatler Asia’s Most Influential title card."
+        ratio="4 / 3"
+        sizes={imgSizes}
+        widths={imgWidths}
+      />
+    </WorkRow>
+
+    <WorkRow last>
+      <Fragment slot="text">
+        <h2>Smile Magazine Cover Story</h2>
+        <p>
+          Barotac Nuevo, Iloilo, is the one town in the entire Philippines that loves football more
+          than basketball. I wrote a feature on Barotac Nuevo in 2020 for the in-flight magazine of
+          Cebu Pacific Air. It would become the cover story for that issue.
+        </p>
+      </Fragment>
+      <WorkImage
+        slot="media"
+        image={smile}
+        alt="Footballers on a pitch in Barotac Nuevo, Iloilo, for a Smile Magazine cover story."
+        ratio="4 / 3"
+        sizes={imgSizes}
+        widths={imgWidths}
+      />
+    </WorkRow>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-title {
+    padding: clamp(36px, 7vh, 80px) 0 clamp(40px, 5vw, 64px);
+  }
+  .page-title h1 {
+    margin: 0;
+    font-size: clamp(42px, 6.4vw, 88px);
+    letter-spacing: -0.035em;
+  }
+</style>

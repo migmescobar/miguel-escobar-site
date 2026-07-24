@@ -1,0 +1,174 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import WorkImage from '../../components/WorkImage.astro';
+
+export async function getStaticPaths() {
+  // Drafts are excluded here too, so a draft never gets a built page.
+  const posts = await getCollection('writing', ({ data }) => !data.draft);
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const dateLong = post.data.pubDate
+  .toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
+  .toUpperCase();
+const dateISO = post.data.pubDate.toISOString();
+---
+
+<BaseLayout
+  title={`${post.data.title} — Miguel Escobar`}
+  description={post.data.description}
+  type="article"
+  publishedTime={dateISO}
+>
+  <article class="post">
+    <div class="backlink" data-reveal>
+      <a href="/writing/">← ALL WRITING</a>
+    </div>
+
+    <header class="post-head" data-reveal>
+      <div class="eyebrow"><time datetime={dateISO}>{dateLong}</time></div>
+      <h1>{post.data.title}</h1>
+      <p class="deck">{post.data.description}</p>
+    </header>
+
+    {
+      post.data.heroImage && (
+        <div class="hero" data-reveal>
+          <WorkImage
+            image={post.data.heroImage}
+            alt={post.data.heroAlt ?? post.data.title}
+            ratio="16 / 9"
+            loading="eager"
+            fetchpriority="high"
+            sizes="(max-width: 760px) 92vw, 720px"
+            widths={[560, 900, 1280]}
+          />
+        </div>
+      )
+    }
+
+    <div class="body" data-reveal>
+      <Content />
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .post {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .backlink {
+    padding: clamp(28px, 5vh, 56px) 0 0;
+  }
+  .backlink a {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    color: var(--ink-mute);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+  }
+  .backlink a:hover {
+    border-bottom-color: var(--ink);
+  }
+
+  .post-head {
+    padding: clamp(28px, 4vw, 44px) 0 clamp(24px, 3vw, 36px);
+  }
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    color: var(--ink-mute);
+    margin-bottom: 20px;
+  }
+  .post-head h1 {
+    margin: 0 0 22px;
+    font-size: clamp(34px, 5vw, 60px);
+    letter-spacing: -0.03em;
+    line-height: 1.08;
+    text-wrap: balance;
+  }
+  .deck {
+    margin: 0;
+    font-size: 22px;
+    line-height: 1.5;
+    color: var(--ink-70);
+  }
+
+  .hero {
+    margin-bottom: clamp(28px, 4vw, 44px);
+  }
+
+  .body {
+    border-top: 1px solid var(--ink-30);
+    padding-top: clamp(28px, 4vw, 40px);
+    padding-bottom: clamp(48px, 7vw, 96px);
+  }
+
+  /* Prose (Markdown output) */
+  .body :global(p) {
+    margin: 0 0 1.3em;
+    font-size: 19px;
+    line-height: 1.65;
+    color: var(--ink-90);
+  }
+  .body :global(h2) {
+    margin: 1.6em 0 0.5em;
+    font-size: clamp(24px, 3vw, 32px);
+    letter-spacing: -0.02em;
+  }
+  .body :global(h3) {
+    margin: 1.4em 0 0.4em;
+    font-size: 21px;
+  }
+  .body :global(ul),
+  .body :global(ol) {
+    margin: 0 0 1.3em;
+    padding-left: 1.3em;
+    font-size: 19px;
+    line-height: 1.65;
+    color: var(--ink-90);
+  }
+  .body :global(li) {
+    margin: 0.3em 0;
+  }
+  .body :global(blockquote) {
+    margin: 1.4em 0;
+    padding-left: 1.1em;
+    border-left: 2px solid var(--ink-30);
+    color: var(--ink-70);
+    font-style: italic;
+  }
+  .body :global(hr) {
+    border: 0;
+    border-top: 1px solid var(--ink-30);
+    margin: 2em 0;
+  }
+  .body :global(img) {
+    width: 100%;
+    height: auto;
+    margin: 1.4em 0;
+  }
+  .body :global(code) {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    background: rgba(20, 20, 20, 0.06);
+    padding: 0.15em 0.4em;
+  }
+  .body :global(pre) {
+    overflow: auto;
+    padding: 1em;
+    background: rgba(20, 20, 20, 0.06);
+    margin: 0 0 1.3em;
+  }
+  .body :global(pre code) {
+    background: none;
+    padding: 0;
+  }
+</style>

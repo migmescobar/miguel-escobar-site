@@ -1,0 +1,49 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Page not found — Miguel Escobar" description="The page you’re looking for doesn’t exist.">
+  <div class="wrap notfound">
+    <div class="eyebrow">ERROR 404</div>
+    <h1>Page not found</h1>
+    <p>The page you’re looking for doesn’t exist or may have moved.</p>
+    <nav class="links" aria-label="Helpful links">
+      <a href="/">Home</a>
+      <a href="/editorial-work/">Editorial Work</a>
+      <a href="/advertising-work/">Advertising Work</a>
+      <a href="/writing/">Writing</a>
+    </nav>
+  </div>
+</BaseLayout>
+
+<style>
+  .notfound {
+    padding: clamp(48px, 12vh, 140px) 0 clamp(64px, 12vw, 160px);
+    max-width: 720px;
+  }
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: var(--ink-mute);
+    margin-bottom: 20px;
+  }
+  h1 {
+    margin: 0 0 22px;
+    font-size: clamp(42px, 6.4vw, 88px);
+    letter-spacing: -0.035em;
+  }
+  p {
+    margin: 0 0 32px;
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--ink-80);
+    max-width: 460px;
+  }
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 28px;
+    font-size: 16px;
+  }
+</style>
