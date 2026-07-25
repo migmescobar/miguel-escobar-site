@@ -167,28 +167,19 @@ git push
 
 ## 7. First-time setup: GitHub + domain + DNS
 
-This is a **one-time** setup. Do it in order.
+This is a **one-time** setup.
 
-### a. Put the code on GitHub
-1. Create a free account at <https://github.com> if you don't have one.
-2. Create a **new empty repository** (e.g. named `miguel-escobar-site`). Don't add a README —
-   this project already has one.
-3. In Terminal, from this folder, connect and push (replace `YOUR-USERNAME`):
+> ✅ **Already done for you:** the repo **`migmescobar/miguel-escobar-site`** is created, `main`
+> is pushed, GitHub Pages is set to build from **GitHub Actions**, and the first deploy
+> succeeded. Steps **a** and **b** are for reference; what's left is the domain + DNS (steps
+> **c–f**), which need your Squarespace login.
 
-   ```bash
-   git remote add origin https://github.com/YOUR-USERNAME/miguel-escobar-site.git
-   git branch -M main
-   git push -u origin main
-   ```
+### a. Put the code on GitHub _(done)_
+The repo lives at <https://github.com/migmescobar/miguel-escobar-site>. Future changes publish
+automatically whenever you `git push` (see §6).
 
-   (If GitHub asks you to log in, follow the prompts. A developer or Claude can help with the
-   `gh` command-line tool if you'd rather.)
-
-### b. Turn on GitHub Pages
-1. In your repo on GitHub: **Settings → Pages**.
-2. Under **Build and deployment → Source**, choose **GitHub Actions**.
-   (The deploy workflow is already included at `.github/workflows/deploy.yml`; the first push
-   triggers it.)
+### b. Turn on GitHub Pages _(done)_
+Source is set to **GitHub Actions** (repo Settings → Pages), using `.github/workflows/deploy.yml`.
 
 ### c. Verify your domain (prevents anyone else claiming it)
 1. GitHub: click your avatar → **Settings → Pages** (your account-level page settings).
@@ -205,11 +196,11 @@ This is a **one-time** setup. Do it in order.
 In Squarespace: **Settings → Domains → miguel-escobar.com → DNS / DNS Settings** (labels vary
 slightly; look for "DNS settings" or "Custom records"). Add these records:
 
-**1) One CNAME so `www` points at GitHub** (replace `YOUR-USERNAME` with your GitHub username):
+**1) One CNAME so `www` points at GitHub:**
 
 | Type | Host / Name | Value / Data |
 |---|---|---|
-| CNAME | `www` | `YOUR-USERNAME.github.io` |
+| CNAME | `www` | `migmescobar.github.io` |
 
 **2) Four A records so the bare domain `miguel-escobar.com` reaches GitHub:**
 
