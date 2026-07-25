@@ -2,6 +2,7 @@
   "extends": ["html-validate:recommended"],
   "rules": {
     "no-inline-style": "off",
-    "prefer-native-element": "off"
+    "prefer-native-element": "off",
+    "long-title": "off"
   }
 }

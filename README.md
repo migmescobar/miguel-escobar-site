@@ -14,7 +14,7 @@ Claude) and they'll know exactly what to do.
 
 1. [What you need once](#1-what-you-need-once)
 2. [Run it on your Mac (preview)](#2-run-it-on-your-mac-preview)
-3. [Add or edit a writing post](#3-add-or-edit-a-writing-post) ← the main thing you'll do
+3. [Add or edit a Thoughts post](#3-add-or-edit-a-thoughts-post) ← the main thing you'll do
 4. [Change your details, links, and the CV](#4-change-your-details-links-and-the-cv)
 5. [Turn on the contact form and analytics](#5-turn-on-the-contact-form-and-analytics)
 6. [Publish changes (it deploys itself)](#6-publish-changes-it-deploys-itself)
@@ -60,9 +60,9 @@ npm run preview   # serves that finished site
 
 ---
 
-## 3. Add or edit a writing post
+## 3. Add or edit a Thoughts post
 
-Every post is **one plain-text file** in the folder `src/content/writing/`. To add a post,
+Every post is **one plain-text file** in the folder `src/content/thoughts/`. To add a post,
 create a new file there ending in `.md` — for example `my-first-post.md` — and start it with
 this block (the part between the `---` lines is the "front matter"):
 
@@ -88,15 +88,15 @@ Field-by-field:
 
 | Field | What to put |
 |---|---|
-| `title` | The post title. It's also the clickable text on the Writing page. |
+| `title` | The post title. It's also the clickable sentence on the Thoughts page — so a short, readable sentence works best (keep it under ~55 characters for tidy search-result titles). |
 | `pubDate` | The date, as `YYYY-MM-DD`. Posts are listed newest first by this date. |
 | `description` | A short summary. Shown as the subtitle on the post and in link previews. |
 | `draft` | `true` = hidden from the site (a private work-in-progress). `false` = live. |
 
-**Drafts:** set `draft: true` while you're still writing. A draft never appears in the Writing
+**Drafts:** set `draft: true` while you're still writing. A draft never appears in the Thoughts
 list, never gets its own web page, and is invisible to Google. When it's ready, change it to
-`draft: false`. (There's a live example of each in the folder: `welcome-to-my-writing.md` is
-published, `a-post-in-progress.md` is a draft.)
+`draft: false`. (The three starter posts in that folder are lorem-ipsum placeholders — edit them
+in place or delete them and add your own.)
 
 **Optional header image for a post.** Put an image file in `src/assets/images/`, then add
 these two lines to the post's front matter:
@@ -241,11 +241,11 @@ src/
     index.astro              Home (/)
     editorial-work.astro     /editorial-work/
     advertising-work.astro   /advertising-work/
-    writing/
-      index.astro            Writing list (/writing/)
+    thoughts/
+      index.astro            Thoughts list (/thoughts/)
       [...slug].astro        The template every post uses
     404.astro                "Page not found"
-  content/writing/           YOUR POSTS live here (one .md file each)
+  content/thoughts/          YOUR POSTS live here (one .md file each)
   components/                Shared pieces (header, footer/contact, image, video)
   layouts/                   Page shells
   consts.ts                  ← contact details, links, Formspree & GoatCounter settings

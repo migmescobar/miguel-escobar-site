@@ -1,11 +1,11 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
-// The "writing" collection: one Markdown file per post in src/content/writing/.
+// The "thoughts" collection: one Markdown file per post in src/content/thoughts/.
 // See the README for the non-developer guide to adding a post.
-const writing = defineCollection({
+const thoughts = defineCollection({
   // Files starting with "_" are ignored, so you can stash notes/scratch files.
-  loader: glob({ pattern: '**/[^_]*.md', base: './src/content/writing' }),
+  loader: glob({ pattern: '**/[^_]*.md', base: './src/content/thoughts' }),
   schema: ({ image }) =>
     z.object({
       title: z.string(),
@@ -20,4 +20,4 @@ const writing = defineCollection({
     }),
 });
 
-export const collections = { writing };
+export const collections = { thoughts };

@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
 // Published posts only (drafts excluded), newest first.
-const posts = (await getCollection('writing', ({ data }) => !data.draft)).sort(
+const posts = (await getCollection('thoughts', ({ data }) => !data.draft)).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 
@@ -12,12 +12,12 @@ const monthYear = (d: Date) =>
 ---
 
 <BaseLayout
-  title="Writing — Miguel Escobar"
-  description="Writing by Miguel Escobar on communications, editorial craft, content governance, culture, and tech."
+  title="Thoughts — Miguel Escobar"
+  description="Thoughts by Miguel Escobar on communications, editorial craft, content governance, culture, and tech."
 >
   <div class="wrap">
     <section class="page-title" data-reveal>
-      <h1>Writing</h1>
+      <h1>Thoughts</h1>
     </section>
 
     <section class="index" data-reveal>
@@ -27,7 +27,7 @@ const monthYear = (d: Date) =>
             {posts.map((post) => (
               <>
                 <span class="date">{monthYear(post.data.pubDate)}</span>
-                <a href={`/writing/${post.id}/`}>{post.data.title}</a>{' '}
+                <a href={`/thoughts/${post.id}/`}>{post.data.title}</a>{' '}
               </>
             ))}
           </p>

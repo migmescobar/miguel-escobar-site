@@ -41,7 +41,7 @@ export const GOATCOUNTER_READY = GOATCOUNTER_CODE !== 'YOUR_GOATCOUNTER_CODE';
 export const NAV_LINKS = [
   { href: '/editorial-work/', label: 'Editorial' },
   { href: '/advertising-work/', label: 'Advertising' },
-  { href: '/writing/', label: 'Writing' },
+  { href: '/thoughts/', label: 'Thoughts' },
   // Contact section lives in the footer of every page, so this is a same-page anchor.
   { href: '#contact', label: 'Contact' },
 ];
