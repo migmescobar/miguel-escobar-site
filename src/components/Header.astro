@@ -1,5 +1,5 @@
 ---
-import { NAV_LINKS, SITE_TITLE } from '../consts';
+import { NAV_LINKS } from '../consts';
 
 const path = Astro.url.pathname;
 
@@ -13,7 +13,7 @@ function isActive(href: string): boolean {
 
 <header>
   <div class="bar wrap">
-    <a class="wordmark" href="/">{SITE_TITLE}</a>
+    <a class="home-dot" href="/" aria-label="Home"></a>
 
     <nav class="nav-desktop" aria-label="Primary">
       {
@@ -65,11 +65,17 @@ function isActive(href: string): boolean {
     align-items: center;
     gap: 14px 28px;
   }
-  .wordmark {
-    font-size: 17px;
-    font-weight: 400;
-    letter-spacing: -0.01em;
+  .home-dot {
+    display: block;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #0047bb;
     text-decoration: none;
+    flex: none;
+  }
+  .home-dot:hover {
+    opacity: 0.82;
   }
 
   .nav-desktop {

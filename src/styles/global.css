@@ -1,3 +1,14 @@
+/* Gambarino display serif (self-hosted woff2, single weight 400) — used only for
+   the big display headings. Fontshare license; downloaded rather than CDN-linked
+   to keep fonts self-hosted like Geist. */
+@font-face {
+  font-family: 'Gambarino';
+  src: url('../assets/fonts/gambarino-400.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* ── Design tokens (from the Claude Design hand-off) ──────────────────────── */
 :root {
   --paper: #eae7e1;
@@ -25,6 +36,7 @@
 
   --font-sans: 'Geist Sans', Helvetica, Arial, sans-serif;
   --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-serif: 'Gambarino', Georgia, 'Times New Roman', serif;
 
   --maxw: 1360px;
   --pad: clamp(20px, 5vw, 64px);

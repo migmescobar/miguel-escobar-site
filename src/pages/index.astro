@@ -69,28 +69,28 @@ const isExternal = (href: string) => href.startsWith('http');
 ---
 
 <BaseLayout title="Miguel Escobar — Strategic Communications & Editorial" description={SITE_DESCRIPTION} personSchema>
-  <section class="hero wrap" data-reveal>
-    <h1 class="hero-title">
-      Strategic Communications. Content Governance. Editorial Operations. APAC&nbsp;Markets.
-    </h1>
-  </section>
-
-  <section class="intro wrap" data-reveal>
-    <div class="rule-col"><div class="hairline"></div></div>
-    <div class="intro-text">
-      <p>
-        A Singapore-based communications professional with a journalist’s instincts. Intellectually
-        curious, plugged into culture and tech, terminally online and AI-pilled.
+  <section class="hero wrap">
+    <h1 class="hero-name">Miguel<br />Escobar</h1>
+    <div class="hero-rule"></div>
+    <div class="hero-grid">
+      <p class="positioning">
+        Strategic Communications. Content Governance. Editorial Operations. APAC&nbsp;Markets.
       </p>
-      <p>
-        At Esquire Philippines, I covered culture, politics, and current affairs, writing, producing,
-        and editing everything from daily articles to investigative features. Over 12+ years I’ve moved
-        across editorial, content operations, and strategic communications, working with brands like the
-        NBA, Trust Bank, Samsung, and Toyota across the Philippines and Singapore. I’ve managed
-        high-volume content projects, enforced editorial standards across several publications, and built
-        communications strategies and content governance frameworks for brands.
-      </p>
-      <p class="last">In all I do, I find purpose in telling stories that are honest, helpful, and human.</p>
+      <div class="bio">
+        <p>
+          A Singapore-based communications professional with a journalist’s instincts. Intellectually
+          curious, plugged into culture and tech, terminally online and AI-pilled.
+        </p>
+        <p>
+          At Esquire Philippines, I covered culture, politics, and current affairs, writing, producing,
+          and editing everything from daily articles to investigative features. Over 12+ years I’ve moved
+          across editorial, content operations, and strategic communications, working with brands like the
+          NBA, Trust Bank, Samsung, and Toyota across the Philippines and Singapore. I’ve managed
+          high-volume content projects, enforced editorial standards across several publications, and built
+          communications strategies and content governance frameworks for brands.
+        </p>
+        <p class="last">In all I do, I find purpose in telling stories that are honest, helpful, and human.</p>
+      </div>
     </div>
   </section>
 
@@ -132,41 +132,42 @@ const isExternal = (href: string) => href.startsWith('http');
   .hero {
     padding: clamp(40px, 8vh, 96px) 0 clamp(48px, 7vw, 96px);
   }
-  .hero-title {
-    margin: 0 0 0 min(12vw, 240px);
-    font-size: clamp(40px, 7.2vw, 104px);
+  .hero-name {
+    margin: 0 0 clamp(28px, 4vw, 48px);
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-synthesis: none;
+    font-size: clamp(54px, 11vw, 164px);
     line-height: 1.02;
-    letter-spacing: -0.035em;
-    text-wrap: balance;
+    letter-spacing: -0.015em;
   }
-
-  .intro {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 32px 48px;
-    padding-bottom: clamp(56px, 9vw, 120px);
-  }
-  .rule-col {
-    flex: 0 1 200px;
-    min-width: 120px;
-    padding-top: 14px;
-  }
-  .hairline {
+  .hero-rule {
     height: 1px;
     background: var(--ink);
-    width: 100%;
-    max-width: 190px;
+    margin-bottom: clamp(28px, 4vw, 48px);
   }
-  .intro-text {
-    flex: 1 1 380px;
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(32px, 5vw, 72px);
+    align-items: start;
+  }
+  .positioning {
+    margin: 0;
+    font-size: clamp(22px, 2.6vw, 34px);
+    line-height: 1.28;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+  .bio {
     max-width: 640px;
     font-size: 17px;
     line-height: 1.65;
   }
-  .intro-text p {
+  .bio p {
     margin: 0 0 1.4em;
   }
-  .intro-text p.last {
+  .bio p.last {
     margin: 0;
     font-weight: 400;
   }
@@ -179,8 +180,11 @@ const isExternal = (href: string) => href.startsWith('http');
   }
   .work-head h2 {
     margin: 0;
-    font-size: clamp(38px, 5.4vw, 72px);
-    letter-spacing: -0.03em;
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-synthesis: none;
+    font-size: clamp(40px, 5.6vw, 76px);
+    letter-spacing: -0.008em;
   }
   .grid {
     display: grid;
@@ -207,16 +211,13 @@ const isExternal = (href: string) => href.startsWith('http');
   }
 
   @media (max-width: 760px) {
-    .hero-title {
-      margin-left: 0;
-      font-size: clamp(30px, 8.5vw, 104px);
+    .hero-grid {
+      grid-template-columns: 1fr;
+      gap: 28px;
     }
-    .rule-col {
-      flex: 1 1 100%;
-      padding-top: 4px;
-    }
-    .hairline {
-      max-width: none;
+    .hero-name {
+      font-size: clamp(46px, 15vw, 124px);
+      line-height: 1.06;
     }
   }
 </style>
