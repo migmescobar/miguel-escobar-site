@@ -3,10 +3,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import WorkRow from '../components/WorkRow.astro';
 import WorkImage from '../components/WorkImage.astro';
 
-import leni from '../assets/images/editorial_01_leni.png';
-import anne from '../assets/images/editorial_02_anne_curtis.png';
-import tatler from '../assets/images/editorial_03_tatler.jpg';
-import smile from '../assets/images/editorial_04_smile_barotac.png';
+// Placeholder art for now — swap in real images per the README.
+import leni from '../assets/images/ph_editorial_politics.png';
+import anne from '../assets/images/ph_editorial_features.png';
+import tatler from '../assets/images/ph_editorial_tatler.png';
+import smile from '../assets/images/ph_editorial_smile.png';
 
 const imgSizes = '(max-width: 760px) 92vw, 620px';
 const imgWidths = [480, 800, 1240];
@@ -42,7 +43,7 @@ const imgWidths = [480, 800, 1240];
       <WorkImage
         slot="media"
         image={leni}
-        alt="Portrait of Leni Robredo, from Esquire Philippines political coverage."
+        alt="Placeholder image for “Politics in Esquire.”"
         ratio="4 / 3"
         sizes={imgSizes}
         widths={imgWidths}
@@ -69,7 +70,7 @@ const imgWidths = [480, 800, 1240];
       <WorkImage
         slot="media"
         image={anne}
-        alt="Black-and-white portrait of actress Anne Curtis for an Esquire feature."
+        alt="Placeholder image for “Other Big Esquire Features.”"
         ratio="4 / 3"
         sizes={imgSizes}
         widths={imgWidths}
@@ -93,7 +94,7 @@ const imgWidths = [480, 800, 1240];
       <WorkImage
         slot="media"
         image={tatler}
-        alt="Tatler Asia’s Most Influential title card."
+        alt="Placeholder image for “Tatler Asia’s Most Influential.”"
         ratio="4 / 3"
         sizes={imgSizes}
         widths={imgWidths}
@@ -112,7 +113,7 @@ const imgWidths = [480, 800, 1240];
       <WorkImage
         slot="media"
         image={smile}
-        alt="Footballers on a pitch in Barotac Nuevo, Iloilo, for a Smile Magazine cover story."
+        alt="Placeholder image for the “Smile Magazine Cover Story.”"
         ratio="4 / 3"
         sizes={imgSizes}
         widths={imgWidths}

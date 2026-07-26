@@ -13,6 +13,7 @@
 :root {
   --paper: #eae7e1;
   --ink: #141414;
+  --brand-blue: #0047bb; /* header home dot; matches the favicon fill */
   --ink-90: rgba(20, 20, 20, 0.9);
   --ink-85: rgba(20, 20, 20, 0.85);
   --ink-80: rgba(20, 20, 20, 0.8);

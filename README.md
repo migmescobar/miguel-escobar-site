@@ -127,6 +127,45 @@ then just works.
 `src/pages/` (e.g. `src/pages/index.astro` is the home page). The text is plain English inside
 the file; edit between the tags. If in doubt, ask a developer or Claude.
 
+### Swapping in your real images
+
+Every picture on the site is currently an **on-brand placeholder** (a paper-coloured card
+labelled with the slot it belongs to and "PLACEHOLDER IMAGE"). They live in
+`src/assets/images/`, and the file names tell you which slot each one is:
+
+| File | Where it shows |
+|---|---|
+| `ph_home_*.png` (6) | the six "Some work" cards on the home page |
+| `ph_editorial_*.png` (4) | the four rows on the Editorial Work page |
+| `ph_ads_*.png` (4) | the four rows on the Advertising Work page |
+
+**You do _not_ need to optimise images yourself.** The site does it for you at build time — it
+generates modern AVIF/WebP versions at several sizes, lazy-loads them, and sets exact dimensions
+so nothing jumps around. Just give it a reasonable source file:
+
+- **Format:** JPG or PNG.
+- **Size:** roughly **1600 px on the long edge** is plenty; keep it under a few MB. (No need to
+  upload 40-megapixel camera originals — they only slow the build.)
+- **Shape (important):** home cards are **3:4 portrait**; Editorial/Advertising rows are **4:3
+  landscape**. Images are cropped to fill, so crop to roughly the right shape or the edges get
+  trimmed.
+
+**To replace one image:**
+1. Put your photo in `src/assets/images/` (e.g. `my-photo.jpg`).
+2. Open the page it belongs to — `src/pages/index.astro` (home), `editorial-work.astro`, or
+   `advertising-work.astro`. Near the top you'll see lines like
+   `import whitewash from '../assets/images/ph_home_whitewash.png';` — change that path to your
+   file, e.g. `'../assets/images/my-photo.jpg'`.
+3. Update the matching `alt="…"` text to describe the real photo (good for accessibility + SEO).
+4. Save and [publish](#6-publish-changes-it-deploys-itself).
+
+**Note:** the two Alcon/GoTyme slots on the Advertising page used to be short looping videos
+(converted from GIFs). They're image placeholders now — if your new art for those is video
+again, just ask and I'll restore the video treatment.
+
+**Easiest of all:** send the images to Claude, say which slot each one is for, and it'll drop
+them in, write the alt text, and publish.
+
 ---
 
 ## 5. Turn on the contact form and analytics
@@ -250,8 +289,9 @@ src/
   layouts/                   Page shells
   consts.ts                  ← contact details, links, Formspree & GoatCounter settings
   styles/global.css          Colours, fonts, and shared styles
-  assets/images/             Photos used on the site (optimised automatically)
-public/                      Files served as-is: CV, favicon, OG image, robots.txt, videos/
+  assets/images/             Site images (currently on-brand placeholders; optimised automatically)
+  assets/fonts/              Self-hosted Gambarino woff2
+public/                      Files served as-is: CV, favicon, OG image, robots.txt
 ```
 
 ---
@@ -259,15 +299,16 @@ public/                      Files served as-is: CV, favicon, OG image, robots.t
 ## 9. For developers
 
 - **Stack:** Astro 5 (static output, `output: 'static'`), zero client framework. Small vanilla
-  scripts only (mobile menu, contact form, scroll-reveal, lazy video). `@astrojs/sitemap` for
-  the sitemap.
-- **Fonts:** Geist + Geist Mono, self-hosted as woff2 via `@fontsource`, `font-display: swap`,
-  latin subset, weights 400/500/600 (sans) and 400/500 (mono).
+  scripts only (mobile menu, contact form, scroll-reveal). `@astrojs/sitemap` for the sitemap.
+- **Fonts:** Geist + Geist Mono (self-hosted via `@fontsource`) for body/UI, plus **Gambarino**
+  (self-hosted woff2 400 at `src/assets/fonts/`, exposed as `--font-serif`) for display headings.
+  All `font-display: swap`.
 - **Images:** `astro:assets` `<Picture>` → responsive AVIF/WebP with a JPEG fallback + `srcset`,
   explicit dimensions (no layout shift), lazy below the fold. See `src/components/WorkImage.astro`.
-- **Videos:** the two source GIFs were converted to muted, looping MP4 + WebM (with a poster
-  frame) — ~90% smaller. They autoplay only in view and only when motion is allowed. See
-  `src/components/WorkVideo.astro` and `public/videos/`.
+  Every slot is a placeholder right now (see §4 → "Swapping in your real images").
+- **Video (dormant):** `src/components/WorkVideo.astro` plays a GIF-derived MP4/WebM as an
+  in-view, motion-aware loop. Currently unused (the two ad slots are image placeholders while the
+  art is redone); kept for when video art returns.
 - **Motion:** scroll-reveal is opt-in via an inline head snippet + IntersectionObserver, fully
   disabled under `prefers-reduced-motion`, with a guaranteed failsafe so content can't get stuck
   hidden.
@@ -276,22 +317,21 @@ public/                      Files served as-is: CV, favicon, OG image, robots.t
   and a design-matched OG image (`public/og-image.png`).
 - **Config knobs:** `src/consts.ts` (contact info, `FORMSPREE_ENDPOINT`, `GOATCOUNTER_CODE`).
 - **Build hook:** `integrations/prune-assets.mjs` deletes the untransformed original images
-  Astro emits on import but never references (~5–6 MB), so `dist/` stays lean.
+  Astro emits on import but never references, so `dist/` stays lean.
 - **Checks:** `npm run build` then `npm run validate:html` (html-validate). Accessibility was
   verified with axe-core (0 violations) and the home page scores 99/100/100/100 on Lighthouse
   (perf / a11y / best-practices / SEO).
 
 ### One-off asset scripts (already run; outputs are committed)
-These regenerate the derived assets. They need the optional dev tools
-(`@resvg/resvg-js`, `ffmpeg-static`) and the original GIFs in `_source/` (kept locally, not
-committed). You normally never need these.
+These regenerate the derived assets. They need the optional tools (`@resvg/resvg-js`, `fontkit`,
+and — only for `assets:video` — `ffmpeg-static` plus the original GIFs in `_source/`). You
+normally never need these.
 
 ```bash
-npm run assets:video   # GIFs → MP4/WebM/poster in public/videos/
-npm run assets:og      # public/og-image.png (1200×630, design-matched)
-npm run assets:hero    # placeholder 16:9 hero for the seed post
-npm run assets:cards   # the two 3:4 placeholder card images (Age Checks, OSC)
-npm run assets:icons   # public/apple-touch-icon.png
+npm run assets:placeholders  # the 14 on-brand placeholder images in src/assets/images
+npm run assets:og            # public/og-image.png (1200×630, Gambarino masthead + brand dot)
+npm run assets:icons         # public/apple-touch-icon.png (derived from favicon.png)
+npm run assets:video         # (only if source GIFs are present) GIF → MP4/WebM/poster
 ```
 
 ### Note on `npm audit`

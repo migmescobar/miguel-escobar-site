@@ -2,10 +2,13 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import WorkRow from '../components/WorkRow.astro';
 import WorkImage from '../components/WorkImage.astro';
-import WorkVideo from '../components/WorkVideo.astro';
 
-import trust from '../assets/images/ads_01_trust_ooh.jpg';
-import nba from '../assets/images/ads_02_nba.png';
+// Placeholder art for now — including the two Alcon/GoTyme slots that used to be
+// looping video. Swap in real images (or ask to restore video) per the README.
+import trust from '../assets/images/ph_ads_trust.png';
+import nba from '../assets/images/ph_ads_nba.png';
+import alcon from '../assets/images/ph_ads_alcon.png';
+import gotyme from '../assets/images/ph_ads_gotyme.png';
 
 const imgSizes = '(max-width: 760px) 92vw, 620px';
 const imgWidths = [480, 800, 1240];
@@ -38,7 +41,7 @@ const imgWidths = [480, 800, 1240];
       <WorkImage
         slot="media"
         image={trust}
-        alt="Trust Bank cashback card out-of-home advertisement in Singapore."
+        alt="Placeholder image for “Trust Bank Singapore.”"
         ratio="4 / 3"
         sizes={imgSizes}
         widths={imgWidths}
@@ -58,7 +61,7 @@ const imgWidths = [480, 800, 1240];
       <WorkImage
         slot="media"
         image={nba}
-        alt="NBA Asia-Pacific newsletter creative."
+        alt="Placeholder image for “NBA Asia-Pacific Newsletters.”"
         ratio="4 / 3"
         sizes={imgSizes}
         widths={imgWidths}
@@ -74,11 +77,13 @@ const imgWidths = [480, 800, 1240];
           Korea and Vietnam, for materials that would be used across Asia and beyond.
         </p>
       </Fragment>
-      <WorkVideo
+      <WorkImage
         slot="media"
-        name="alcon_bts"
-        alt="Behind-the-scenes footage from an Alcon Precision1 campaign production."
+        image={alcon}
+        alt="Placeholder image for “Alcon Asia-Pacific Campaigns.”"
         ratio="4 / 3"
+        sizes={imgSizes}
+        widths={imgWidths}
       />
     </WorkRow>
 
@@ -97,11 +102,13 @@ const imgWidths = [480, 800, 1240];
             rel="noopener">shorts</a>.
         </p>
       </Fragment>
-      <WorkVideo
+      <WorkImage
         slot="media"
-        name="gotyme"
-        alt="Still from the GoTyme Bank launch campaign film."
+        image={gotyme}
+        alt="Placeholder image for “GoTyme Bank Philippines.”"
         ratio="4 / 3"
+        sizes={imgSizes}
+        widths={imgWidths}
       />
     </WorkRow>
   </div>
