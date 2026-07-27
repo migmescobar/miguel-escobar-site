@@ -14,13 +14,17 @@ export default defineConfig({
   },
   integrations: [
     sitemap({
-      // 404 is not a real content page
-      filter: (page) => !page.includes('/404'),
+      // Exclude the 404 and the generated OG image endpoints.
+      filter: (page) => !page.includes('/404') && !page.includes('/og/'),
     }),
     pruneAssets(),
   ],
   image: {
     // Sharp is Astro's default image service; generates AVIF/WebP + fallbacks.
     responsiveStyles: true,
+  },
+  vite: {
+    // Native / font libs used by the per-post OG endpoint — don't bundle them.
+    ssr: { external: ['@resvg/resvg-js', 'fontkit'] },
   },
 });

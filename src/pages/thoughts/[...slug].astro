@@ -23,6 +23,8 @@ const dateISO = post.data.pubDate.toISOString();
   description={post.data.description}
   type="article"
   publishedTime={dateISO}
+  articleHeadline={post.data.title}
+  image={`/og/thoughts/${post.id}.png`}
 >
   <article class="post">
     <div class="backlink" data-reveal>

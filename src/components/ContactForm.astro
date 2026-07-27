@@ -35,12 +35,6 @@ import { FORMSPREE_ENDPOINT, FORMSPREE_READY, CONTACT } from '../consts';
   <input type="hidden" name="_subject" value="New message from miguel-escobar.com" />
 
   <button type="submit">Send message</button>
-
-  <p class="form-fallback">
-    Prefer email? <a href={`mailto:${CONTACT.email}?subject=${encodeURIComponent('Hello Miguel')}`}
-      >Write to me directly</a
-    >.
-  </p>
 </form>
 
 <style>
@@ -122,15 +116,6 @@ import { FORMSPREE_ENDPOINT, FORMSPREE_READY, CONTACT } from '../consts';
   }
   .form-status.error {
     color: #ffc0c0;
-  }
-
-  .form-fallback {
-    margin: 0;
-    font-size: 14px;
-    color: rgba(255, 255, 255, 0.8);
-  }
-  .form-fallback a {
-    color: #fff;
   }
 
   /* Visually hide the honeypot without display:none (bots skip display:none). */

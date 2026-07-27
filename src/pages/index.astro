@@ -19,7 +19,7 @@ import alconFilm from '../assets/images/ph_home_more-advertising.png';
 const cards = [
   {
     title: 'Age Checks Matter',
-    href: '#',
+    href: null,
     blurb:
       'A film and campaign for the IMDA, launching Age Assurance Measures — age checks on app stores — in Singapore.',
     image: ageChecks,
@@ -27,7 +27,7 @@ const cards = [
   },
   {
     title: 'Launching The Online Safety Commission',
-    href: '#',
+    href: null,
     blurb:
       'Web copy, service articles, and explainer videos about online harms for the launch of Singapore’s Online Safety Commission.',
     image: osc,
@@ -92,7 +92,7 @@ const isExternal = (href: string) => href.startsWith('http');
           communications strategies and content governance frameworks for brands.
         </p>
         <p>
-          Now I'm learning code from the ground up, with a view to applying my skills in a more tech-forward context.
+          Now I’m learning code from the ground up, with a view to applying my skills in a more tech-forward context.
         </p>
         <p class="last">In all I do, I find purpose in telling stories that are honest, helpful, and human.</p>
       </div>
@@ -117,13 +117,17 @@ const isExternal = (href: string) => href.startsWith('http');
               widths={[320, 480, 760]}
             />
             <h3>
-              <a
-                href={card.href}
-                target={isExternal(card.href) ? '_blank' : undefined}
-                rel={isExternal(card.href) ? 'noopener' : undefined}
-              >
-                {card.title}
-              </a>
+              {card.href ? (
+                <a
+                  href={card.href}
+                  target={isExternal(card.href) ? '_blank' : undefined}
+                  rel={isExternal(card.href) ? 'noopener' : undefined}
+                >
+                  {card.title}
+                </a>
+              ) : (
+                card.title
+              )}
             </h3>
             <p>{card.blurb}</p>
           </article>
@@ -222,8 +226,8 @@ const isExternal = (href: string) => href.startsWith('http');
       gap: 28px;
     }
     .hero-name {
-      font-size: clamp(46px, 15vw, 124px);
-      line-height: 1.06;
+      font-size: clamp(62px, 23vw, 92px);
+      line-height: 1.04;
     }
   }
 </style>
