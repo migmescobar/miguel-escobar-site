@@ -26,9 +26,11 @@ import { CONTACT } from '../consts';
 </footer>
 
 <style>
+  /* Contact + footer is a white-on-blue block (matches the header home dot). */
   .site-footer {
-    border-top: 1px solid var(--ink-30);
-    padding: clamp(48px, 7vw, 88px) var(--pad) clamp(40px, 5vw, 64px);
+    background: var(--brand-blue);
+    color: var(--paper);
+    padding: clamp(56px, 8vw, 104px) var(--pad) clamp(44px, 5vw, 68px);
   }
   .contact {
     display: flex;
@@ -46,12 +48,13 @@ import { CONTACT } from '../consts';
     font-synthesis: none;
     font-size: clamp(40px, 5.2vw, 72px);
     letter-spacing: -0.008em;
+    color: #fff;
   }
   .lede {
     margin: 0 0 28px;
     font-size: 16px;
     line-height: 1.6;
-    color: var(--ink-80);
+    color: rgba(255, 255, 255, 0.85);
     max-width: 400px;
   }
   .links {
@@ -61,20 +64,29 @@ import { CONTACT } from '../consts';
     font-size: 16px;
     align-items: flex-start;
   }
+  .links a {
+    color: var(--paper);
+    text-decoration-color: rgba(255, 255, 255, 0.55);
+  }
+  .links a:hover {
+    text-decoration-color: #fff;
+  }
   .links .cv {
+    color: #fff;
     font-weight: 500;
   }
   .links .tel {
+    color: #fff;
     text-decoration: none;
     border-bottom: 1px solid transparent;
   }
   .links .tel:hover {
-    border-bottom-color: var(--ink);
+    border-bottom-color: #fff;
   }
 
   .copyright {
     margin-top: clamp(40px, 6vw, 72px);
-    border-top: 1px solid var(--ink-20);
+    border-top: 1px solid rgba(255, 255, 255, 0.25);
     padding-top: 20px;
     display: flex;
     justify-content: space-between;
@@ -83,6 +95,6 @@ import { CONTACT } from '../consts';
     font-family: var(--font-mono);
     font-size: 11px;
     letter-spacing: 0.06em;
-    color: var(--ink-mute);
+    color: rgba(255, 255, 255, 0.7);
   }
 </style>

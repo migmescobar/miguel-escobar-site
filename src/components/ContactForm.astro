@@ -60,17 +60,17 @@ import { FORMSPREE_ENDPOINT, FORMSPREE_READY, CONTACT } from '../consts';
     font-family: var(--font-mono);
     font-size: 11px;
     letter-spacing: 0.08em;
-    color: var(--ink-mute);
+    color: rgba(255, 255, 255, 0.7);
   }
   .contact-form input,
   .contact-form textarea {
     border: 0;
-    border-bottom: 1px solid var(--ink-40);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.45);
     background: transparent;
     padding: 8px 0;
     font-family: var(--font-sans);
     font-size: 17px;
-    color: var(--ink);
+    color: #fff;
     border-radius: 0;
     outline: none;
   }
@@ -79,21 +79,21 @@ import { FORMSPREE_ENDPOINT, FORMSPREE_READY, CONTACT } from '../consts';
   }
   .contact-form input:focus,
   .contact-form textarea:focus {
-    border-bottom-color: var(--ink);
-    box-shadow: 0 1px 0 var(--ink);
+    border-bottom-color: #fff;
+    box-shadow: 0 1px 0 #fff;
   }
   .contact-form [aria-invalid='true'] {
-    border-bottom-color: #9b2c2c;
-    box-shadow: 0 1px 0 #9b2c2c;
+    border-bottom-color: #ffc0c0;
+    box-shadow: 0 1px 0 #ffc0c0;
   }
 
   button {
     align-self: flex-start;
     margin-top: 6px;
     padding: 14px 28px;
-    background: var(--ink);
-    color: var(--paper);
-    border: 1px solid var(--ink);
+    background: var(--paper);
+    color: var(--brand-blue);
+    border: 1px solid var(--paper);
     font-family: var(--font-sans);
     font-size: 15px;
     font-weight: 500;
@@ -102,7 +102,11 @@ import { FORMSPREE_ENDPOINT, FORMSPREE_READY, CONTACT } from '../consts';
   }
   button:hover {
     background: transparent;
-    color: var(--ink);
+    color: var(--paper);
+  }
+  button:focus-visible {
+    outline: 2px solid var(--paper);
+    outline-offset: 3px;
   }
   button[disabled] {
     opacity: 0.55;
@@ -114,16 +118,19 @@ import { FORMSPREE_ENDPOINT, FORMSPREE_READY, CONTACT } from '../consts';
     font-size: 15px;
     line-height: 1.5;
     padding: 12px 0;
-    border-bottom: 1px solid var(--ink-30);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
   }
   .form-status.error {
-    color: #9b2c2c;
+    color: #ffc0c0;
   }
 
   .form-fallback {
     margin: 0;
     font-size: 14px;
-    color: var(--ink-mute);
+    color: rgba(255, 255, 255, 0.8);
+  }
+  .form-fallback a {
+    color: #fff;
   }
 
   /* Visually hide the honeypot without display:none (bots skip display:none). */
