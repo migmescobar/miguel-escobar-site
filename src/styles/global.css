@@ -1,13 +1,6 @@
 /* PP Editorial New display serif (Pangram Pangram, self-hosted woff2, free
-   personal-use license — see /licenses). Used only for the big display headings:
-   weight 200 (Ultralight) for the hero, 400 for the rest. */
-@font-face {
-  font-family: 'Editorial New';
-  src: url('../assets/fonts/editorial-new-200.woff2') format('woff2');
-  font-weight: 200;
-  font-style: normal;
-  font-display: swap;
-}
+   personal-use license — see /licenses). Used only for the big display headings
+   (Regular 400). */
 @font-face {
   font-family: 'Editorial New';
   src: url('../assets/fonts/editorial-new-400.woff2') format('woff2');

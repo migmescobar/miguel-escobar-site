@@ -301,9 +301,9 @@ public/                      Files served as-is: CV, favicon, OG image, robots.t
 - **Stack:** Astro 5 (static output, `output: 'static'`), zero client framework. Small vanilla
   scripts only (mobile menu, contact form, scroll-reveal). `@astrojs/sitemap` for the sitemap.
 - **Fonts:** Geist + Geist Mono (self-hosted via `@fontsource`) for body/UI, plus **PP Editorial
-  New** (Pangram Pangram, self-hosted woff2 — Ultralight 200 for the hero, Regular 400 for the
-  other headings, exposed as `--font-serif`) for the display serif. All `font-display: swap`. The
-  free personal-use license is committed in `/licenses`.
+  New** (Pangram Pangram, self-hosted woff2, Regular 400, exposed as `--font-serif`) for the
+  display headings. All `font-display: swap`. The free personal-use license is committed in
+  `/licenses`.
 - **Images:** `astro:assets` `<Picture>` → responsive AVIF/WebP with a JPEG fallback + `srcset`,
   explicit dimensions (no layout shift), lazy below the fold. See `src/components/WorkImage.astro`.
   Every slot is a placeholder right now (see §4 → "Swapping in your real images").
