@@ -11,10 +11,9 @@ const fonts = path.join(root, 'scripts/fonts');
 const outDir = path.join(root, 'public');
 mkdirSync(outDir, { recursive: true });
 
-// resvg matches fonts by their internal family name. The Fontshare Gambarino
-// WEBfont has an obfuscated internal name (the site's @font-face renames it to
-// "Gambarino"), so read whatever the file actually declares and use that.
-const GAMBARINO = openSync(path.join(fonts, 'Gambarino-Regular.ttf')).familyName;
+// resvg matches fonts by their internal family name; read it from the OTF.
+// Uses the Regular weight (crisper than Ultralight at social-thumbnail sizes).
+const EDITORIAL = openSync(path.join(fonts, 'PPEditorialNew-Regular.otf')).familyName;
 
 const PAPER = '#EAE7E1';
 const INK = '#141414';
@@ -25,7 +24,7 @@ const svg = `<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http:/
   <circle cx="102" cy="94" r="22" fill="${BRAND}"/>
   <text x="146" y="103" font-family="Geist Mono" font-size="22" letter-spacing="3" fill="${INK}" fill-opacity="0.55">MIGUEL-ESCOBAR.COM</text>
   <line x1="80" y1="150" x2="1120" y2="150" stroke="${INK}" stroke-opacity="0.3" stroke-width="1"/>
-  <text x="74" y="348" font-family="${GAMBARINO}" font-size="122" letter-spacing="-1.5" fill="${INK}">Miguel Escobar</text>
+  <text x="74" y="360" font-family="${EDITORIAL}" font-size="128" letter-spacing="-1" fill="${INK}">Miguel Escobar</text>
   <text x="80" y="438" font-family="Geist" font-size="33" fill="${INK}" fill-opacity="0.72">Strategic Communications · Content Governance ·</text>
   <text x="80" y="484" font-family="Geist" font-size="33" fill="${INK}" fill-opacity="0.72">Editorial Operations · APAC Markets</text>
   <line x1="80" y1="544" x2="1120" y2="544" stroke="${INK}" stroke-opacity="0.2" stroke-width="1"/>
@@ -36,7 +35,7 @@ const resvg = new Resvg(svg, {
   fitTo: { mode: 'width', value: 1200 },
   font: {
     fontFiles: [
-      path.join(fonts, 'Gambarino-Regular.ttf'),
+      path.join(fonts, 'PPEditorialNew-Regular.otf'),
       path.join(fonts, 'Geist-Medium.ttf'),
       path.join(fonts, 'Geist-Regular.ttf'),
       path.join(fonts, 'GeistMono-Regular.ttf'),

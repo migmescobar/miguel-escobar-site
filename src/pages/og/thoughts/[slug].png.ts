@@ -1,7 +1,7 @@
 // Build-time Open Graph image for each Thoughts post: /og/thoughts/<slug>.png
-// (1200x630, on-brand — Gambarino title + date, matching the site OG card).
-// Generated with resvg; fontkit reads the webfont's obfuscated family name and
-// measures the title so it wraps to fit.
+// (1200x630, on-brand — PP Editorial New title + date, matching the site OG card).
+// Generated with resvg; fontkit reads the font's family name and measures the
+// title so it wraps to fit.
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 import { Resvg } from '@resvg/resvg-js';
@@ -10,12 +10,12 @@ import { fileURLToPath } from 'node:url';
 
 const fontPath = (name: string) =>
   fileURLToPath(new URL(`../../../../scripts/fonts/${name}`, import.meta.url));
-const GAMBARINO_TTF = fontPath('Gambarino-Regular.ttf');
-const fontFiles = [GAMBARINO_TTF, fontPath('Geist-Medium.ttf'), fontPath('GeistMono-Regular.ttf')];
+const EDITORIAL_OTF = fontPath('PPEditorialNew-Regular.otf');
+const fontFiles = [EDITORIAL_OTF, fontPath('Geist-Medium.ttf'), fontPath('GeistMono-Regular.ttf')];
 
-// resvg matches fonts by their internal (obfuscated) family name; read it once.
-const gamb = openSync(GAMBARINO_TTF) as any;
-const GAMBARINO = gamb.familyName as string;
+// resvg matches fonts by their internal family name; read it once.
+const serif = openSync(EDITORIAL_OTF) as any;
+const EDITORIAL = serif.familyName as string;
 
 const PAPER = '#EAE7E1';
 const INK = '#141414';
@@ -23,9 +23,9 @@ const BRAND = '#0047bb';
 
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-/** Greedy word-wrap using the actual Gambarino metrics. */
+/** Greedy word-wrap using the actual Editorial New metrics. */
 function wrapTitle(text: string, fontSize: number, maxWidth: number): string[] {
-  const measure = (s: string) => (gamb.layout(s).advanceWidth * fontSize) / gamb.unitsPerEm;
+  const measure = (s: string) => (serif.layout(s).advanceWidth * fontSize) / serif.unitsPerEm;
   const lines: string[] = [];
   let cur = '';
   for (const word of text.split(/\s+/)) {
@@ -68,7 +68,7 @@ export const GET: APIRoute = ({ props }) => {
   const titleSvg = lines
     .map(
       (l, i) =>
-        `<text x="80" y="${startY + i * lineHeight}" font-family="${GAMBARINO}" font-size="${fontSize}" letter-spacing="-1" fill="${INK}">${esc(l)}</text>`
+        `<text x="80" y="${startY + i * lineHeight}" font-family="${EDITORIAL}" font-size="${fontSize}" letter-spacing="-1" fill="${INK}">${esc(l)}</text>`
     )
     .join('');
   const dateY = startY + (lines.length - 1) * lineHeight + 56;

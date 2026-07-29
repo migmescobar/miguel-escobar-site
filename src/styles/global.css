@@ -1,11 +1,25 @@
-/* Gambarino display serif (self-hosted woff2, single weight 400) — used only for
-   the big display headings. Fontshare license; downloaded rather than CDN-linked
-   to keep fonts self-hosted like Geist. */
+/* PP Editorial New display serif (Pangram Pangram, self-hosted woff2, free
+   personal-use license — see /licenses). Used only for the big display headings:
+   weight 200 (Ultralight) for the hero, 400 for the rest. */
 @font-face {
-  font-family: 'Gambarino';
-  src: url('../assets/fonts/gambarino-400.woff2') format('woff2');
+  font-family: 'Editorial New';
+  src: url('../assets/fonts/editorial-new-200.woff2') format('woff2');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Editorial New';
+  src: url('../assets/fonts/editorial-new-400.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Editorial New';
+  src: url('../assets/fonts/editorial-new-400-italic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
   font-display: swap;
 }
 
@@ -37,7 +51,7 @@
 
   --font-sans: 'Geist Sans', Helvetica, Arial, sans-serif;
   --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
-  --font-serif: 'Gambarino', Georgia, 'Times New Roman', serif;
+  --font-serif: 'Editorial New', Georgia, 'Times New Roman', serif;
 
   --maxw: 1360px;
   --pad: clamp(20px, 5vw, 64px);

@@ -290,7 +290,7 @@ src/
   consts.ts                  ← contact details, links, Formspree & GoatCounter settings
   styles/global.css          Colours, fonts, and shared styles
   assets/images/             Site images (currently on-brand placeholders; optimised automatically)
-  assets/fonts/              Self-hosted Gambarino woff2
+  assets/fonts/              Self-hosted Editorial New woff2 (license in /licenses)
 public/                      Files served as-is: CV, favicon, OG image, robots.txt
 ```
 
@@ -300,9 +300,10 @@ public/                      Files served as-is: CV, favicon, OG image, robots.t
 
 - **Stack:** Astro 5 (static output, `output: 'static'`), zero client framework. Small vanilla
   scripts only (mobile menu, contact form, scroll-reveal). `@astrojs/sitemap` for the sitemap.
-- **Fonts:** Geist + Geist Mono (self-hosted via `@fontsource`) for body/UI, plus **Gambarino**
-  (self-hosted woff2 400 at `src/assets/fonts/`, exposed as `--font-serif`) for display headings.
-  All `font-display: swap`.
+- **Fonts:** Geist + Geist Mono (self-hosted via `@fontsource`) for body/UI, plus **PP Editorial
+  New** (Pangram Pangram, self-hosted woff2 — Ultralight 200 for the hero, Regular 400 for the
+  other headings, exposed as `--font-serif`) for the display serif. All `font-display: swap`. The
+  free personal-use license is committed in `/licenses`.
 - **Images:** `astro:assets` `<Picture>` → responsive AVIF/WebP with a JPEG fallback + `srcset`,
   explicit dimensions (no layout shift), lazy below the fold. See `src/components/WorkImage.astro`.
   Every slot is a placeholder right now (see §4 → "Swapping in your real images").
@@ -329,7 +330,7 @@ normally never need these.
 
 ```bash
 npm run assets:placeholders  # the 14 on-brand placeholder images in src/assets/images
-npm run assets:og            # public/og-image.png (1200×630, Gambarino masthead + brand dot)
+npm run assets:og            # public/og-image.png (1200×630, Editorial New masthead + brand dot)
 npm run assets:icons         # public/apple-touch-icon.png (derived from favicon.png)
 npm run assets:video         # (only if source GIFs are present) GIF → MP4/WebM/poster
 ```

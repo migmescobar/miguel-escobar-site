@@ -11,6 +11,7 @@
     "astro": "astro",
     "validate:html": "html-validate \"dist/**/*.html\"",
     "assets:video": "node scripts/convert-gifs.mjs",
+    "assets:fonts": "node scripts/convert-fonts.mjs",
     "assets:og": "node scripts/generate-og.mjs",
     "assets:placeholders": "node scripts/generate-placeholders.mjs",
     "assets:icons": "node scripts/generate-icons.mjs"
@@ -28,6 +29,7 @@
     "html-validate": "^9.7.1"
   },
   "optionalDependencies": {
-    "ffmpeg-static": "^5.2.0"
+    "ffmpeg-static": "^5.2.0",
+    "wawoff2": "^2.0.1"
   }
 }
