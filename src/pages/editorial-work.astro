@@ -3,11 +3,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import WorkRow from '../components/WorkRow.astro';
 import WorkImage from '../components/WorkImage.astro';
 
-// Placeholder art for now — swap in real images per the README.
-import leni from '../assets/images/ph_editorial_politics.png';
-import anne from '../assets/images/ph_editorial_features.png';
-import tatler from '../assets/images/ph_editorial_tatler.png';
-import smile from '../assets/images/ph_editorial_smile.png';
+import politics from '../assets/images/editorial_politics.png';
+import culture from '../assets/images/editorial_culture.png';
+import tatler from '../assets/images/editorial_tatler.png';
+import smile from '../assets/images/editorial_smile.png';
 
 const imgSizes = '(max-width: 760px) 92vw, 620px';
 const imgWidths = [480, 800, 1240];
@@ -36,14 +35,17 @@ const imgWidths = [480, 800, 1240];
             rel="noopener">Dick Gordon</a>, and political influencer <a
             href="https://www.esquiremag.ph/long-reads/profiles/mocha-uson-full-text-a1521-20161202-lfrm4"
             target="_blank"
-            rel="noopener">Mocha Uson</a>. I also worked on Esquire’s blockbuster December 2016 issue, featuring <a href="https://www.esquiremag.ph/long-reads/profiles/her-excellency-full-text-a1506-20180402-lfrm3">Vice President Leni Robredo</a> on the cover.
+            rel="noopener">Mocha Uson</a>. I also worked on Esquire’s blockbuster December 2016 issue, featuring <a
+            href="https://www.esquiremag.ph/long-reads/profiles/her-excellency-full-text-a1506-20180402-lfrm3"
+            target="_blank"
+            rel="noopener">Vice President Leni Robredo</a> on the cover.
         </p>
         <p>With Esquire, I was on the frontlines of online culture wars, just as social media’s era of political rancour and polarisation began in the Philippines. So through my work, I learned firsthand about the roles and responsibilities of media in a democracy.</p>
       </Fragment>
       <WorkImage
         slot="media"
-        image={leni}
-        alt="Placeholder image for “Politics in Esquire.”"
+        image={politics}
+        alt="Portrait of former Philippine Vice President Leni Robredo in a red top against a dark background, from Esquire Philippines."
         ratio="4 / 3"
         sizes={imgSizes}
         widths={imgWidths}
@@ -65,13 +67,19 @@ const imgWidths = [480, 800, 1240];
             target="_blank"
             rel="noopener">fashion features</a>.</p>
         <p>
-          I wrote and produced of Esquire’s biggest-ever stories: <a href="https://www.esquiremag.ph/long-reads/what-ive-learned/eddie-garcia-what-ive-learned-a1513-20181015-lfrm">an interview with Eddie Garcia</a>, a legendary actor and icon of Filipino cinema. <a href="https://www.youtube.com/watch?v=yY4LLYrMHt8">The full interview</a> is still the publication’s most-viewed video on Facebook and YouTube.
+          I wrote and produced one of Esquire’s biggest-ever stories: <a
+            href="https://www.esquiremag.ph/long-reads/what-ive-learned/eddie-garcia-what-ive-learned-a1513-20181015-lfrm"
+            target="_blank"
+            rel="noopener">an interview with Eddie Garcia</a>, a legendary actor and icon of Filipino cinema. <a
+            href="https://www.youtube.com/watch?v=yY4LLYrMHt8"
+            target="_blank"
+            rel="noopener">The full interview</a> is still the publication’s most-viewed video on Facebook and YouTube.
         </p>
       </Fragment>
       <WorkImage
         slot="media"
-        image={anne}
-        alt="Placeholder image for “Other Big Esquire Features.”"
+        image={culture}
+        alt="A dramatic, low-key editorial close-up portrait of an older man in a pinstriped suit against a dark background, from a feature in Esquire Philippines."
         ratio="4 / 3"
         sizes={imgSizes}
         widths={imgWidths}
@@ -95,7 +103,7 @@ const imgWidths = [480, 800, 1240];
       <WorkImage
         slot="media"
         image={tatler}
-        alt="Placeholder image for “Tatler Asia’s Most Influential.”"
+        alt="Tatler’s “Asia’s Most Influential” series title, set in white and gold serif lettering on black."
         ratio="4 / 3"
         sizes={imgSizes}
         widths={imgWidths}
@@ -106,7 +114,10 @@ const imgWidths = [480, 800, 1240];
       <Fragment slot="text">
         <h2>Smile Magazine Cover Story</h2>
         <p>
-          I wrote the cover story for <a href="https://smile.ink-live.com/html5/reader/production/default.aspx?pubname=&edid=029443cb-cf76-46cf-a91b-5360ee2806f0">the February 2020 issue</a> of Cebu Pacific Air’s in-flight magazine, Smile.
+          I wrote the cover story for <a
+            href="https://smile.ink-live.com/html5/reader/production/default.aspx?pubname=&amp;edid=029443cb-cf76-46cf-a91b-5360ee2806f0"
+            target="_blank"
+            rel="noopener">the February 2020 issue</a> of Cebu Pacific Air’s in-flight magazine, Smile.
           It was a feature on Barotac Nuevo, Iloilo, the one and only town in the entire Philippines that loves football
           more than basketball.
         </p>
@@ -114,7 +125,7 @@ const imgWidths = [480, 800, 1240];
       <WorkImage
         slot="media"
         image={smile}
-        alt="Placeholder image for the “Smile Magazine Cover Story.”"
+        alt="A football match on the town plaza pitch in front of the historic Barotac Nuevo church in Iloilo, for the Smile magazine cover story."
         ratio="4 / 3"
         sizes={imgSizes}
         widths={imgWidths}

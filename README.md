@@ -129,14 +129,14 @@ the file; edit between the tags. If in doubt, ask a developer or Claude.
 
 ### Swapping in your real images
 
-The home page uses your real art. The Editorial and Advertising list pages still use **on-brand
-placeholders** (paper-coloured cards labelled with the slot and "PLACEHOLDER IMAGE"). All images
-live in `src/assets/images/`, and the file names tell you which slot each one is:
+The home page and the Editorial Work page use your real art. The Advertising Work page still uses
+**on-brand placeholders** (paper-coloured cards labelled with the slot and "PLACEHOLDER IMAGE").
+All images live in `src/assets/images/`, and the file names tell you which slot each one is:
 
 | File | Where it shows |
 |---|---|
 | `home_*.png` (6) | the six "Some work" cards on the home page (real art) |
-| `ph_editorial_*.png` (4) | the four rows on the Editorial Work page (placeholder) |
+| `editorial_*.png` (4) | the four rows on the Editorial Work page (real art) |
 | `ph_ads_*.png` (4) | the four rows on the Advertising Work page (placeholder) |
 
 **You do _not_ need to optimise images yourself.** The site does it for you at build time — it
@@ -302,8 +302,8 @@ public/                      Files served as-is: CV, favicon, OG image, robots.t
   `/licenses`.
 - **Images:** `astro:assets` `<Picture>` → responsive AVIF/WebP with a JPEG fallback + `srcset`,
   explicit dimensions (no layout shift), lazy below the fold. See `src/components/WorkImage.astro`.
-  The home cards use real art; the Editorial and Advertising list pages still use placeholders
-  (see §4 → "Swapping in your real images").
+  The home cards and the Editorial page use real art; the Advertising list page still uses
+  placeholders (see §4 → "Swapping in your real images").
 - **Motion:** scroll-reveal is opt-in via an inline head snippet + IntersectionObserver, fully
   disabled under `prefers-reduced-motion`, with a guaranteed failsafe so content can't get stuck
   hidden.
@@ -322,7 +322,7 @@ These regenerate the derived assets. They need the optional tools (`@resvg/resvg
 `wawoff2`). You normally never need these.
 
 ```bash
-npm run assets:placeholders  # the 8 on-brand placeholder images for the Editorial/Advertising pages
+npm run assets:placeholders  # the 4 on-brand placeholder images for the Advertising page
 npm run assets:og            # public/og-image.png (1200×630, Editorial New masthead + brand dot)
 npm run assets:icons         # public/apple-touch-icon.png (derived from favicon.png)
 npm run assets:fonts         # PP Editorial New OTF → self-hosted woff2 (src/assets/fonts)

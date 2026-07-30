@@ -13,14 +13,10 @@ const fontDir = path.join(root, 'scripts/fonts');
 const PAPER = '#EAE7E1';
 const INK = '#141414';
 
-// w/h define the aspect ratio: 1200x900 = 4:3 (work rows). The home cards now use
-// real art (src/assets/images/home_*.png), so only the work-page slots are generated here.
+// w/h define the aspect ratio: 1200x900 = 4:3 (work rows). The home cards and the
+// Editorial page now use real art (src/assets/images/{home,editorial}_*.png), so only
+// the Advertising-page slots are generated here.
 const items = [
-  // Editorial rows (4:3)
-  { file: 'ph_editorial_politics.png', w: 1200, h: 900, eyebrow: 'ESQUIRE · POLITICS', lines: ['Politics in Esquire'] },
-  { file: 'ph_editorial_features.png', w: 1200, h: 900, eyebrow: 'ESQUIRE · FEATURES', lines: ['Other Big', 'Esquire Features'] },
-  { file: 'ph_editorial_tatler.png', w: 1200, h: 900, eyebrow: 'TATLER ASIA', lines: ['Most Influential'] },
-  { file: 'ph_editorial_smile.png', w: 1200, h: 900, eyebrow: 'SMILE MAGAZINE', lines: ['Cover Story'] },
   // Advertising rows (4:3)
   { file: 'ph_ads_trust.png', w: 1200, h: 900, eyebrow: 'TRUST BANK · SINGAPORE', lines: ['Trust Bank'] },
   { file: 'ph_ads_nba.png', w: 1200, h: 900, eyebrow: 'NBA · ASIA-PACIFIC', lines: ['NBA Newsletters'] },
