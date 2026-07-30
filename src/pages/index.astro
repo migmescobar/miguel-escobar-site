@@ -121,6 +121,11 @@ const isExternal = (href: string) => href.startsWith('http');
                   rel={isExternal(card.href) ? 'noopener' : undefined}
                 >
                   {card.title}
+                  {isExternal(card.href) && (
+                    <span class="ext" aria-hidden="true">
+                      ↗
+                    </span>
+                  )}
                 </a>
               ) : (
                 card.title
@@ -169,6 +174,9 @@ const isExternal = (href: string) => href.startsWith('http');
     max-width: 640px;
     font-size: 17px;
     line-height: 1.65;
+    /* Optical baseline nudge: the 34px positioning line and the 17px bio start at
+       the same y, so the smaller column reads as sitting high. Desktop only. */
+    padding-top: 7px;
   }
   .bio p {
     margin: 0 0 1.4em;
@@ -196,7 +204,7 @@ const isExternal = (href: string) => href.startsWith('http');
   .grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
-    gap: clamp(40px, 4vw, 56px) 40px;
+    gap: clamp(40px, 4vw, 56px);
   }
   .card {
     display: flex;
@@ -208,6 +216,16 @@ const isExternal = (href: string) => href.startsWith('http');
     font-size: 22px;
     letter-spacing: -0.01em;
     line-height: 1.25;
+  }
+  /* Signals that the link leaves the site. Decorative, so hidden from screen
+     readers — the link text alone carries the meaning. */
+  .card h3 .ext {
+    font-family: var(--font-mono);
+    font-size: 0.62em;
+    margin-left: 0.24em;
+    vertical-align: 0.16em;
+    color: var(--ink-mute);
+    text-decoration: none;
   }
   .card p {
     margin: 0;
@@ -225,6 +243,9 @@ const isExternal = (href: string) => href.startsWith('http');
     .hero-name {
       font-size: clamp(62px, 23vw, 92px);
       line-height: 1.04;
+    }
+    .bio {
+      padding-top: 0;
     }
   }
 </style>

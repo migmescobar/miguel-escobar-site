@@ -36,6 +36,9 @@ import { CONTACT } from '../consts';
   .contact {
     display: flex;
     flex-wrap: wrap;
+    /* Each column takes its natural height, so the shorter links column doesn't
+       stretch and leave a ragged base at mid-widths. */
+    align-items: flex-start;
     gap: 40px 48px;
   }
   .contact-left {
