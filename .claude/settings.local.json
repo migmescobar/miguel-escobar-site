@@ -1,7 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(unzip -l website-files.zip)"
-    ]
-  }
-}

@@ -129,15 +129,15 @@ the file; edit between the tags. If in doubt, ask a developer or Claude.
 
 ### Swapping in your real images
 
-Every picture on the site is currently an **on-brand placeholder** (a paper-coloured card
-labelled with the slot it belongs to and "PLACEHOLDER IMAGE"). They live in
-`src/assets/images/`, and the file names tell you which slot each one is:
+The home page uses your real art. The Editorial and Advertising list pages still use **on-brand
+placeholders** (paper-coloured cards labelled with the slot and "PLACEHOLDER IMAGE"). All images
+live in `src/assets/images/`, and the file names tell you which slot each one is:
 
 | File | Where it shows |
 |---|---|
-| `ph_home_*.png` (6) | the six "Some work" cards on the home page |
-| `ph_editorial_*.png` (4) | the four rows on the Editorial Work page |
-| `ph_ads_*.png` (4) | the four rows on the Advertising Work page |
+| `home_*.png` (6) | the six "Some work" cards on the home page (real art) |
+| `ph_editorial_*.png` (4) | the four rows on the Editorial Work page (placeholder) |
+| `ph_ads_*.png` (4) | the four rows on the Advertising Work page (placeholder) |
 
 **You do _not_ need to optimise images yourself.** The site does it for you at build time — it
 generates modern AVIF/WebP versions at several sizes, lazy-loads them, and sets exact dimensions
@@ -154,14 +154,10 @@ so nothing jumps around. Just give it a reasonable source file:
 1. Put your photo in `src/assets/images/` (e.g. `my-photo.jpg`).
 2. Open the page it belongs to — `src/pages/index.astro` (home), `editorial-work.astro`, or
    `advertising-work.astro`. Near the top you'll see lines like
-   `import whitewash from '../assets/images/ph_home_whitewash.png';` — change that path to your
+   `import whitewash from '../assets/images/home_whitewash.png';` — change that path to your
    file, e.g. `'../assets/images/my-photo.jpg'`.
 3. Update the matching `alt="…"` text to describe the real photo (good for accessibility + SEO).
 4. Save and [publish](#6-publish-changes-it-deploys-itself).
-
-**Note:** the two Alcon/GoTyme slots on the Advertising page used to be short looping videos
-(converted from GIFs). They're image placeholders now — if your new art for those is video
-again, just ask and I'll restore the video treatment.
 
 **Easiest of all:** send the images to Claude, say which slot each one is for, and it'll drop
 them in, write the alt text, and publish.
@@ -285,7 +281,7 @@ src/
       [...slug].astro        The template every post uses
     404.astro                "Page not found"
   content/thoughts/          YOUR POSTS live here (one .md file each)
-  components/                Shared pieces (header, footer/contact, image, video)
+  components/                Shared pieces (header, footer/contact, image)
   layouts/                   Page shells
   consts.ts                  ← contact details, links, Formspree & GoatCounter settings
   styles/global.css          Colours, fonts, and shared styles
@@ -306,10 +302,8 @@ public/                      Files served as-is: CV, favicon, OG image, robots.t
   `/licenses`.
 - **Images:** `astro:assets` `<Picture>` → responsive AVIF/WebP with a JPEG fallback + `srcset`,
   explicit dimensions (no layout shift), lazy below the fold. See `src/components/WorkImage.astro`.
-  Every slot is a placeholder right now (see §4 → "Swapping in your real images").
-- **Video (dormant):** `src/components/WorkVideo.astro` plays a GIF-derived MP4/WebM as an
-  in-view, motion-aware loop. Currently unused (the two ad slots are image placeholders while the
-  art is redone); kept for when video art returns.
+  The home cards use real art; the Editorial and Advertising list pages still use placeholders
+  (see §4 → "Swapping in your real images").
 - **Motion:** scroll-reveal is opt-in via an inline head snippet + IntersectionObserver, fully
   disabled under `prefers-reduced-motion`, with a guaranteed failsafe so content can't get stuck
   hidden.
@@ -325,14 +319,13 @@ public/                      Files served as-is: CV, favicon, OG image, robots.t
 
 ### One-off asset scripts (already run; outputs are committed)
 These regenerate the derived assets. They need the optional tools (`@resvg/resvg-js`, `fontkit`,
-and — only for `assets:video` — `ffmpeg-static` plus the original GIFs in `_source/`). You
-normally never need these.
+`wawoff2`). You normally never need these.
 
 ```bash
-npm run assets:placeholders  # the 14 on-brand placeholder images in src/assets/images
+npm run assets:placeholders  # the 8 on-brand placeholder images for the Editorial/Advertising pages
 npm run assets:og            # public/og-image.png (1200×630, Editorial New masthead + brand dot)
 npm run assets:icons         # public/apple-touch-icon.png (derived from favicon.png)
-npm run assets:video         # (only if source GIFs are present) GIF → MP4/WebM/poster
+npm run assets:fonts         # PP Editorial New OTF → self-hosted woff2 (src/assets/fonts)
 ```
 
 ### Note on `npm audit`

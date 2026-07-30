@@ -27,3 +27,6 @@ _source/
 .vscode/*
 !.vscode/extensions.json
 .idea/
+
+# Claude Code machine-local settings (personal permissions, not shared)
+.claude/settings.local.json

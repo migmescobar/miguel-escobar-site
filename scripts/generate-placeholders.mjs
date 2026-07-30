@@ -13,15 +13,9 @@ const fontDir = path.join(root, 'scripts/fonts');
 const PAPER = '#EAE7E1';
 const INK = '#141414';
 
-// w/h define the aspect ratio: 900x1200 = 3:4 (home cards), 1200x900 = 4:3 (work rows).
+// w/h define the aspect ratio: 1200x900 = 4:3 (work rows). The home cards now use
+// real art (src/assets/images/home_*.png), so only the work-page slots are generated here.
 const items = [
-  // Home cards (3:4)
-  { file: 'ph_home_age-checks.png', w: 900, h: 1200, eyebrow: 'SINGAPORE · IMDA', lines: ['Age Checks', 'Matter'] },
-  { file: 'ph_home_osc.png', w: 900, h: 1200, eyebrow: 'SINGAPORE · ONLINE SAFETY', lines: ['Online Safety', 'Commission'] },
-  { file: 'ph_home_whitewash.png', w: 900, h: 1200, eyebrow: 'ESQUIRE · INVESTIGATIVE', lines: ['How to', 'Whitewash a', 'Dictator'] },
-  { file: 'ph_home_pulpit.png', w: 900, h: 1200, eyebrow: 'ESQUIRE · EXPOSÉ', lines: ['A Pulpit for', 'Pastors of Porn'] },
-  { file: 'ph_home_more-editorial.png', w: 900, h: 1200, eyebrow: 'INDEX', lines: ['More', 'Editorial Work'] },
-  { file: 'ph_home_more-advertising.png', w: 900, h: 1200, eyebrow: 'INDEX', lines: ['More', 'Advertising Work'] },
   // Editorial rows (4:3)
   { file: 'ph_editorial_politics.png', w: 1200, h: 900, eyebrow: 'ESQUIRE · POLITICS', lines: ['Politics in Esquire'] },
   { file: 'ph_editorial_features.png', w: 1200, h: 900, eyebrow: 'ESQUIRE · FEATURES', lines: ['Other Big', 'Esquire Features'] },
