@@ -9,6 +9,8 @@ interface Props {
   ratio?: string;
   sizes?: string;
   widths?: number[];
+  /** Encode quality (0–100). 80 keeps smooth dark gradients band-free in AVIF. */
+  quality?: number;
   loading?: 'lazy' | 'eager';
   fetchpriority?: 'high' | 'auto';
 }
@@ -19,6 +21,7 @@ const {
   ratio = '3 / 4',
   sizes = '(max-width: 640px) 92vw, 420px',
   widths = [320, 560, 840],
+  quality = 80,
   loading = 'lazy',
   fetchpriority = 'auto',
 } = Astro.props;
@@ -36,6 +39,7 @@ const finalWidths = Array.from(new Set([...widths.filter((w) => w < image.width)
     alt={alt}
     formats={['avif', 'webp']}
     fallbackFormat="jpeg"
+    quality={quality}
     widths={finalWidths}
     sizes={sizes}
     loading={loading}
