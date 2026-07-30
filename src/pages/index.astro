@@ -121,11 +121,6 @@ const isExternal = (href: string) => href.startsWith('http');
                   rel={isExternal(card.href) ? 'noopener' : undefined}
                 >
                   {card.title}
-                  {isExternal(card.href) && (
-                    <span class="ext" aria-hidden="true">
-                      ↗
-                    </span>
-                  )}
                 </a>
               ) : (
                 card.title
@@ -216,16 +211,6 @@ const isExternal = (href: string) => href.startsWith('http');
     font-size: 22px;
     letter-spacing: -0.01em;
     line-height: 1.25;
-  }
-  /* Signals that the link leaves the site. Decorative, so hidden from screen
-     readers — the link text alone carries the meaning. */
-  .card h3 .ext {
-    font-family: var(--font-mono);
-    font-size: 0.62em;
-    margin-left: 0.24em;
-    vertical-align: 0.16em;
-    color: var(--ink-mute);
-    text-decoration: none;
   }
   .card p {
     margin: 0;
