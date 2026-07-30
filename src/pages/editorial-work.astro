@@ -10,6 +10,7 @@ import smile from '../assets/images/editorial_smile.png';
 
 const imgSizes = '(max-width: 760px) 92vw, 620px';
 const imgWidths = [480, 800, 1240];
+const imgQuality = 90;
 ---
 
 <BaseLayout
@@ -49,6 +50,7 @@ const imgWidths = [480, 800, 1240];
         ratio="4 / 3"
         sizes={imgSizes}
         widths={imgWidths}
+        quality={imgQuality}
       />
     </WorkRow>
 
@@ -79,10 +81,11 @@ const imgWidths = [480, 800, 1240];
       <WorkImage
         slot="media"
         image={culture}
-        alt="A dramatic, low-key editorial close-up portrait of an older man in a pinstriped suit against a dark background, from a feature in Esquire Philippines."
+        alt="A dramatic, low-key editorial close-up portrait of actor Eddie Garcia in a pinstriped suit against a dark background, from a feature in Esquire Philippines."
         ratio="4 / 3"
         sizes={imgSizes}
         widths={imgWidths}
+        quality={imgQuality}
       />
     </WorkRow>
 
@@ -107,6 +110,7 @@ const imgWidths = [480, 800, 1240];
         ratio="4 / 3"
         sizes={imgSizes}
         widths={imgWidths}
+        quality={imgQuality}
       />
     </WorkRow>
 
@@ -129,6 +133,7 @@ const imgWidths = [480, 800, 1240];
         ratio="4 / 3"
         sizes={imgSizes}
         widths={imgWidths}
+        quality={imgQuality}
       />
     </WorkRow>
   </div>
