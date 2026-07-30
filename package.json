@@ -12,7 +12,6 @@
     "validate:html": "html-validate \"dist/**/*.html\"",
     "assets:fonts": "node scripts/convert-fonts.mjs",
     "assets:og": "node scripts/generate-og.mjs",
-    "assets:placeholders": "node scripts/generate-placeholders.mjs",
     "assets:icons": "node scripts/generate-icons.mjs"
   },
   "dependencies": {

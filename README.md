@@ -129,15 +129,14 @@ the file; edit between the tags. If in doubt, ask a developer or Claude.
 
 ### Swapping in your real images
 
-The home page and the Editorial Work page use your real art. The Advertising Work page still uses
-**on-brand placeholders** (paper-coloured cards labelled with the slot and "PLACEHOLDER IMAGE").
-All images live in `src/assets/images/`, and the file names tell you which slot each one is:
+Every image on the site is now your real art. They live in `src/assets/images/`, and the file
+names tell you which slot each one is:
 
 | File | Where it shows |
 |---|---|
-| `home_*.png` (6) | the six "Some work" cards on the home page (real art) |
-| `editorial_*.png` (4) | the four rows on the Editorial Work page (real art) |
-| `ph_ads_*.png` (4) | the four rows on the Advertising Work page (placeholder) |
+| `home_*.png` (6) | the six "Some work" cards on the home page |
+| `editorial_*.png` (4) | the four rows on the Editorial Work page |
+| `ads_*.png` (4) | the four rows on the Advertising Work page |
 
 **You do _not_ need to optimise images yourself.** The site does it for you at build time — it
 generates modern AVIF/WebP versions at several sizes, lazy-loads them, and sets exact dimensions
@@ -285,7 +284,7 @@ src/
   layouts/                   Page shells
   consts.ts                  ← contact details, links, Formspree & GoatCounter settings
   styles/global.css          Colours, fonts, and shared styles
-  assets/images/             Site images (currently on-brand placeholders; optimised automatically)
+  assets/images/             Site images (your real art; optimised automatically at build)
   assets/fonts/              Self-hosted Editorial New woff2 (license in /licenses)
 public/                      Files served as-is: CV, favicon, OG image, robots.txt
 ```
@@ -301,9 +300,9 @@ public/                      Files served as-is: CV, favicon, OG image, robots.t
   display headings. All `font-display: swap`. The free personal-use license is committed in
   `/licenses`.
 - **Images:** `astro:assets` `<Picture>` → responsive AVIF/WebP with a JPEG fallback + `srcset`,
-  explicit dimensions (no layout shift), lazy below the fold. See `src/components/WorkImage.astro`.
-  The home cards and the Editorial page use real art; the Advertising list page still uses
-  placeholders (see §4 → "Swapping in your real images").
+  explicit dimensions (no layout shift), lazy below the fold. See `src/components/WorkImage.astro`,
+  which exposes a `quality` prop (default 80; the work pages pass higher values). Every image slot
+  now uses real art (see §4 → "Swapping in your real images").
 - **Motion:** scroll-reveal is opt-in via an inline head snippet + IntersectionObserver, fully
   disabled under `prefers-reduced-motion`, with a guaranteed failsafe so content can't get stuck
   hidden.
@@ -322,7 +321,6 @@ These regenerate the derived assets. They need the optional tools (`@resvg/resvg
 `wawoff2`). You normally never need these.
 
 ```bash
-npm run assets:placeholders  # the 4 on-brand placeholder images for the Advertising page
 npm run assets:og            # public/og-image.png (1200×630, Editorial New masthead + brand dot)
 npm run assets:icons         # public/apple-touch-icon.png (derived from favicon.png)
 npm run assets:fonts         # PP Editorial New OTF → self-hosted woff2 (src/assets/fonts)

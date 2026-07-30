@@ -3,16 +3,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import WorkRow from '../components/WorkRow.astro';
 import WorkImage from '../components/WorkImage.astro';
 
-// Placeholder art for now — including the two Alcon/GoTyme slots that used to be
-// looping video. Swap in real images (or ask to restore video) per the README.
-import trust from '../assets/images/ph_ads_trust.png';
-import nba from '../assets/images/ph_ads_nba.png';
-import alcon from '../assets/images/ph_ads_alcon.png';
-import gotyme from '../assets/images/ph_ads_gotyme.png';
+import trust from '../assets/images/ads_trust.png';
+import nba from '../assets/images/ads_nba.png';
+import alcon from '../assets/images/ads_alcon.png';
+import gotyme from '../assets/images/ads_gotyme.png';
 
 const imgSizes = '(max-width: 760px) 92vw, 620px';
 const imgWidths = [480, 800, 1240];
-const imgQuality = 90;
+const imgQuality = 80;
 ---
 
 <BaseLayout
@@ -42,7 +40,7 @@ const imgQuality = 90;
       <WorkImage
         slot="media"
         image={trust}
-        alt="Placeholder image for “Trust Bank Singapore.”"
+        alt="A woman laughing as Singapore dollar notes and gold confetti rain around her, holding up a Trust Bank cashback card."
         ratio="4 / 3"
         sizes={imgSizes}
         widths={imgWidths}
@@ -63,7 +61,7 @@ const imgQuality = 90;
       <WorkImage
         slot="media"
         image={nba}
-        alt="Placeholder image for “NBA Asia-Pacific Newsletters.”"
+        alt="A dramatic NBA promotional collage of San Antonio Spurs and New York Knicks players over city skylines, with a golden basketball."
         ratio="4 / 3"
         sizes={imgSizes}
         widths={imgWidths}
@@ -83,7 +81,7 @@ const imgQuality = 90;
       <WorkImage
         slot="media"
         image={alcon}
-        alt="Placeholder image for “Alcon Asia-Pacific Campaigns.”"
+        alt="A woman working at a laptop in a warm-lit, elegant dark-blue office with abstract art behind her, from an Alcon campaign."
         ratio="4 / 3"
         sizes={imgSizes}
         widths={imgWidths}
@@ -109,7 +107,7 @@ const imgQuality = 90;
       <WorkImage
         slot="media"
         image={gotyme}
-        alt="Placeholder image for “GoTyme Bank Philippines.”"
+        alt="A grinning presenter in a suit points to a framed portrait of a man held up before a seated audience, from the GoTyme Bank campaign film."
         ratio="4 / 3"
         sizes={imgSizes}
         widths={imgWidths}
