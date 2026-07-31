@@ -175,9 +175,10 @@ const isExternal = (href: string) => href.startsWith('http');
   .bio p {
     margin: 0 0 1.4em;
   }
-  .bio p.last {
+  /* No trailing space under the bio column, whichever paragraph ends it. Was
+     tied to a .last class that no longer exists in the markup. */
+  .bio p:last-child {
     margin: 0;
-    font-weight: 400;
   }
 
   .work {
