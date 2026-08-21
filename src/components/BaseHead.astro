@@ -11,6 +11,12 @@ import '@fontsource/geist-mono/latin-400.css';
 import '@fontsource/geist-mono/latin-500.css';
 import '../styles/global.css';
 
+// Preload the display serif so the browser starts fetching it while the CSS is
+// still downloading. Without this it's only discovered after the CSS parses, so
+// the big serif headings paint in fallback Georgia first and visibly swap.
+// Imported (not hard-coded) so the href tracks Astro's content hash.
+import editorialSerif from '../assets/fonts/editorial-new-400.woff2?url';
+
 interface Props {
   title: string;
   description: string;
@@ -72,6 +78,10 @@ const blogPosting =
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="generator" content={Astro.generator} />
+
+<!-- crossorigin is required even same-origin: fonts fetch in anonymous CORS
+     mode, and without it the browser downloads the file a second time. -->
+<link rel="preload" href={editorialSerif} as="font" type="font/woff2" crossorigin />
 
 <title>{title}</title>
 <meta name="description" content={description} />
