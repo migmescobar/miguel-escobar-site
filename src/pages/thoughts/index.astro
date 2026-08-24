@@ -27,7 +27,7 @@ const monthYear = (d: Date) =>
             {posts.map((post) => (
               <>
                 <span class="date">{monthYear(post.data.pubDate)}</span>
-                <a href={`/thoughts/${post.id}/`}>{post.data.title}</a>{' '}
+                <a href={`/thoughts/${post.id}/`}>{post.data.listTitle ?? post.data.title}</a>{' '}
               </>
             ))}
           </p>

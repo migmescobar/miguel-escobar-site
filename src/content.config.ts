@@ -9,6 +9,11 @@ const thoughts = defineCollection({
   schema: ({ image }) =>
     z.object({
       title: z.string(),
+      // Optional distinct headline for the Thoughts list (falls back to `title`
+      // if omitted). Lets a post's on-page headline differ from how it's
+      // billed in the index, like a magazine's contents-page line vs. the
+      // article's own head.
+      listTitle: z.string().optional(),
       pubDate: z.coerce.date(),
       description: z.string(),
       // Set to true to keep a post hidden from the site until it's ready.

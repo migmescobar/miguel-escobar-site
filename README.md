@@ -88,7 +88,8 @@ Field-by-field:
 
 | Field | What to put |
 |---|---|
-| `title` | The post title. It's also the clickable sentence on the Thoughts page — so a short, readable sentence works best (keep it under ~55 characters for tidy search-result titles). |
+| `title` | The post's own headline — shown as the H1 on the post page, the browser tab title, and in social-share previews. Also what's used as the clickable sentence on the Thoughts list, unless you set `listTitle` (below). |
+| `listTitle` | *Optional.* A different headline just for the Thoughts list, if you want it to read differently there than on the post itself (like a magazine's contents-page line vs. the article's own head). Leave it out and `title` is used everywhere. |
 | `pubDate` | The date, as `YYYY-MM-DD`. Posts are listed newest first by this date. |
 | `description` | A short summary. Shown as the subtitle on the post and in link previews. |
 | `draft` | `true` = hidden from the site (a private work-in-progress). `false` = live. |
