@@ -7,6 +7,7 @@ import { getCollection } from 'astro:content';
 import { Resvg } from '@resvg/resvg-js';
 import { openSync } from 'fontkit';
 import { fileURLToPath } from 'node:url';
+import { plainTitle } from '../../../utils/postTitle';
 
 const fontPath = (name: string) =>
   fileURLToPath(new URL(`../../../../scripts/fonts/${name}`, import.meta.url));
@@ -52,16 +53,18 @@ export const GET: APIRoute = ({ props }) => {
     .toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
     .toUpperCase();
 
-  // Pick a size that keeps the title to a tidy number of lines.
+  // Pick a size that keeps the title to a tidy number of lines. The OG card is a
+  // static image, not HTML, so it always uses the plain title (no *italic* markers).
+  const titleText = plainTitle(post.data.title);
   let fontSize = 64;
-  let lines = wrapTitle(post.data.title, fontSize, 1040);
+  let lines = wrapTitle(titleText, fontSize, 1040);
   if (lines.length > 3) {
     fontSize = 50;
-    lines = wrapTitle(post.data.title, fontSize, 1040);
+    lines = wrapTitle(titleText, fontSize, 1040);
   }
   if (lines.length > 4) {
     fontSize = 42;
-    lines = wrapTitle(post.data.title, fontSize, 1040);
+    lines = wrapTitle(titleText, fontSize, 1040);
   }
   const lineHeight = Math.round(fontSize * 1.12);
   const startY = 250;

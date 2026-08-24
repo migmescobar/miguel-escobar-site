@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { parseTitleParts } from '../../utils/postTitle';
 
 // Published posts only (drafts excluded), newest first.
 const posts = (await getCollection('thoughts', ({ data }) => !data.draft)).sort(
@@ -27,7 +28,7 @@ const monthYear = (d: Date) =>
             {posts.map((post) => (
               <>
                 <span class="date">{monthYear(post.data.pubDate)}</span>
-                <a href={`/thoughts/${post.id}/`}>{post.data.listTitle ?? post.data.title}</a>{' '}
+                <a href={`/thoughts/${post.id}/`}>{parseTitleParts(post.data.listTitle ?? post.data.title).map((p) => (p.em ? <em>{p.text}</em> : p.text))}</a>{' '}
               </>
             ))}
           </p>

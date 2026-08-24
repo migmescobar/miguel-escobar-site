@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import WorkImage from '../../components/WorkImage.astro';
+import { parseTitleParts, plainTitle } from '../../utils/postTitle';
 
 export async function getStaticPaths() {
   // Drafts are excluded here too, so a draft never gets a built page.
@@ -16,14 +17,15 @@ const dateLong = post.data.pubDate
   .toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
   .toUpperCase();
 const dateISO = post.data.pubDate.toISOString();
+const titlePlain = plainTitle(post.data.title);
 ---
 
 <BaseLayout
-  title={`${post.data.title} — Miguel Escobar`}
+  title={`${titlePlain} — Miguel Escobar`}
   description={post.data.description}
   type="article"
   publishedTime={dateISO}
-  articleHeadline={post.data.title}
+  articleHeadline={titlePlain}
   image={`/og/thoughts/${post.id}.png`}
 >
   <article class="post">
@@ -33,7 +35,7 @@ const dateISO = post.data.pubDate.toISOString();
 
     <header class="post-head" data-reveal>
       <div class="eyebrow"><time datetime={dateISO}>{dateLong}</time></div>
-      <h1>{post.data.title}</h1>
+      <h1>{parseTitleParts(post.data.title).map((p) => (p.em ? <em>{p.text}</em> : p.text))}</h1>
       <p class="deck">{post.data.description}</p>
     </header>
 
@@ -42,7 +44,7 @@ const dateISO = post.data.pubDate.toISOString();
         <div class="hero" data-reveal>
           <WorkImage
             image={post.data.heroImage}
-            alt={post.data.heroAlt ?? post.data.title}
+            alt={post.data.heroAlt ?? titlePlain}
             ratio="16 / 9"
             loading="eager"
             fetchpriority="high"

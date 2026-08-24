@@ -88,7 +88,7 @@ Field-by-field:
 
 | Field | What to put |
 |---|---|
-| `title` | The post's own headline — shown as the H1 on the post page, the browser tab title, and in social-share previews. Also what's used as the clickable sentence on the Thoughts list, unless you set `listTitle` (below). |
+| `title` | The post's own headline — shown as the H1 on the post page, the browser tab title, and in social-share previews. Also what's used as the clickable sentence on the Thoughts list, unless you set `listTitle` (below). Wrap a word in `*asterisks*` to italicise it (e.g. a movie or book title) — that works in `title` and `listTitle`, but nowhere else in the front matter. |
 | `listTitle` | *Optional.* A different headline just for the Thoughts list, if you want it to read differently there than on the post itself (like a magazine's contents-page line vs. the article's own head). Leave it out and `title` is used everywhere. |
 | `pubDate` | The date, as `YYYY-MM-DD`. Posts are listed newest first by this date. |
 | `description` | A short summary. Shown as the subtitle on the post and in link previews. |
@@ -96,8 +96,7 @@ Field-by-field:
 
 **Drafts:** set `draft: true` while you're still writing. A draft never appears in the Thoughts
 list, never gets its own web page, and is invisible to Google. When it's ready, change it to
-`draft: false`. (The three starter posts in that folder are lorem-ipsum placeholders — edit them
-in place or delete them and add your own.)
+`draft: false`.
 
 **Optional header image for a post.** Put an image file in `src/assets/images/`, then add
 these two lines to the post's front matter:

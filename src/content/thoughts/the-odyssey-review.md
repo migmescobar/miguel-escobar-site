@@ -1,6 +1,6 @@
 ---
-title: The Odyssey is magnificent, but far too amenable
-listTitle: Nolan’s Odyssey is full of sound and fury
+title: '*The Odyssey* is magnificent, but far too amenable'
+listTitle: Nolan’s *Odyssey* is full of sound and fury
 pubDate: 2026-08-24
 description: What are movies even for these days, especially when they’re this big?
 draft: false
