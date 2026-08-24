@@ -69,15 +69,15 @@ function isActive(href: string): boolean {
     display: block;
     flex: none;
     font-family: var(--font-mono);
-    font-size: 15px;
-    font-weight: 500;
-    letter-spacing: 0.08em;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     text-decoration: none;
-    color: var(--ink);
+    color: var(--ink-mute);
   }
   .home-link:hover {
-    opacity: 0.7;
+    color: var(--ink);
   }
 
   .nav-desktop {
@@ -86,15 +86,18 @@ function isActive(href: string): boolean {
   }
   .nav-link {
     font-family: var(--font-mono);
-    font-size: 13px;
+    font-size: 11px;
+    font-weight: 400;
     letter-spacing: 0.06em;
     text-transform: uppercase;
     text-decoration: none;
+    color: var(--ink-mute);
     border-bottom: 1px solid transparent;
     padding-bottom: 2px;
   }
   .nav-link:hover,
   .nav-link.active {
+    color: var(--ink);
     border-bottom-color: var(--ink);
   }
 
@@ -127,17 +130,16 @@ function isActive(href: string): boolean {
   }
   .m-link {
     font-family: var(--font-mono);
-    font-size: 17px;
+    font-size: 14px;
     font-weight: 400;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: var(--ink-75);
+    color: var(--ink-mute);
     text-decoration: none;
     padding: 13px 0;
     border-top: 1px solid var(--ink-15);
   }
   .m-link.active {
-    font-weight: 500;
     color: var(--ink);
   }
 

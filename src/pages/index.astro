@@ -135,7 +135,9 @@ const isExternal = (href: string) => href.startsWith('http');
 
 <style>
   .hero {
-    padding: clamp(40px, 8vh, 96px) 0 clamp(48px, 7vw, 96px);
+    /* Top padding bumped up from clamp(40px,8vh,96px) for more breathing room
+       below the nav bar; bottom (above the hairline) is unchanged. */
+    padding: clamp(56px, 11vh, 128px) 0 clamp(48px, 7vw, 96px);
   }
   .hero-name {
     margin: 0 0 clamp(28px, 4vw, 48px);
