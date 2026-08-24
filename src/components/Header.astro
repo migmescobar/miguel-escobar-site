@@ -13,7 +13,7 @@ function isActive(href: string): boolean {
 
 <header>
   <div class="bar wrap">
-    <a class="home-link" href="/" aria-label="Home">ME</a>
+    <a class="home-dot" href="/" aria-label="Home"></a>
 
     <nav class="nav-desktop" aria-label="Primary">
       {
@@ -65,19 +65,17 @@ function isActive(href: string): boolean {
     align-items: center;
     gap: 14px 28px;
   }
-  .home-link {
+  .home-dot {
     display: block;
-    flex: none;
-    font-family: var(--font-mono);
-    font-size: 12px;
-    font-weight: 400;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--brand-blue);
     text-decoration: none;
-    color: var(--ink-mute);
+    flex: none;
   }
-  .home-link:hover {
-    color: var(--ink);
+  .home-dot:hover {
+    opacity: 0.82;
   }
 
   .nav-desktop {
@@ -85,19 +83,13 @@ function isActive(href: string): boolean {
     gap: clamp(18px, 3vw, 40px);
   }
   .nav-link {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    font-weight: 400;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    font-size: 15px;
     text-decoration: none;
-    color: var(--ink-mute);
     border-bottom: 1px solid transparent;
     padding-bottom: 2px;
   }
   .nav-link:hover,
   .nav-link.active {
-    color: var(--ink);
     border-bottom-color: var(--ink);
   }
 
@@ -129,17 +121,15 @@ function isActive(href: string): boolean {
     display: flex;
   }
   .m-link {
-    font-family: var(--font-mono);
-    font-size: 14px;
+    font-size: 19px;
     font-weight: 400;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--ink-mute);
+    color: var(--ink-75);
     text-decoration: none;
     padding: 13px 0;
     border-top: 1px solid var(--ink-15);
   }
   .m-link.active {
+    font-weight: 500;
     color: var(--ink);
   }
 
