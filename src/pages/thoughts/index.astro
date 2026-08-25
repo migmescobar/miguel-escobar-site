@@ -18,7 +18,7 @@ const monthYear = (d: Date) =>
 >
   <div class="wrap">
     <section class="page-title" data-reveal>
-      <h1>Thoughts</h1>
+      <h1 class="display">Thoughts</h1>
     </section>
 
     <section class="index" data-reveal>
@@ -46,11 +46,9 @@ const monthYear = (d: Date) =>
   }
   .page-title h1 {
     margin: 0;
-    font-family: var(--font-serif);
-    font-weight: 400;
-    font-synthesis: none;
-    font-size: clamp(44px, 6.8vw, 96px);
-    letter-spacing: -0.008em;
+    font-size: clamp(46px, 6.8vw, 96px);
+    line-height: 1.02;
+    letter-spacing: -0.012em;
   }
 
   .index {
@@ -60,24 +58,28 @@ const monthYear = (d: Date) =>
   .entries {
     margin: 0;
     font-size: clamp(30px, 4vw, 48px);
-    line-height: 1.38;
-    letter-spacing: -0.02em;
-    font-weight: 500;
+    line-height: 1.2;
+    font-weight: 400;
+    letter-spacing: -0.026em;
     text-wrap: pretty;
   }
   .date {
     font-family: var(--font-mono);
     font-size: 0.3em;
-    font-weight: 400;
+    font-weight: 500;
     letter-spacing: 0.1em;
     vertical-align: 0.62em;
+    /* Hand-off says .5; darkened to clear AA at this small size (see global.css). */
     color: var(--ink-mute);
-    margin-right: 0.45em;
+    margin-right: 1.2em;
     white-space: nowrap;
   }
+  /* Deliberately dormant until hover — a display list, not body copy. The
+     hand-off's .3 resting value fails AA even for large text, so this uses .5,
+     which keeps the effect and clears the 3:1 large-text threshold. */
   .entries a {
     text-decoration: none;
-    color: var(--ink-dormant);
+    color: var(--ink-50);
     transition: color 0.35s ease;
   }
   .entries a:hover,
@@ -86,7 +88,7 @@ const monthYear = (d: Date) =>
   }
   .empty {
     margin: 0;
-    font-size: 18px;
-    color: var(--ink-60);
+    font-size: 16px;
+    color: var(--ink-90);
   }
 </style>

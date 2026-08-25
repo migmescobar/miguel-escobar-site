@@ -3,25 +3,26 @@
 // JSON-LD, self-hosted fonts, favicon, and (in production) analytics.
 import { SITE_URL, SITE_TITLE, CONTACT, GOATCOUNTER_CODE, GOATCOUNTER_READY } from '../consts';
 
-// Self-hosted Geist (woff2, font-display: swap) — latin subset only, needed weights.
-import '@fontsource/geist-sans/latin-400.css';
-import '@fontsource/geist-sans/latin-500.css';
-import '@fontsource/geist-sans/latin-600.css';
-import '@fontsource/geist-mono/latin-400.css';
-import '@fontsource/geist-mono/latin-500.css';
+// JetBrains Mono is metadata-only type (dates, form labels, footer). Self-hosted
+// via @fontsource rather than the Google Fonts CDN the hand-off suggested, so no
+// request leaves the domain. The display serif and text sans are self-hosted
+// woff2 declared in global.css.
+import '@fontsource/jetbrains-mono/latin-400.css';
+import '@fontsource/jetbrains-mono/latin-500.css';
 import '../styles/global.css';
 
 // Preload the faces used above the fold so the browser fetches them while the
 // CSS is still downloading. Without this they're only discovered after the CSS
 // parses, so text paints in fallback (Georgia / Helvetica) and visibly swaps.
 // Imported (not hard-coded) so each href tracks Astro's content hash.
-// Only these three: the display serif (hero name, section headings), sans 400
-// (body copy) and sans 500 (the hero positioning line, nav, h1–h3). Sans 600 is
-// never used so it's never even fetched, and mono is small + below the fold —
-// preloading those would only compete for early bandwidth.
-import editorialSerif from '../assets/fonts/editorial-new-400.woff2?url';
-import geistSans400 from '@fontsource/geist-sans/files/geist-sans-latin-400-normal.woff2?url';
-import geistSans500 from '@fontsource/geist-sans/files/geist-sans-latin-500-normal.woff2?url';
+// Three only: the display serif (page H1s), the text sans (body + nav), and
+// mono 400 (the date sits above the fold on the article and Thoughts pages).
+// The italic and 500 faces are conditional — article italics and the mobile-nav
+// current item — so they're left to normal discovery rather than competing for
+// early bandwidth.
+import displaySerif from '../assets/fonts/editorial-old-400.woff2?url';
+import textSans from '../assets/fonts/neue-montreal-400.woff2?url';
+import metaMono from '@fontsource/jetbrains-mono/files/jetbrains-mono-latin-400-normal.woff2?url';
 
 interface Props {
   title: string;
@@ -87,9 +88,9 @@ const blogPosting =
 
 <!-- crossorigin is required even same-origin: fonts fetch in anonymous CORS
      mode, and without it the browser downloads the file a second time. -->
-<link rel="preload" href={editorialSerif} as="font" type="font/woff2" crossorigin />
-<link rel="preload" href={geistSans400} as="font" type="font/woff2" crossorigin />
-<link rel="preload" href={geistSans500} as="font" type="font/woff2" crossorigin />
+<link rel="preload" href={displaySerif} as="font" type="font/woff2" crossorigin />
+<link rel="preload" href={textSans} as="font" type="font/woff2" crossorigin />
+<link rel="preload" href={metaMono} as="font" type="font/woff2" crossorigin />
 
 <title>{title}</title>
 <meta name="description" content={description} />

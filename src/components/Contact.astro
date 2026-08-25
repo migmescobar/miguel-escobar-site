@@ -6,10 +6,10 @@ import { CONTACT } from '../consts';
 <footer id="contact" class="site-footer" aria-labelledby="contact-heading">
   <div class="contact wrap" data-reveal>
     <div class="contact-left">
-      <h2 id="contact-heading">Let’s talk</h2>
+      <h2 id="contact-heading" class="display">Let’s talk</h2>
       <p class="lede">Hiring, briefing, or looking to connect? Hit me up and help me escape the permanent underclass.</p>
       <div class="links">
-        <a href={CONTACT.cv} download class="cv">Download my CV</a>
+        <a href={CONTACT.cv} target="_blank" rel="noopener" class="cv">Download my CV</a>
         <a href={CONTACT.phoneHref} class="tel" set:html={CONTACT.phoneDisplay.replace(/ /g, '&nbsp;')}
         ></a>
         <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
@@ -47,18 +47,16 @@ import { CONTACT } from '../consts';
   }
   h2 {
     margin: 0 0 16px;
-    font-family: var(--font-serif);
-    font-weight: 400;
-    font-synthesis: none;
-    font-size: clamp(40px, 5.2vw, 72px);
-    letter-spacing: -0.008em;
+    font-size: clamp(42px, 5.4vw, 76px);
+    line-height: 1.02;
+    letter-spacing: -0.012em;
     color: #fff;
   }
   .lede {
     margin: 0 0 28px;
     font-size: 16px;
     line-height: 1.6;
-    color: rgba(255, 255, 255, 0.85);
+    color: var(--white-85);
     max-width: 400px;
   }
   .links {
@@ -70,14 +68,13 @@ import { CONTACT } from '../consts';
   }
   .links a {
     color: var(--paper);
-    text-decoration-color: rgba(255, 255, 255, 0.55);
+    text-decoration-color: var(--white-55);
   }
   .links a:hover {
     text-decoration-color: #fff;
   }
   .links .cv {
     color: #fff;
-    font-weight: 500;
   }
   .links .tel {
     color: #fff;
@@ -90,7 +87,7 @@ import { CONTACT } from '../consts';
 
   .copyright {
     margin-top: clamp(40px, 6vw, 72px);
-    border-top: 1px solid rgba(255, 255, 255, 0.25);
+    border-top: 1px solid var(--white-25);
     padding-top: 20px;
     display: flex;
     justify-content: space-between;
@@ -98,7 +95,8 @@ import { CONTACT } from '../consts';
     gap: 8px 24px;
     font-family: var(--font-mono);
     font-size: 11px;
-    letter-spacing: 0.06em;
-    color: rgba(255, 255, 255, 0.7);
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    color: var(--white-70);
   }
 </style>

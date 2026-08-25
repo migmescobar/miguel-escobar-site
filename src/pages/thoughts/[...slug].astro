@@ -29,13 +29,9 @@ const titlePlain = plainTitle(post.data.title);
   image={`/og/thoughts/${post.id}.png`}
 >
   <article class="post">
-    <div class="backlink" data-reveal>
-      <a href="/thoughts/">← ALL THOUGHTS</a>
-    </div>
-
     <header class="post-head" data-reveal>
       <div class="eyebrow"><time datetime={dateISO}>{dateLong}</time></div>
-      <h1>{parseTitleParts(post.data.title).map((p) => (p.em ? <em>{p.text}</em> : p.text))}</h1>
+      <h1 class="display">{parseTitleParts(post.data.title).map((p) => (p.em ? <em>{p.text}</em> : p.text))}</h1>
       <p class="deck">{post.data.description}</p>
     </header>
 
@@ -67,40 +63,26 @@ const titlePlain = plainTitle(post.data.title);
     max-width: 720px;
     margin: 0 auto;
   }
-  .backlink {
-    padding: clamp(28px, 5vh, 56px) 0 0;
-  }
-  .backlink a {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    letter-spacing: 0.06em;
-    color: var(--ink-mute);
-    text-decoration: none;
-    border-bottom: 1px solid transparent;
-  }
-  .backlink a:hover {
-    border-bottom-color: var(--ink);
-  }
 
   .post-head {
-    padding: clamp(28px, 4vw, 44px) 0 clamp(24px, 3vw, 36px);
+    padding: clamp(36px, 7vh, 80px) 0 clamp(24px, 3vw, 36px);
   }
   .eyebrow {
     font-family: var(--font-mono);
     font-size: 12px;
-    letter-spacing: 0.06em;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    /* Hand-off says .55; darkened to clear AA at 12px (see global.css). */
     color: var(--ink-mute);
     margin-bottom: 20px;
   }
+  /* Editorial Old. line-height 1.22 is deliberately loose so this serif's
+     descenders clear the next line — don't tighten it. */
   .post-head h1 {
     margin: 0 0 22px;
-    /* Geist (not the display serif), matching how the same titles are set on the
-       Thoughts index. Weight 500 is a real loaded weight, so no synthesis guard. */
-    font-family: var(--font-sans);
-    font-weight: 500;
     font-size: clamp(34px, 5vw, 60px);
-    letter-spacing: -0.03em;
-    line-height: 1.08;
+    line-height: 1.22;
+    letter-spacing: -0.012em;
     text-wrap: balance;
   }
   .deck {
@@ -108,6 +90,7 @@ const titlePlain = plainTitle(post.data.title);
     font-size: 22px;
     line-height: 1.5;
     color: var(--ink-70);
+    text-wrap: pretty;
   }
 
   .hero {
@@ -123,14 +106,19 @@ const titlePlain = plainTitle(post.data.title);
   /* Prose (Markdown output) */
   .body :global(p) {
     margin: 0 0 1.3em;
-    font-size: 19px;
+    font-size: 16px;
     line-height: 1.65;
     color: var(--ink-90);
+    text-wrap: pretty;
+  }
+  .body :global(p:last-child) {
+    margin-bottom: 0;
   }
   .body :global(h2) {
     margin: 1.6em 0 0.5em;
     font-size: clamp(24px, 3vw, 32px);
-    letter-spacing: -0.02em;
+    line-height: 1.28;
+    letter-spacing: -0.008em;
   }
   .body :global(h3) {
     margin: 1.4em 0 0.4em;
@@ -140,7 +128,7 @@ const titlePlain = plainTitle(post.data.title);
   .body :global(ol) {
     margin: 0 0 1.3em;
     padding-left: 1.3em;
-    font-size: 19px;
+    font-size: 16px;
     line-height: 1.65;
     color: var(--ink-90);
   }
@@ -167,13 +155,13 @@ const titlePlain = plainTitle(post.data.title);
   .body :global(code) {
     font-family: var(--font-mono);
     font-size: 0.85em;
-    background: rgba(20, 20, 20, 0.06);
+    background: var(--ink-06);
     padding: 0.15em 0.4em;
   }
   .body :global(pre) {
     overflow: auto;
     padding: 1em;
-    background: rgba(20, 20, 20, 0.06);
+    background: var(--ink-06);
     margin: 0 0 1.3em;
   }
   .body :global(pre code) {

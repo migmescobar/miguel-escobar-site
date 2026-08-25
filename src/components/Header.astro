@@ -2,22 +2,26 @@
 import { NAV_LINKS } from '../consts';
 
 const path = Astro.url.pathname;
+const isHome = path === '/' || path === '';
 
 function isActive(href: string): boolean {
   if (href.startsWith('#')) return false; // Contact anchor is never "current"
   const base = href.replace(/\/$/, '');
   const here = path.replace(/\/$/, '');
-  return here === base || (base !== '' && here.startsWith(base + '/'));
+  if (base === '') return here === '';
+  return here === base || here.startsWith(base + '/');
 }
+
+// There's no wordmark in this design, so "Home" becomes a nav item — but only
+// on the pages that aren't already Home.
+const links = isHome ? NAV_LINKS : [{ href: '/', label: 'Home' }, ...NAV_LINKS];
 ---
 
 <header>
   <div class="bar wrap">
-    <a class="home-dot" href="/" aria-label="Home"></a>
-
     <nav class="nav-desktop" aria-label="Primary">
       {
-        NAV_LINKS.map(({ href, label }) => (
+        links.map(({ href, label }) => (
           <a
             href={href}
             class:list={['nav-link', { active: isActive(href) }]}
@@ -42,7 +46,7 @@ function isActive(href: string): boolean {
 
   <nav id="mobile-menu" class="nav-mobile" aria-label="Primary mobile" hidden>
     {
-      NAV_LINKS.map(({ href, label }) => (
+      links.map(({ href, label }) => (
         <a
           href={href}
           class:list={['m-link', { active: isActive(href) }]}
@@ -59,23 +63,13 @@ function isActive(href: string): boolean {
   header {
     padding: 26px var(--pad);
   }
+  /* No logo or wordmark — the nav sits alone, right-aligned. Miguel's name
+     appears only in the Home H1. */
   .bar {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
     gap: 14px 28px;
-  }
-  .home-dot {
-    display: block;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: var(--brand-blue);
-    text-decoration: none;
-    flex: none;
-  }
-  .home-dot:hover {
-    opacity: 0.82;
   }
 
   .nav-desktop {
@@ -122,8 +116,7 @@ function isActive(href: string): boolean {
   }
   .m-link {
     font-size: 19px;
-    font-weight: 400;
-    color: var(--ink-75);
+    color: rgba(20, 20, 20, 0.75);
     text-decoration: none;
     padding: 13px 0;
     border-top: 1px solid var(--ink-15);

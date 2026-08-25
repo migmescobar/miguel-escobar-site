@@ -35,13 +35,15 @@ const { last = false } = Astro.props;
   .text :global(h2) {
     margin: 0 0 14px;
     font-size: clamp(24px, 2.6vw, 32px);
-    letter-spacing: -0.015em;
+    font-weight: 400;
+    line-height: 1.28;
+    letter-spacing: -0.008em;
   }
   .text :global(p) {
     margin: 0 0 1em;
     font-size: 16px;
     line-height: 1.65;
-    color: var(--ink-85);
+    color: var(--ink-90);
     text-wrap: pretty;
   }
   .text :global(p:last-child) {

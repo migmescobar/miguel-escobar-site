@@ -69,7 +69,7 @@ const isExternal = (href: string) => href.startsWith('http');
 
 <BaseLayout title="Miguel Escobar — Strategic Communications & Editorial" description={SITE_DESCRIPTION} personSchema>
   <section class="hero wrap">
-    <h1 class="hero-name">Miguel<br />Escobar</h1>
+    <h1 class="hero-name display display-liga">{'Mi\u200Cguel'}<br />Escobar</h1>
     <div class="hero-rule"></div>
     <div class="hero-grid">
       <p class="positioning">
@@ -99,7 +99,7 @@ const isExternal = (href: string) => href.startsWith('http');
 
   <section class="work wrap">
     <div class="work-head" data-reveal>
-      <h2>Some work</h2>
+      <h2 class="display">Some work</h2>
     </div>
     <div class="grid">
       {
@@ -118,9 +118,7 @@ const isExternal = (href: string) => href.startsWith('http');
                   href={card.href}
                   target={isExternal(card.href) ? '_blank' : undefined}
                   rel={isExternal(card.href) ? 'noopener' : undefined}
-                >
-                  {card.title}
-                </a>
+                >{isExternal(card.href) ? card.title : `${card.title}\u00A0\u2192`}</a>
               ) : (
                 card.title
               )}
@@ -135,18 +133,15 @@ const isExternal = (href: string) => href.startsWith('http');
 
 <style>
   .hero {
-    /* Top padding bumped up from clamp(40px,8vh,96px) for more breathing room
-       below the nav bar; bottom (above the hairline) is unchanged. */
-    padding: clamp(56px, 11vh, 128px) 0 clamp(48px, 7vw, 96px);
+    padding: clamp(64px, 11vh, 140px) 0 clamp(56px, 9vw, 120px);
   }
+  /* Family, weight and the ligature-on feature set come from .display.display-liga
+     in global.css — this is the one heading that keeps discretionary ligatures. */
   .hero-name {
     margin: 0 0 clamp(28px, 4vw, 48px);
-    font-family: var(--font-serif);
-    font-weight: 400;
-    font-synthesis: none;
     font-size: clamp(54px, 11vw, 164px);
-    line-height: 1.02;
-    letter-spacing: -0.015em;
+    line-height: 0.96;
+    letter-spacing: -0.018em;
   }
   .hero-rule {
     height: 1px;
@@ -162,40 +157,38 @@ const isExternal = (href: string) => href.startsWith('http');
   .positioning {
     margin: 0;
     font-size: clamp(22px, 2.6vw, 34px);
-    line-height: 1.28;
-    font-weight: 500;
-    letter-spacing: -0.02em;
+    line-height: 1.24;
+    font-weight: 400;
+    letter-spacing: -0.008em;
+    word-spacing: 0.05em;
+    text-wrap: balance;
   }
   .bio {
     max-width: 640px;
-    font-size: 17px;
+    font-size: 16px;
     line-height: 1.65;
-    /* Optical baseline nudge: the 34px positioning line and the 17px bio start at
-       the same y, so the smaller column reads as sitting high. Desktop only. */
+    color: var(--ink-90);
+    /* Optical baseline match to the much larger line in the left column. */
     padding-top: 7px;
   }
   .bio p {
     margin: 0 0 1.4em;
   }
-  /* No trailing space under the bio column, whichever paragraph ends it. Was
-     tied to a .last class that no longer exists in the markup. */
   .bio p:last-child {
     margin: 0;
   }
 
   .work {
-    padding: clamp(40px, 6vw, 72px) 0 clamp(64px, 9vw, 128px);
+    padding: clamp(30px, 4.25vw, 52px) 0 clamp(64px, 9vw, 128px);
   }
   .work-head {
     margin-bottom: clamp(24px, 3vw, 40px);
   }
   .work-head h2 {
     margin: 0;
-    font-family: var(--font-serif);
-    font-weight: 400;
-    font-synthesis: none;
     font-size: clamp(42px, 5.8vw, 80px);
-    letter-spacing: -0.008em;
+    line-height: 1.02;
+    letter-spacing: -0.012em;
     white-space: nowrap;
   }
   .grid {
@@ -211,14 +204,15 @@ const isExternal = (href: string) => href.startsWith('http');
   .card h3 {
     margin: 0;
     font-size: 22px;
-    letter-spacing: -0.01em;
-    line-height: 1.25;
+    font-weight: 400;
+    line-height: 1.38;
+    letter-spacing: -0.004em;
   }
   .card p {
     margin: 0;
     font-size: 15px;
     line-height: 1.55;
-    color: var(--ink-80);
+    color: var(--ink-90);
     text-wrap: pretty;
   }
 
@@ -228,8 +222,9 @@ const isExternal = (href: string) => href.startsWith('http');
       gap: 28px;
     }
     .hero-name {
-      font-size: clamp(62px, 23vw, 92px);
-      line-height: 1.04;
+      font-size: clamp(46px, 15vw, 124px);
+      line-height: 0.98;
+      letter-spacing: -0.014em;
     }
     .bio {
       padding-top: 0;

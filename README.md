@@ -285,7 +285,7 @@ src/
   consts.ts                  ← contact details, links, Formspree & GoatCounter settings
   styles/global.css          Colours, fonts, and shared styles
   assets/images/             Site images (your real art; optimised automatically at build)
-  assets/fonts/              Self-hosted Editorial New woff2 (license in /licenses)
+  assets/fonts/              Self-hosted Editorial Old + Neue Montreal woff2 (licences in /licenses)
 public/                      Files served as-is: CV, favicon, OG image, robots.txt
 ```
 
@@ -295,10 +295,18 @@ public/                      Files served as-is: CV, favicon, OG image, robots.t
 
 - **Stack:** Astro 5 (static output, `output: 'static'`), zero client framework. Small vanilla
   scripts only (mobile menu, contact form, scroll-reveal). `@astrojs/sitemap` for the sitemap.
-- **Fonts:** Geist + Geist Mono (self-hosted via `@fontsource`) for body/UI, plus **PP Editorial
-  New** (Pangram Pangram, self-hosted woff2, Regular 400, exposed as `--font-serif`) for the
-  display headings. All `font-display: swap`. The free personal-use license is committed in
-  `/licenses`.
+- **Fonts:** three families, all self-hosted, all `font-display: swap`. **PP Editorial Old**
+  (`--font-serif`) for display headings; **PP Neue Montreal** (`--font-sans`) for body, nav and
+  UI; **JetBrains Mono** (`--font-mono`, via `@fontsource`) for metadata — dates, form labels,
+  footer. The two Pangram Pangram families are free-personal-use releases; keep their EULAs in
+  `/licenses`. Only five PP faces ship (Editorial Old roman + italic, Neue Montreal roman +
+  italic + semibold); semibold exists solely for the current item in the mobile nav. The retail
+  OTFs carry Cyrillic/Greek this site never renders, so `assets:fonts` subsets them — that takes
+  Neue Montreal from ~83KB to ~26KB a face. Editorial Old only sheds ~15% because its bulk is the
+  discretionary-ligature set the Home H1 depends on.
+- **Ligatures:** Editorial Old's discretionary ligatures are ON for the Home H1 only (`.display
+  .display-liga`) and OFF for every other display heading (`.display`), with `ss01` on
+  throughout. A zero-width non-joiner in "Mi&zwnj;guel" suppresses one unwanted pair.
 - **Images:** `astro:assets` `<Picture>` → responsive AVIF/WebP with a JPEG fallback + `srcset`,
   explicit dimensions (no layout shift), lazy below the fold. See `src/components/WorkImage.astro`,
   which exposes a `quality` prop (default 80; the work pages pass higher values). Every image slot
@@ -318,12 +326,12 @@ public/                      Files served as-is: CV, favicon, OG image, robots.t
 
 ### One-off asset scripts (already run; outputs are committed)
 These regenerate the derived assets. They need the optional tools (`@resvg/resvg-js`, `fontkit`,
-`wawoff2`). You normally never need these.
+`wawoff2`, and `fonttools` on PATH for `assets:fonts`). You normally never need these.
 
 ```bash
-npm run assets:og            # public/og-image.png (1200×630, Editorial New masthead + brand dot)
+npm run assets:og            # public/og-image.png (1200×630, Editorial Old masthead + brand dot)
 npm run assets:icons         # public/apple-touch-icon.png (derived from favicon.png)
-npm run assets:fonts         # PP Editorial New OTF → self-hosted woff2 (src/assets/fonts)
+npm run assets:fonts         # PP OTFs → subsetted, self-hosted woff2 (needs `pip install fonttools`)
 ```
 
 ### Note on `npm audit`

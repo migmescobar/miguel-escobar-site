@@ -1,18 +1,44 @@
-/* PP Editorial New display serif (Pangram Pangram, self-hosted woff2, free
-   personal-use license — see /licenses). Used only for the big display headings
-   (Regular 400). */
+/* ── Typefaces ────────────────────────────────────────────────────────────────
+   PP Editorial Old (display) and PP Neue Montreal (text) — Pangram Pangram,
+   free personal-use licence, EULAs in /licenses. Self-hosted, subsetted woff2
+   (see scripts/convert-fonts.mjs). JetBrains Mono is imported from @fontsource
+   in BaseHead.astro rather than the Google Fonts CDN the hand-off suggested, so
+   every face on the site stays self-hosted and no request leaves the domain. */
 @font-face {
-  font-family: 'Editorial New';
-  src: url('../assets/fonts/editorial-new-400.woff2') format('woff2');
+  font-family: 'Editorial Old';
+  src: url('../assets/fonts/editorial-old-400.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: 'Editorial New';
-  src: url('../assets/fonts/editorial-new-400-italic.woff2') format('woff2');
+  font-family: 'Editorial Old';
+  src: url('../assets/fonts/editorial-old-400-italic.woff2') format('woff2');
   font-weight: 400;
   font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Neue Montreal';
+  src: url('../assets/fonts/neue-montreal-400.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Neue Montreal';
+  src: url('../assets/fonts/neue-montreal-400-italic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+/* Semibold is mapped across 500–600 so the one weight-500 element in the design
+   (the current item in the mobile nav) gets a real face, never a synthetic bold. */
+@font-face {
+  font-family: 'Neue Montreal';
+  src: url('../assets/fonts/neue-montreal-500.woff2') format('woff2');
+  font-weight: 500 600;
+  font-style: normal;
   font-display: swap;
 }
 
@@ -20,31 +46,35 @@
 :root {
   --paper: #eae7e1;
   --ink: #141414;
-  --brand-blue: #0047bb; /* header home dot; matches the favicon fill */
-  --ink-90: rgba(20, 20, 20, 0.9);
-  --ink-85: rgba(20, 20, 20, 0.85);
-  --ink-80: rgba(20, 20, 20, 0.8);
-  --ink-75: rgba(20, 20, 20, 0.75);
-  --ink-70: rgba(20, 20, 20, 0.7);
-  --ink-60: rgba(20, 20, 20, 0.6);
-  --ink-55: rgba(20, 20, 20, 0.55);
-  --ink-50: rgba(20, 20, 20, 0.5);
-  --ink-40: rgba(20, 20, 20, 0.4);
-  --ink-35: rgba(20, 20, 20, 0.35);
-  --ink-30: rgba(20, 20, 20, 0.3);
-  --ink-20: rgba(20, 20, 20, 0.2);
-  --ink-15: rgba(20, 20, 20, 0.15);
+  --brand-blue: #0047bb;
 
-  /* Muted TEXT tokens tuned to meet WCAG AA on paper (the hand-off's 0.5–0.6
-     grays fall just under AA). Decorative rules/borders keep the lighter tints
-     above. --ink-mute: small secondary text (labels, eyebrows, footer, dates).
-     --ink-dormant: the large "dormant" writing links that brighten on hover. */
+  --ink-90: rgba(20, 20, 20, 0.9); /* all body copy */
+  --ink-70: rgba(20, 20, 20, 0.7); /* article standfirst */
+  --ink-55: rgba(20, 20, 20, 0.55); /* article date */
+  --ink-50: rgba(20, 20, 20, 0.5); /* Thoughts index date chip */
+  --ink-40: rgba(20, 20, 20, 0.4); /* default link underline */
+  --ink-30: rgba(20, 20, 20, 0.3); /* section rules; Thoughts link at rest */
+  --ink-15: rgba(20, 20, 20, 0.15); /* mobile nav dividers */
+  --ink-06: rgba(20, 20, 20, 0.06); /* image placeholder fill */
+
+  /* The hand-off sets small meta text at .55 (3.84:1) and the dormant Thoughts
+     links at .30 (1.92:1) — both below WCAG AA on paper, and its own checklist
+     says not to regress accessibility. As with the earlier hand-off, those greys
+     are darkened here: --ink-mute for small text (5.78:1, clears the 4.5:1 rule)
+     and --ink-50 for the large dormant links (3.29:1, clears the 3:1 large-text
+     rule while keeping the brighten-on-hover effect). Decorative rules and
+     borders keep the lighter tints above. */
   --ink-mute: rgba(20, 20, 20, 0.68);
-  --ink-dormant: rgba(20, 20, 20, 0.5);
 
-  --font-sans: 'Geist Sans', Helvetica, Arial, sans-serif;
-  --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
-  --font-serif: 'Editorial New', Georgia, 'Times New Roman', serif;
+  --white-85: rgba(255, 255, 255, 0.85);
+  --white-70: rgba(255, 255, 255, 0.7);
+  --white-55: rgba(255, 255, 255, 0.55);
+  --white-45: rgba(255, 255, 255, 0.45);
+  --white-25: rgba(255, 255, 255, 0.25);
+
+  --font-sans: 'Neue Montreal', Helvetica, Arial, sans-serif;
+  --font-serif: 'Editorial Old', Georgia, serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 
   --maxw: 1360px;
   --pad: clamp(20px, 5vw, 64px);
@@ -63,16 +93,38 @@ html {
 body {
   margin: 0;
   background: var(--paper);
-  color: var(--ink);
+  color: var(--ink-90);
   font-family: var(--font-sans);
+  /* Compensates for setting Neue Montreal Regular rather than the Text cut. */
+  letter-spacing: 0.015em;
   -webkit-font-smoothing: antialiased;
+  font-kerning: normal;
+  font-variant-ligatures: common-ligatures;
   text-rendering: optimizeLegibility;
 }
 
 h1,
 h2,
 h3 {
-  font-weight: 500;
+  font-weight: 400;
+  color: var(--ink);
+}
+
+/* ── Display type ─────────────────────────────────────────────────────────────
+   Editorial Old's discretionary ligatures are deliberately OFF for every
+   heading except the Home H1 (which opts in via .display-liga). 'ss01' stays
+   on everywhere. */
+.display {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-synthesis: none;
+  font-kerning: normal;
+  font-variant-ligatures: none;
+  font-feature-settings: 'kern' 1, 'liga' 0, 'clig' 0, 'dlig' 0, 'ss01' 1;
+}
+.display-liga {
+  font-variant-ligatures: common-ligatures contextual discretionary-ligatures;
+  font-feature-settings: 'kern' 1, 'liga' 1, 'clig' 1, 'dlig' 1, 'ss01' 1;
 }
 
 a {
@@ -98,6 +150,14 @@ picture {
   max-width: 100%;
 }
 
+/* No rounded corners anywhere in this design. */
+img,
+input,
+textarea,
+button {
+  border-radius: 0;
+}
+
 input::placeholder,
 textarea::placeholder {
   color: rgba(255, 255, 255, 0.5);
@@ -105,10 +165,10 @@ textarea::placeholder {
 
 /* Visible keyboard focus everywhere (accessibility). */
 :focus-visible {
-  outline: 2px solid var(--ink);
+  outline: 2px solid var(--brand-blue);
   outline-offset: 3px;
 }
-/* Footer is white-on-blue, so focus rings there need to be light to stay visible. */
+/* The contact block is white-on-blue, so focus rings there flip to light. */
 .site-footer :focus-visible {
   outline-color: var(--paper);
 }
