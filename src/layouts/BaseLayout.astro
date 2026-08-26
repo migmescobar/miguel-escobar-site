@@ -11,7 +11,11 @@ interface Props {
   publishedTime?: string;
   personSchema?: boolean;
   articleHeadline?: string;
+  /** Home is a single-viewport "door" page: no header, no footer, no scroll. */
+  bare?: boolean;
 }
+
+const { bare = false } = Astro.props;
 ---
 
 <!doctype html>
@@ -22,11 +26,11 @@ interface Props {
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
     <div class="page">
-      <Header />
-      <main id="main">
+      {!bare && <Header />}
+      <main id="main" class:list={{ bare }}>
         <slot />
       </main>
-      <Contact />
+      {!bare && <Contact />}
     </div>
 
     <style>
@@ -38,6 +42,12 @@ interface Props {
       main {
         flex: 1;
         padding: 0 var(--pad);
+      }
+      /* Home supplies its own padding and owns the full viewport. */
+      main.bare {
+        display: flex;
+        flex-direction: column;
+        padding: 0;
       }
       .skip-link {
         position: absolute;

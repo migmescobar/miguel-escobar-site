@@ -1,5 +1,5 @@
 // Build-time Open Graph image for each Thoughts post: /og/thoughts/<slug>.png
-// (1200x630, on-brand — PP Editorial Old title + date, matching the site OG card).
+// (1200x630, on-brand — Neue Montreal title + date, matching the site OG card).
 // Generated with resvg; fontkit reads the font's family name and measures the
 // title so it wraps to fit.
 import type { APIRoute } from 'astro';
@@ -12,15 +12,14 @@ import { plainTitle } from '../../../utils/postTitle';
 const fontPath = (name: string) =>
   fileURLToPath(new URL(`../../../../scripts/fonts/${name}`, import.meta.url));
 // resvg's font loader only reads OTF/TTF — a woff2 silently renders blank, so
-// these point at the OTFs in scripts/fonts/ rather than the site's woff2.
-const DISPLAY_OTF = fontPath('PPEditorialOld-Regular.otf');
+// this points at the OTF in scripts/fonts/ rather than the site's woff2.
 const TEXT_OTF = fontPath('PPNeueMontreal-Regular.otf');
-const fontFiles = [DISPLAY_OTF, TEXT_OTF];
+const fontFiles = [TEXT_OTF];
 
-// resvg matches fonts by their internal family name; read them once.
-const serif = openSync(DISPLAY_OTF) as any;
-const DISPLAY = serif.familyName as string;
-const TEXT = (openSync(TEXT_OTF) as any).familyName as string;
+// resvg matches fonts by their internal family name; read it once. The same
+// face is used for the title and the meta lines — this design has no serif.
+const display = openSync(TEXT_OTF) as any;
+const TEXT = display.familyName as string;
 
 const PAPER = '#EAE7E1';
 const INK = '#141414';
@@ -28,9 +27,9 @@ const BRAND = '#0047bb';
 
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-/** Greedy word-wrap using the actual display-serif metrics. */
+/** Greedy word-wrap using the actual rendered font metrics. */
 function wrapTitle(text: string, fontSize: number, maxWidth: number): string[] {
-  const measure = (s: string) => (serif.layout(s).advanceWidth * fontSize) / serif.unitsPerEm;
+  const measure = (s: string) => (display.layout(s).advanceWidth * fontSize) / display.unitsPerEm;
   const lines: string[] = [];
   let cur = '';
   for (const word of text.split(/\s+/)) {
@@ -75,7 +74,7 @@ export const GET: APIRoute = ({ props }) => {
   const titleSvg = lines
     .map(
       (l, i) =>
-        `<text x="80" y="${startY + i * lineHeight}" font-family="${DISPLAY}" font-size="${fontSize}" letter-spacing="-1" fill="${INK}">${esc(l)}</text>`
+        `<text x="80" y="${startY + i * lineHeight}" font-family="${TEXT}" font-size="${fontSize}" letter-spacing="-1" fill="${INK}">${esc(l)}</text>`
     )
     .join('');
   const dateY = startY + (lines.length - 1) * lineHeight + 56;

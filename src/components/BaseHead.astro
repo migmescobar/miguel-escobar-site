@@ -15,12 +15,11 @@ import '../styles/global.css';
 // CSS is still downloading. Without this they're only discovered after the CSS
 // parses, so text paints in fallback (Georgia / Helvetica) and visibly swaps.
 // Imported (not hard-coded) so each href tracks Astro's content hash.
-// Three only: the display serif (page H1s), the text sans (body + nav), and
+// Two only: the text sans (everything — this design has no display serif) and
 // mono 400 (the date sits above the fold on the article and Thoughts pages).
 // The italic and 500 faces are conditional — article italics and the mobile-nav
 // current item — so they're left to normal discovery rather than competing for
 // early bandwidth.
-import displaySerif from '../assets/fonts/editorial-old-400.woff2?url';
 import textSans from '../assets/fonts/neue-montreal-400.woff2?url';
 import metaMono from '@fontsource/jetbrains-mono/files/jetbrains-mono-latin-400-normal.woff2?url';
 
@@ -88,7 +87,6 @@ const blogPosting =
 
 <!-- crossorigin is required even same-origin: fonts fetch in anonymous CORS
      mode, and without it the browser downloads the file a second time. -->
-<link rel="preload" href={displaySerif} as="font" type="font/woff2" crossorigin />
 <link rel="preload" href={textSans} as="font" type="font/woff2" crossorigin />
 <link rel="preload" href={metaMono} as="font" type="font/woff2" crossorigin />
 

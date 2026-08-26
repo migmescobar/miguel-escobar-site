@@ -18,7 +18,11 @@ const monthYear = (d: Date) =>
 >
   <div class="wrap">
     <section class="page-title" data-reveal>
-      <h1 class="display">Thoughts</h1>
+      <h1>Thoughts</h1>
+      <!-- DRAFT COPY — fills the slot the hand-off left as Lorem. Rewrite freely. -->
+      <p class="subhead">
+        Occasional writing on media, culture, and the business of making things worth reading.
+      </p>
     </section>
 
     <section class="index" data-reveal>
@@ -47,8 +51,18 @@ const monthYear = (d: Date) =>
   .page-title h1 {
     margin: 0;
     font-size: clamp(46px, 6.8vw, 96px);
-    line-height: 1.02;
-    letter-spacing: -0.012em;
+    font-weight: 400;
+    line-height: 1.06;
+    letter-spacing: -0.013em;
+  }
+  .subhead {
+    margin: clamp(18px, 2vw, 26px) 0 0;
+    max-width: 46ch;
+    font-size: clamp(18px, 1.8vw, 22px);
+    line-height: 1.45;
+    letter-spacing: 0.004em;
+    color: var(--ink-70);
+    text-wrap: pretty;
   }
 
   .index {
@@ -60,7 +74,7 @@ const monthYear = (d: Date) =>
     font-size: clamp(30px, 4vw, 48px);
     line-height: 1.2;
     font-weight: 400;
-    letter-spacing: -0.026em;
+    letter-spacing: -0.014em;
     text-wrap: pretty;
   }
   .date {
@@ -69,17 +83,18 @@ const monthYear = (d: Date) =>
     font-weight: 500;
     letter-spacing: 0.1em;
     vertical-align: 0.62em;
-    /* Hand-off says .5; darkened to clear AA at this small size (see global.css). */
+    /* Hand-off says .5; darkened to clear AA at this small size. */
     color: var(--ink-mute);
     margin-right: 1.2em;
     white-space: nowrap;
   }
-  /* Deliberately dormant until hover — a display list, not body copy. The
-     hand-off's .3 resting value fails AA even for large text, so this uses .5,
-     which keeps the effect and clears the 3:1 large-text threshold. */
+  /* Dim until hover — a display list, not body copy. The hand-off's .3 resting
+     value fails AA even for large text, so this uses .5, which keeps the effect
+     and clears the 3:1 large-text threshold. Focus also lifts it to full ink,
+     which the hand-off flagged as worth doing. */
   .entries a {
     text-decoration: none;
-    color: var(--ink-50);
+    color: var(--ink-dormant);
     transition: color 0.35s ease;
   }
   .entries a:hover,

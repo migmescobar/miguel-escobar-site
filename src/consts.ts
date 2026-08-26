@@ -21,27 +21,17 @@ export const CONTACT = {
   cv: '/MiguelEscobar_2026_CV_Resume.pdf',
 };
 
-// ── Contact form ────────────────────────────────────────────────────────────
-// 1. Create a free form at https://formspree.io (send confirmations to the email
-//    above). 2. Paste the endpoint it gives you (looks like the example below).
-// Until you do, the form falls back to opening the visitor's email app.
-export const FORMSPREE_ENDPOINT = 'https://formspree.io/f/YOUR_FORM_ID';
-
 // ── Analytics ───────────────────────────────────────────────────────────────
 // Create a free site at https://www.goatcounter.com and put your code here
 // (the part before ".goatcounter.com"). Leave as-is to disable analytics.
 export const GOATCOUNTER_CODE = 'YOUR_GOATCOUNTER_CODE';
 
-/** True once the Formspree endpoint has been filled in. */
-export const FORMSPREE_READY = !FORMSPREE_ENDPOINT.includes('YOUR_FORM_ID');
 /** True once the GoatCounter code has been filled in. */
 export const GOATCOUNTER_READY = GOATCOUNTER_CODE !== 'YOUR_GOATCOUNTER_CODE';
 
 /** Primary navigation (shared header). */
 export const NAV_LINKS = [
-  { href: '/editorial-work/', label: 'Editorial' },
-  { href: '/advertising-work/', label: 'Advertising' },
+  { href: '/about/', label: 'About' },
+  { href: '/work/', label: 'Work' },
   { href: '/thoughts/', label: 'Thoughts' },
-  // Contact section lives in the footer of every page, so this is a same-page anchor.
-  { href: '#contact', label: 'Contact' },
 ];

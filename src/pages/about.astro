@@ -1,0 +1,75 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="About — Miguel Escobar"
+  description="Miguel Escobar is a Singapore-based communications professional with a journalist’s instincts — editorial, content operations, and strategic communications across APAC."
+>
+  <div class="wrap">
+    <section class="statement" data-reveal>
+      <h1>Strategic Communications. Content Governance. Editorial Operations. APAC&nbsp;Markets.</h1>
+    </section>
+
+    <section class="bio-section" data-reveal>
+      <div class="bio">
+        <p>
+          A Singapore-based communications professional with a journalist’s instincts. Perpetually
+          curious, plugged into tech and culture, terminally online, and judiciously AI-pilled.
+        </p>
+        <p>
+          At Esquire Philippines, I covered culture, politics, and current affairs, writing, producing,
+          and editing everything from daily articles to investigative features. Over 12 years I’ve moved
+          across editorial, content operations, and strategic communications, working with brands like the
+          NBA, Trust Bank, and Samsung across the Philippines and Singapore. I’ve managed
+          high-volume content projects, enforced editorial standards across several publications, and built
+          communications strategies and content governance frameworks for brands.
+        </p>
+        <p>
+          Now I’m learning code at the National University of Singapore (NUS) with a view to applying my editorial skills in a more tech-forward context.
+        </p>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .statement {
+    padding: clamp(28px, 5vh, 64px) 0 clamp(36px, 5vw, 64px);
+  }
+  /* 1.06 leading is intentional — it was loosened from a tighter setting.
+     Don't tighten it back. */
+  .statement h1 {
+    margin: 0;
+    max-width: 22ch;
+    font-size: clamp(38px, 6.6vw, 104px);
+    font-weight: 400;
+    line-height: 1.06;
+    letter-spacing: -0.014em;
+    text-wrap: balance;
+    font-variant-ligatures: none;
+    font-feature-settings: 'kern' 1;
+  }
+
+  /* The bio sits right-aligned in the grid so it reads opposite the H1's
+     left-hand mass. */
+  .bio-section {
+    padding: 0 0 clamp(48px, 7vw, 96px);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    justify-content: end;
+  }
+  .bio {
+    max-width: 64ch;
+    justify-self: end;
+    font-size: clamp(17px, 1.55vw, 20px);
+    line-height: 1.58;
+    letter-spacing: 0.004em;
+  }
+  .bio p {
+    margin: 0 0 1.3em;
+  }
+  .bio p:last-child {
+    margin: 0;
+  }
+</style>

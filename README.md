@@ -16,7 +16,7 @@ Claude) and they'll know exactly what to do.
 2. [Run it on your Mac (preview)](#2-run-it-on-your-mac-preview)
 3. [Add or edit a Thoughts post](#3-add-or-edit-a-thoughts-post) ← the main thing you'll do
 4. [Change your details, links, and the CV](#4-change-your-details-links-and-the-cv)
-5. [Turn on the contact form and analytics](#5-turn-on-the-contact-form-and-analytics)
+5. [Turn on analytics](#5-turn-on-analytics)
 6. [Publish changes (it deploys itself)](#6-publish-changes-it-deploys-itself)
 7. [First-time setup: GitHub + domain + DNS](#7-first-time-setup-github--domain--dns)
 8. [How the site is organised](#8-how-the-site-is-organised)
@@ -123,8 +123,8 @@ commented so you can see what each one is.
 replace that file with a new PDF, keeping the **same file name** — the "Download my CV" link
 then just works.
 
-**Page wording** (home, editorial, advertising) lives in the matching files under
-`src/pages/` (e.g. `src/pages/index.astro` is the home page). The text is plain English inside
+**Page wording** lives in the matching files under `src/pages/` — `index.astro` (the Home
+"doors" page), `about.astro`, `work.astro`, `editorial-work.astro`, `advertising-work.astro`. The text is plain English inside
 the file; edit between the tags. If in doubt, ask a developer or Claude.
 
 ### Swapping in your real images
@@ -134,7 +134,7 @@ names tell you which slot each one is:
 
 | File | Where it shows |
 |---|---|
-| `home_*.png` (6) | the six "Some work" cards on the home page |
+| `home_*.png` (6) | the six cards on the **Work** page |
 | `editorial_*.png` (4) | the four rows on the Editorial Work page |
 | `ads_*.png` (4) | the four rows on the Advertising Work page |
 
@@ -151,7 +151,7 @@ so nothing jumps around. Just give it a reasonable source file:
 
 **To replace one image:**
 1. Put your photo in `src/assets/images/` (e.g. `my-photo.jpg`).
-2. Open the page it belongs to — `src/pages/index.astro` (home), `editorial-work.astro`, or
+2. Open the page it belongs to — `src/pages/work.astro`, `editorial-work.astro`, or
    `advertising-work.astro`. Near the top you'll see lines like
    `import whitewash from '../assets/images/home_whitewash.png';` — change that path to your
    file, e.g. `'../assets/images/my-photo.jpg'`.
@@ -163,21 +163,16 @@ them in, write the alt text, and publish.
 
 ---
 
-## 5. Turn on the contact form and analytics
+## 5. Turn on analytics
 
-Both are optional and both are free. Until you set them up, the site still works: the contact
-form falls back to opening the visitor's email app, and analytics simply stay off.
-
-**Contact form (Formspree).**
-1. Sign up at <https://formspree.io> and create a new form (send submissions to your email).
-2. It gives you an endpoint that looks like `https://formspree.io/f/abcdwxyz`.
-3. Open `src/consts.ts`, find `FORMSPREE_ENDPOINT`, and paste your endpoint in place of the
-   placeholder. Save, then [publish](#6-publish-changes-it-deploys-itself).
+Optional and free. Until you set it up, analytics simply stay off.
 
 **Analytics (GoatCounter — privacy-friendly, no cookie banner needed).**
 1. Sign up at <https://www.goatcounter.com> and pick a site code (e.g. `miguelescobar`).
 2. Open `src/consts.ts`, find `GOATCOUNTER_CODE`, and put your code there. Save and publish.
-   (Analytics only load on the live site, never during local preview.)
+
+There is no contact form — the footer carries your email, phone, LinkedIn and CV as plain links,
+which is the whole contact surface of the site.
 
 ---
 
@@ -272,9 +267,11 @@ slightly; look for "DNS settings" or "Custom records"). Add these records:
 ```
 src/
   pages/                     Each file = one web page
-    index.astro              Home (/)
-    editorial-work.astro     /editorial-work/
-    advertising-work.astro   /advertising-work/
+    index.astro              Home (/) — the name + three "doors", no header/footer
+    about.astro              /about/
+    work.astro               /work/ — the six-card index
+    editorial-work.astro     /editorial-work/  ("More Editorial Work")
+    advertising-work.astro   /advertising-work/  ("More Advertising Work")
     thoughts/
       index.astro            Thoughts list (/thoughts/)
       [...slug].astro        The template every post uses
@@ -282,10 +279,10 @@ src/
   content/thoughts/          YOUR POSTS live here (one .md file each)
   components/                Shared pieces (header, footer/contact, image)
   layouts/                   Page shells
-  consts.ts                  ← contact details, links, Formspree & GoatCounter settings
+  consts.ts                  ← contact details, nav links, GoatCounter setting
   styles/global.css          Colours, fonts, and shared styles
   assets/images/             Site images (your real art; optimised automatically at build)
-  assets/fonts/              Self-hosted Editorial Old + Neue Montreal woff2 (licences in /licenses)
+  assets/fonts/              Self-hosted Neue Montreal woff2 (licence in /licenses)
 public/                      Files served as-is: CV, favicon, OG image, robots.txt
 ```
 
@@ -294,19 +291,16 @@ public/                      Files served as-is: CV, favicon, OG image, robots.t
 ## 9. For developers
 
 - **Stack:** Astro 5 (static output, `output: 'static'`), zero client framework. Small vanilla
-  scripts only (mobile menu, contact form, scroll-reveal). `@astrojs/sitemap` for the sitemap.
-- **Fonts:** three families, all self-hosted, all `font-display: swap`. **PP Editorial Old**
-  (`--font-serif`) for display headings; **PP Neue Montreal** (`--font-sans`) for body, nav and
-  UI; **JetBrains Mono** (`--font-mono`, via `@fontsource`) for metadata — dates, form labels,
-  footer. The two Pangram Pangram families are free-personal-use releases; keep their EULAs in
-  `/licenses`. Only five PP faces ship (Editorial Old roman + italic, Neue Montreal roman +
-  italic + semibold); semibold exists solely for the current item in the mobile nav. The retail
-  OTFs carry Cyrillic/Greek this site never renders, so `assets:fonts` subsets them — that takes
-  Neue Montreal from ~83KB to ~26KB a face. Editorial Old only sheds ~15% because its bulk is the
-  discretionary-ligature set the Home H1 depends on.
-- **Ligatures:** Editorial Old's discretionary ligatures are ON for the Home H1 only (`.display
-  .display-liga`) and OFF for every other display heading (`.display`), with `ss01` on
-  throughout. A zero-width non-joiner in "Mi&zwnj;guel" suppresses one unwanted pair.
+  scripts only (mobile menu, scroll-reveal, Home hero-fit + colour flood). `@astrojs/sitemap`
+  for the sitemap.
+- **Fonts:** two families, both self-hosted, both `font-display: swap`. **PP Neue Montreal**
+  (`--font-sans`) carries the entire site — body, nav, and every heading; **JetBrains Mono**
+  (`--font-mono`, via `@fontsource`) is metadata only: dates and the footer meta line. There is
+  **no display serif** in this design. Neue Montreal is a Pangram Pangram free-personal-use
+  release; keep its EULA in `/licenses`. Three faces ship (roman, italic, semibold); semibold
+  exists solely for the current item in the mobile nav. The retail OTFs carry Cyrillic/Greek this
+  site never renders, so `assets:fonts` subsets them — ~83KB to ~26KB a face.
+
 - **Images:** `astro:assets` `<Picture>` → responsive AVIF/WebP with a JPEG fallback + `srcset`,
   explicit dimensions (no layout shift), lazy below the fold. See `src/components/WorkImage.astro`,
   which exposes a `quality` prop (default 80; the work pages pass higher values). Every image slot
@@ -317,7 +311,7 @@ public/                      Files served as-is: CV, favicon, OG image, robots.t
 - **SEO:** per-page title/description, Open Graph + Twitter tags, canonical URLs on
   `www.miguel-escobar.com`, JSON-LD `Person` on the home page, `robots.txt`, generated sitemap,
   and a design-matched OG image (`public/og-image.png`).
-- **Config knobs:** `src/consts.ts` (contact info, `FORMSPREE_ENDPOINT`, `GOATCOUNTER_CODE`).
+- **Config knobs:** `src/consts.ts` (contact info, `NAV_LINKS`, `GOATCOUNTER_CODE`).
 - **Build hook:** `integrations/prune-assets.mjs` deletes the untransformed original images
   Astro emits on import but never references, so `dist/` stays lean.
 - **Checks:** `npm run build` then `npm run validate:html` (html-validate). Accessibility was
@@ -329,7 +323,7 @@ These regenerate the derived assets. They need the optional tools (`@resvg/resvg
 `wawoff2`, and `fonttools` on PATH for `assets:fonts`). You normally never need these.
 
 ```bash
-npm run assets:og            # public/og-image.png (1200×630, Editorial Old masthead + brand dot)
+npm run assets:og            # public/og-image.png (1200×630, Neue Montreal masthead + brand dot)
 npm run assets:icons         # public/apple-touch-icon.png (derived from favicon.png)
 npm run assets:fonts         # PP OTFs → subsetted, self-hosted woff2 (needs `pip install fonttools`)
 ```

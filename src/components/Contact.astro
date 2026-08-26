@@ -1,102 +1,82 @@
 ---
-import ContactForm from './ContactForm.astro';
+// Site footer + the only contact block on the site (there is no Contact page,
+// and no form — this design carries contact as four plain links).
 import { CONTACT } from '../consts';
 ---
 
 <footer id="contact" class="site-footer" aria-labelledby="contact-heading">
-  <div class="contact wrap" data-reveal>
-    <div class="contact-left">
-      <h2 id="contact-heading" class="display">Let’s talk</h2>
-      <p class="lede">Hiring, briefing, or looking to connect? Hit me up and help me escape the permanent underclass.</p>
-      <div class="links">
-        <a href={CONTACT.cv} target="_blank" rel="noopener" class="cv">Download my CV</a>
-        <a href={CONTACT.phoneHref} class="tel" set:html={CONTACT.phoneDisplay.replace(/ /g, '&nbsp;')}
-        ></a>
-        <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
-        <a href={CONTACT.linkedin} target="_blank" rel="noopener">LinkedIn</a>
-      </div>
+  <div class="upper wrap">
+    <div class="lede-col">
+      <h2 id="contact-heading">Let’s talk</h2>
+      <p>Hiring, briefing, or looking to connect? Hit me up and help me escape the permanent underclass.</p>
     </div>
 
-    <ContactForm />
+    <div class="links">
+      <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
+      <a href={CONTACT.phoneHref} set:html={CONTACT.phoneDisplay.replace(/ /g, '&nbsp;')}></a>
+      <a href={CONTACT.linkedin} target="_blank" rel="noopener">LinkedIn</a>
+      <a href={CONTACT.cv} target="_blank" rel="noopener">Download my CV</a>
+    </div>
   </div>
 
-  <div class="copyright wrap">
+  <div class="lower wrap">
     <span>© 2026 MIGUEL ESCOBAR</span>
     <span>OWNSELF VIBE CODE</span>
   </div>
 </footer>
 
 <style>
-  /* Contact + footer is a white-on-blue block (matches the header home dot). */
   .site-footer {
-    background: var(--brand-blue);
-    color: var(--paper);
-    padding: clamp(56px, 8vw, 104px) var(--pad) clamp(44px, 5vw, 68px);
+    border-top: 1px solid var(--hairline);
+    margin-top: clamp(56px, 8vw, 112px);
+    padding: clamp(32px, 4.5vw, 60px) var(--pad) 0;
   }
-  .contact {
+
+  .upper {
+    padding-bottom: clamp(44px, 6.5vw, 88px);
     display: flex;
     flex-wrap: wrap;
-    /* Each column takes its natural height, so the shorter links column doesn't
-       stretch and leave a ragged base at mid-widths. */
+    gap: clamp(24px, 4vw, 64px);
+    justify-content: space-between;
     align-items: flex-start;
-    gap: 40px 48px;
   }
-  .contact-left {
-    flex: 1 1 320px;
-    min-width: 260px;
+  .lede-col {
+    flex: 0 1 auto;
   }
-  h2 {
-    margin: 0 0 16px;
-    font-size: clamp(42px, 5.4vw, 76px);
-    line-height: 1.02;
-    letter-spacing: -0.012em;
-    color: #fff;
+  .lede-col h2 {
+    margin: 0;
+    font-size: clamp(26px, 2.9vw, 40px);
+    line-height: 1.04;
+    letter-spacing: -0.008em;
   }
-  .lede {
-    margin: 0 0 28px;
+  .lede-col p {
+    margin: 14px 0 0;
+    max-width: 40ch;
     font-size: 16px;
-    line-height: 1.6;
-    color: var(--white-85);
-    max-width: 400px;
+    line-height: 1.55;
+    opacity: 0.8;
+    text-wrap: pretty;
   }
+
   .links {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    font-size: 16px;
+    gap: 11px;
+    font-size: clamp(16px, 1.4vw, 18px);
+    line-height: 1.35;
     align-items: flex-start;
   }
-  .links a {
-    color: var(--paper);
-    text-decoration-color: var(--white-55);
-  }
-  .links a:hover {
-    text-decoration-color: #fff;
-  }
-  .links .cv {
-    color: #fff;
-  }
-  .links .tel {
-    color: #fff;
-    text-decoration: none;
-    border-bottom: 1px solid transparent;
-  }
-  .links .tel:hover {
-    border-bottom-color: #fff;
-  }
 
-  .copyright {
-    margin-top: clamp(40px, 6vw, 72px);
-    border-top: 1px solid var(--white-25);
-    padding-top: 20px;
+  .lower {
+    padding: 0 0 clamp(16px, 2.2vw, 26px);
     display: flex;
-    justify-content: space-between;
     flex-wrap: wrap;
-    gap: 8px 24px;
+    gap: 6px 24px;
+    justify-content: space-between;
     font-family: var(--font-mono);
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 400;
-    letter-spacing: 0.1em;
-    color: var(--white-70);
+    letter-spacing: 0.14em;
+    opacity: 0.5;
   }
 </style>

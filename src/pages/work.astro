@@ -1,0 +1,160 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import WorkImage from '../components/WorkImage.astro';
+
+import osc from '../assets/images/home_osc.png';
+import ageChecks from '../assets/images/home_age_checks.png';
+import whitewash from '../assets/images/home_whitewash.png';
+import pulpit from '../assets/images/home_pulpit.png';
+import advertising from '../assets/images/home_advertising.png';
+import editorial from '../assets/images/home_editorial.png';
+
+const cards = [
+  {
+    title: 'Online Safety Commission Launch Content',
+    href: 'https://www.osc.gov.sg/',
+    blurb:
+      'Web copy, service articles, and explainer videos about online harms for the launch of Singapore’s Online Safety Commission',
+    image: osc,
+    alt: 'A young person absorbed in a phone screen — from the launch of Singapore’s Online Safety Commission.',
+  },
+  {
+    title: 'Age Checks Matter',
+    href: 'https://www.imda.gov.sg/how-we-can-help/age-assurance',
+    blurb:
+      'A campaign — including outdoor ads, a film, and an explainer video — for Singapore’s IMDA, launching Age Assurance Measures in app stores',
+    image: ageChecks,
+    alt: 'A shopkeeper raising her hand to a boy holding beer beneath an “Under 18” sign, from the Age Assurance Measures campaign',
+  },
+  {
+    title: 'How to Whitewash a Dictator',
+    href: 'https://www.esquiremag.ph/politics/opinion/fighting-for-history-on-the-wikipedia-battlefield-a00207-20170817-lfrm2',
+    blurb:
+      'An investigative feature for Esquire Philippines, on an invisible war for Philippine history waged by Wikipedia editors on hotly contested pages',
+    image: whitewash,
+    alt: 'Ferdinand Marcos collaged over a redacted Wikipedia “Martial law” article, for “How to Whitewash a Dictator”',
+  },
+  {
+    title: 'A Pulpit for Pastors of Porn',
+    href: 'https://www.esquiremag.ph/long-reads/notes-and-essays/the-rise-of-pastor-culture-and-why-it-must-end-a1513-20170629-lfrm',
+    blurb:
+      'An Esquire Philippines exposé that shed light on a social media subculture of sexual predators in the Philippines, sparking a nationwide reckoning',
+    image: pulpit,
+    alt: 'Halftone hands reaching toward pixelated images inside retro computer windows, for “A Pulpit for Pastors of Porn.”',
+  },
+  {
+    title: 'More Advertising Work',
+    href: '/advertising-work/',
+    blurb:
+      'A selection of ads and campaigns I’ve worked on, including for the NBA, Trust Bank, and Alcon',
+    image: advertising,
+    alt: 'A woman laughing behind a Trust cashback Visa card as banknotes rain down.',
+  },
+  {
+    title: 'More Editorial Work',
+    href: '/editorial-work/',
+    blurb:
+      'A selection of stories I wrote and produced for Esquire Philippines, Tatler Asia, and Smile Magazine',
+    image: editorial,
+    alt: 'A dramatic, low-key editorial portrait of an older man against a black background.',
+  },
+];
+
+const isExternal = (href: string) => href.startsWith('http');
+---
+
+<BaseLayout
+  title="Work — Miguel Escobar"
+  description="Selected work by Miguel Escobar — launch content and campaigns for Singapore’s Online Safety Commission and IMDA, investigative features for Esquire Philippines, and more."
+>
+  <div class="wrap">
+    <section class="page-head" data-reveal>
+      <h1>Some work</h1>
+      <!-- DRAFT COPY — written to fill the slot the hand-off left as Lorem.
+           Rewrite freely; it's one line to change. -->
+      <p class="subhead">
+        A selection of things I’ve written, produced, and led — across newsrooms, agencies, and
+        government campaigns in Singapore and the Philippines.
+      </p>
+    </section>
+
+    <section class="cards" data-reveal>
+      <div class="grid">
+        {
+          cards.map((card) => (
+            <article class="card">
+              <WorkImage
+                image={card.image}
+                alt={card.alt}
+                ratio="3 / 4"
+                sizes="(max-width: 640px) 92vw, (max-width: 1080px) 45vw, 320px"
+                widths={[320, 480, 760]}
+              />
+              <h3>
+                <a
+                  href={card.href}
+                  target={isExternal(card.href) ? '_blank' : undefined}
+                  rel={isExternal(card.href) ? 'noopener' : undefined}
+                >{isExternal(card.href) ? card.title : `${card.title} →`}</a>
+              </h3>
+              <p>{card.blurb}</p>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-head {
+    padding: clamp(28px, 5vh, 64px) 0 clamp(28px, 3.5vw, 48px);
+  }
+  .page-head h1 {
+    margin: 0;
+    font-size: clamp(38px, 6.6vw, 104px);
+    font-weight: 400;
+    line-height: 0.98;
+    letter-spacing: -0.014em;
+  }
+  .subhead {
+    margin: clamp(18px, 2vw, 26px) 0 0;
+    max-width: 46ch;
+    font-size: clamp(18px, 1.8vw, 22px);
+    line-height: 1.45;
+    letter-spacing: 0.004em;
+    color: var(--ink-70);
+    text-wrap: pretty;
+  }
+
+  .cards {
+    border-top: 1px solid var(--hairline);
+    padding-top: clamp(32px, 4vw, 56px);
+    padding-bottom: clamp(48px, 7vw, 96px);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
+    gap: clamp(40px, 4vw, 56px);
+  }
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  /* Slightly positive tracking at this size is intentional. */
+  .card h3 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 1.38;
+    letter-spacing: 0.002em;
+  }
+  .card p {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--ink-90);
+    text-wrap: pretty;
+  }
+</style>
