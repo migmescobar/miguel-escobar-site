@@ -11,6 +11,8 @@ interface Props {
   publishedTime?: string;
   personSchema?: boolean;
   articleHeadline?: string;
+  /** Keep this page out of search results (the 404). */
+  noindex?: boolean;
   /** Home is a single-viewport "door" page: no header, no footer, no scroll. */
   bare?: boolean;
 }

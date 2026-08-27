@@ -8,7 +8,7 @@ export const SITE_URL = 'https://www.miguel-escobar.com';
 
 export const SITE_TITLE = 'Miguel Escobar';
 export const SITE_DESCRIPTION =
-  'Miguel Escobar is an experienced communications professional with an editorial background focused in tech and culture. He is based in Singapore, but born and raised in Metro Manila.';
+  'Miguel Escobar is a Singapore-based creative communications professional with a deep editorial background in tech, media, and culture.';
 
 /** Contact + footer details (used on every page). */
 export const CONTACT = {

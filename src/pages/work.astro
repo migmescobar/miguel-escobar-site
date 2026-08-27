@@ -66,7 +66,7 @@ const isExternal = (href: string) => href.startsWith('http');
 
 <BaseLayout
   title="Work — Miguel Escobar"
-  description="Selected work by Miguel Escobar — launch content and campaigns for Singapore’s Online Safety Commission and IMDA, investigative features for Esquire Philippines, and more."
+  description="Selected work by Miguel Escobar — launch content for Singapore’s Online Safety Commission and IMDA, plus features for Esquire Philippines."
 >
   <div class="wrap">
     <PageHead title="Some work" subhead="I find purpose in work that’s honest, helpful, and human" />
@@ -83,13 +83,13 @@ const isExternal = (href: string) => href.startsWith('http');
                 sizes="(max-width: 640px) 92vw, (max-width: 1080px) 45vw, 320px"
                 widths={[320, 480, 760]}
               />
-              <h3>
+              <h2>
                 <a
                   href={card.href}
                   target={isExternal(card.href) ? '_blank' : undefined}
                   rel={isExternal(card.href) ? 'noopener' : undefined}
                 >{isExternal(card.href) ? card.title : `${card.title} →`}</a>
-              </h3>
+              </h2>
               <p>{card.blurb}</p>
             </article>
           ))
@@ -115,8 +115,9 @@ const isExternal = (href: string) => href.startsWith('http');
     flex-direction: column;
     gap: 16px;
   }
-  /* Slightly positive tracking at this size is intentional. */
-  .card h3 {
+  /* h2, not h3: the page H1 is "Some work" and nothing sits between, so h3
+     would skip a heading level. Slightly positive tracking here is intentional. */
+  .card h2 {
     margin: 0;
     font-size: 22px;
     font-weight: 400;

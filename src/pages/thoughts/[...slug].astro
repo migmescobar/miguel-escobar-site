@@ -18,10 +18,17 @@ const dateLong = post.data.pubDate
   .toUpperCase();
 const dateISO = post.data.pubDate.toISOString();
 const titlePlain = plainTitle(post.data.title);
+
+// Search results cut titles around 60 characters. Keep the brand suffix when it
+// fits and drop it when it doesn't, so a long headline isn't truncated mid-word
+// and the useful words survive.
+const SUFFIX = ' — Miguel Escobar';
+const pageTitle =
+  (titlePlain + SUFFIX).length <= 60 ? `${titlePlain}${SUFFIX}` : titlePlain;
 ---
 
 <BaseLayout
-  title={`${titlePlain} — Miguel Escobar`}
+  title={pageTitle}
   description={post.data.description}
   type="article"
   publishedTime={dateISO}
