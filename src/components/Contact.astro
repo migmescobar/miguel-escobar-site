@@ -36,7 +36,7 @@ import { CONTACT } from '../consts';
     margin-top: clamp(56px, 8vw, 112px);
     padding: clamp(32px, 4.5vw, 60px) var(--pad) 0;
   }
-  /* The global hover underline is --accent (blue), which sits at 1.5:1 on this
+  /* The global hover underline is --accent (blue), which sits at ~1.2:1 on this
      ground — effectively invisible. Inside the footer the underline goes to
      full currentColor instead: same "underline shifts on hover" behaviour,
      tonal rather than chromatic, and no new brand colour. */
@@ -89,8 +89,8 @@ import { CONTACT } from '../consts';
     font-size: 9px;
     font-weight: 400;
     letter-spacing: 0.12em;
-    /* .5 measured 3.74:1 on the new dark ground — below AA for text this
-       small. .65 keeps it recessive at a comfortable 5.2:1. */
+    /* .5 measured 4.31:1 on this ground — just under AA for text this small.
+       .65 keeps it recessive with headroom (6.4:1). */
     opacity: 0.65;
   }
 </style>
