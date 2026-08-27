@@ -19,16 +19,6 @@
   font-style: italic;
   font-display: swap;
 }
-/* Semibold is mapped across 500–600 so the weight-500 states in the design
-   (the current item in the mobile nav) get a real face, never a synthetic bold. */
-@font-face {
-  font-family: 'Neue Montreal';
-  src: url('../assets/fonts/neue-montreal-500.woff2') format('woff2');
-  font-weight: 500 600;
-  font-style: normal;
-  font-display: swap;
-}
-
 /* ── Design tokens ────────────────────────────────────────────────────────── */
 :root {
   --paper: #eae7e1;

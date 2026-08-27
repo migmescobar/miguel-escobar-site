@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import WorkImage from '../components/WorkImage.astro';
+import PageHead from '../components/PageHead.astro';
 
 import osc from '../assets/images/home_osc.png';
 import ageChecks from '../assets/images/home_age_checks.png';
@@ -68,15 +69,7 @@ const isExternal = (href: string) => href.startsWith('http');
   description="Selected work by Miguel Escobar — launch content and campaigns for Singapore’s Online Safety Commission and IMDA, investigative features for Esquire Philippines, and more."
 >
   <div class="wrap">
-    <section class="page-head" data-reveal>
-      <h1>Some work</h1>
-      <!-- DRAFT COPY — written to fill the slot the hand-off left as Lorem.
-           Rewrite freely; it's one line to change. -->
-      <p class="subhead">
-        A selection of things I’ve written, produced, and led — across newsrooms, agencies, and
-        government campaigns in Singapore and the Philippines.
-      </p>
-    </section>
+    <PageHead title="Some work" subhead="I find purpose in work that’s honest, helpful, and human" />
 
     <section class="cards" data-reveal>
       <div class="grid">
@@ -107,26 +100,6 @@ const isExternal = (href: string) => href.startsWith('http');
 </BaseLayout>
 
 <style>
-  .page-head {
-    padding: clamp(28px, 5vh, 64px) 0 clamp(28px, 3.5vw, 48px);
-  }
-  .page-head h1 {
-    margin: 0;
-    font-size: clamp(38px, 6.6vw, 104px);
-    font-weight: 400;
-    line-height: 0.98;
-    letter-spacing: -0.014em;
-  }
-  .subhead {
-    margin: clamp(18px, 2vw, 26px) 0 0;
-    max-width: 46ch;
-    font-size: clamp(18px, 1.8vw, 22px);
-    line-height: 1.45;
-    letter-spacing: 0.004em;
-    color: var(--ink-70);
-    text-wrap: pretty;
-  }
-
   .cards {
     border-top: 1px solid var(--hairline);
     padding-top: clamp(32px, 4vw, 56px);

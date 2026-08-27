@@ -25,12 +25,12 @@ const UNICODES = [
 ].join(',');
 
 // Only the faces the site actually renders — see README "For developers".
-// Neue Montreal carries the whole site; there is no display serif.
+// Neue Montreal carries the whole site; there is no display serif, and nothing
+// is set in a heavier weight (the active nav item is marked by colour alone),
+// so roman + italic is the entire set.
 const jobs = [
-  // Semibold maps to 500 and is used only for the current item in the mobile nav.
   ['PPNeueMontreal-Regular.otf', 'neue-montreal-400.woff2'],
   ['PPNeueMontreal-Italic.otf', 'neue-montreal-400-italic.woff2'],
-  ['PPNeueMontreal-Semibold.otf', 'neue-montreal-500.woff2'],
 ];
 
 const tmp = mkdtempSync(path.join(tmpdir(), 'fontsubset-'));

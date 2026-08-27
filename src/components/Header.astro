@@ -103,21 +103,23 @@ const current = (href: string) =>
     border-bottom-color: var(--ink);
   }
 
-  /* Geometry is the spec: 18 × 11.5px (11.5px is the cap height of the 16px
-     wordmark). The row is baseline-aligned and the wordmark's box is 20px tall
-     with 4px of underline padding below the type, so centring would sit ~2px
-     low — align-self:center plus the 3.4px bottom margin biases the stack up
-     onto the cap band. Don't switch this to align-self:baseline: a button whose
-     children are empty spans has no text baseline, and the browser synthesises
-     one that pins only the top bar. */
+  /* The hand-off set this to the wordmark's exact cap height (11.5px), but a
+     hard-edged three-bar stack reads taller than letterforms at the same
+     height, so it's pulled in to 17 × 10px — optically shorter than the caps,
+     which is what actually looks level. The 1.5px stroke and the 3.4px bottom
+     margin are unchanged: with align-self:center the margin box is what gets
+     centred, so the margin (not the height) is what sets the stack's centre —
+     shrinking the box keeps it on the same cap-band centre. Don't switch this
+     to align-self:baseline: a button whose children are empty spans has no text
+     baseline, and the browser synthesises one that pins only the top bar. */
   .nav-burger {
     position: relative;
     display: none;
     flex-direction: column;
     justify-content: space-between;
     align-self: center;
-    width: 18px;
-    height: 11.5px;
+    width: 17px;
+    height: 10px;
     margin: 0 0 3.4px;
     background: none;
     border: 0;
@@ -146,8 +148,10 @@ const current = (href: string) =>
   .nav-mobile.open {
     display: flex;
   }
+  /* Capped at the wordmark's size so the menu never out-shouts it. The active
+     item is marked by colour alone — no weight change. */
   .m-link {
-    font-size: 19px;
+    font-size: 16px;
     font-weight: 400;
     color: color-mix(in srgb, currentColor 75%, transparent);
     text-decoration: none;
@@ -155,7 +159,6 @@ const current = (href: string) =>
     border-top: 1px solid var(--hairline);
   }
   .m-link.active {
-    font-weight: 500;
     color: var(--ink);
   }
 

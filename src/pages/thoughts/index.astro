@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHead from '../../components/PageHead.astro';
 import { parseTitleParts } from '../../utils/postTitle';
 
 // Published posts only (drafts excluded), newest first.
@@ -17,13 +18,7 @@ const monthYear = (d: Date) =>
   description="Thoughts by Miguel Escobar on communications, editorial craft, content governance, culture, and tech."
 >
   <div class="wrap">
-    <section class="page-title" data-reveal>
-      <h1>Thoughts</h1>
-      <!-- DRAFT COPY — fills the slot the hand-off left as Lorem. Rewrite freely. -->
-      <p class="subhead">
-        Occasional writing on media, culture, and the business of making things worth reading.
-      </p>
-    </section>
+    <PageHead title="Thoughts" subhead="Where I’m at on media, culture, and issues of the day" />
 
     <section class="index" data-reveal>
       {
@@ -45,26 +40,6 @@ const monthYear = (d: Date) =>
 </BaseLayout>
 
 <style>
-  .page-title {
-    padding: clamp(36px, 7vh, 80px) 0 clamp(24px, 3vw, 40px);
-  }
-  .page-title h1 {
-    margin: 0;
-    font-size: clamp(46px, 6.8vw, 96px);
-    font-weight: 400;
-    line-height: 1.06;
-    letter-spacing: -0.013em;
-  }
-  .subhead {
-    margin: clamp(18px, 2vw, 26px) 0 0;
-    max-width: 46ch;
-    font-size: clamp(18px, 1.8vw, 22px);
-    line-height: 1.45;
-    letter-spacing: 0.004em;
-    color: var(--ink-70);
-    text-wrap: pretty;
-  }
-
   .index {
     border-top: 1px solid var(--ink-30);
     padding: clamp(32px, 4vw, 56px) 0 clamp(64px, 10vw, 140px);

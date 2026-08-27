@@ -1,0 +1,46 @@
+---
+// The hero block for every non-home, non-article page (About, Work, Thoughts,
+// Editorial Work, Advertising Work). Shared so the distance from the nav and
+// the H1/subhead type can't drift apart page by page — they did before this.
+interface Props {
+  title: string;
+  subhead?: string;
+}
+const { title, subhead } = Astro.props;
+---
+
+<section class="page-head" data-reveal>
+  <h1>{title}</h1>
+  {subhead && <p class="subhead">{subhead}</p>}
+</section>
+
+<style>
+  .page-head {
+    padding: clamp(36px, 7vh, 80px) 0 clamp(24px, 3vw, 40px);
+  }
+  /* max-width only bites on the long About statement; short titles ignore it. */
+  .page-head h1 {
+    margin: 0;
+    max-width: 22ch;
+    font-size: clamp(38px, 6.6vw, 96px);
+    font-weight: 400;
+    /* 1.1 rather than the hand-off's 1.06. Measured clearance at 1.06 was fine
+       (~13.7px of air at desktop, nothing colliding), but About's statement is
+       the only H1 here that runs to several lines and it read cramped at 4
+       lines on a phone. Single-line titles are unaffected by this. */
+    line-height: 1.1;
+    letter-spacing: -0.014em;
+    text-wrap: balance;
+    font-variant-ligatures: none;
+    font-feature-settings: 'kern' 1;
+  }
+  .subhead {
+    margin: clamp(18px, 2vw, 26px) 0 0;
+    max-width: 46ch;
+    font-size: clamp(18px, 1.8vw, 22px);
+    line-height: 1.45;
+    letter-spacing: 0.004em;
+    color: var(--ink-70);
+    text-wrap: pretty;
+  }
+</style>
