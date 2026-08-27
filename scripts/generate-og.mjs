@@ -1,5 +1,9 @@
-// Generate a 1200x630 Open Graph card that matches the site's design
-// (paper #EAE7E1, ink #141414, Neue Montreal). Run: npm run assets:og
+// Generate the 1200x630 Open Graph card. Run: npm run assets:og
+//
+// The card echoes the home page's one big gesture: MIGUEL ESCOBAR set on a
+// single line, fitted edge to edge, on a flood colour with light type. Social
+// feeds are overwhelmingly white, so the saturated ground is what makes it
+// carry at thumbnail size.
 import { Resvg } from '@resvg/resvg-js';
 import { openSync } from 'fontkit';
 import { writeFileSync, mkdirSync } from 'node:fs';
@@ -11,36 +15,124 @@ const fonts = path.join(root, 'scripts/fonts');
 const outDir = path.join(root, 'public');
 mkdirSync(outDir, { recursive: true });
 
-// resvg matches fonts by their internal family name; read them from the OTFs.
-// resvg's font loader only reads OTF/TTF — handing it a woff2 silently renders
-// a blank image, so these must stay as the OTFs in scripts/fonts/.
-const TEXT = openSync(path.join(fonts, 'PPNeueMontreal-Regular.otf')).familyName;
+// resvg's font loader only reads OTF/TTF — handing it a woff2 renders a
+// silently blank image — and it matches fonts by internal family name.
+const OTF = path.join(fonts, 'PPNeueMontreal-Regular.otf');
+const font = openSync(OTF);
+const TEXT = font.familyName;
 
+const BLUE = '#0047BB'; // the About door's flood colour; the site's one accent
 const PAPER = '#EAE7E1';
-const INK = '#141414';
-const BRAND = '#0047bb';
 
-const svg = `<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
-  <rect width="1200" height="630" fill="${PAPER}"/>
-  <circle cx="102" cy="94" r="22" fill="${BRAND}"/>
-  <text x="146" y="103" font-family="${TEXT}" font-size="22" letter-spacing="3" fill="${INK}" fill-opacity="0.55">MIGUEL-ESCOBAR.COM</text>
-  <line x1="80" y1="150" x2="1120" y2="150" stroke="${INK}" stroke-opacity="0.3" stroke-width="1"/>
-  <text x="74" y="360" font-family="${TEXT}" font-size="128" letter-spacing="-1" fill="${INK}">Miguel Escobar</text>
-  <text x="80" y="438" font-family="${TEXT}" font-size="33" fill="${INK}" fill-opacity="0.72">Strategic Communications · Content Governance ·</text>
-  <text x="80" y="484" font-family="${TEXT}" font-size="33" fill="${INK}" fill-opacity="0.72">Editorial Operations · APAC Markets</text>
-  <line x1="80" y1="544" x2="1120" y2="544" stroke="${INK}" stroke-opacity="0.2" stroke-width="1"/>
-  <text x="80" y="586" font-family="${TEXT}" font-size="20" letter-spacing="2" fill="${INK}" fill-opacity="0.55">SINGAPORE · COMMUNICATIONS &amp; EDITORIAL</text>
+const W = 1200;
+const H = 630;
+const PAD = 80;
+const INNER = W - PAD * 2;
+
+const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+/** Width of a string in em, including SVG letter-spacing (applied per glyph). */
+const emWidth = (s, lsEm) => font.layout(s).advanceWidth / font.unitsPerEm + lsEm * s.length;
+
+/** Largest font-size that fits `s` into `maxPx` at the given tracking. */
+const fitSize = (s, maxPx, lsEm) => (maxPx / emWidth(s, lsEm)) * 0.998;
+
+/** Greedy wrap at a fixed size — the minimum number of lines that fits. */
+function wrap(text, size, maxPx, lsEm) {
+  const lines = [];
+  let cur = '';
+  for (const word of text.split(/\s+/)) {
+    const test = cur ? `${cur} ${word}` : word;
+    if (cur && emWidth(test, lsEm) * size > maxPx) {
+      lines.push(cur);
+      cur = word;
+    } else cur = test;
+  }
+  if (cur) lines.push(cur);
+  return lines;
+}
+
+/**
+ * Same line count as a greedy wrap, but broken so the lines come out even —
+ * greedy leaves a one-word orphan ("… and stakes of / tech"), which reads badly
+ * at card size. Searches every split into N lines and keeps the one whose
+ * longest line is shortest.
+ */
+function wrapBalanced(text, size, maxPx, lsEm) {
+  const words = text.split(/\s+/);
+  const target = wrap(text, size, maxPx, lsEm).length;
+  if (target < 2) return words.length ? [text] : [];
+
+  let best = null;
+  const walk = (start, remaining, acc) => {
+    if (remaining === 1) {
+      const last = words.slice(start).join(' ');
+      const lines = [...acc, last];
+      const widest = Math.max(...lines.map((l) => emWidth(l, lsEm) * size));
+      if (widest <= maxPx && (!best || widest < best.widest)) best = { lines, widest };
+      return;
+    }
+    for (let end = start + 1; end <= words.length - (remaining - 1); end++) {
+      const line = words.slice(start, end).join(' ');
+      if (emWidth(line, lsEm) * size > maxPx) break;
+      walk(end, remaining - 1, [...acc, line]);
+    }
+  };
+  walk(0, target, []);
+  return best ? best.lines : wrap(text, size, maxPx, lsEm);
+}
+
+// ── Name, fitted edge to edge like the home hero ───────────────────────────
+const NAME = 'MIGUEL ESCOBAR';
+const NAME_LS = -0.03;
+const nameSize = fitSize(NAME, INNER, NAME_LS);
+
+// ── Positioning line ───────────────────────────────────────────────────────
+const LEDE = 'Editorial instincts and creative acuity, rewired for the scale and stakes of tech';
+const ledeSize = 34;
+const ledeLS = 0.004;
+const ledeLines = wrapBalanced(LEDE, ledeSize, INNER, ledeLS);
+const ledeLH = Math.round(ledeSize * 1.35);
+
+const ruleY = H - 92;
+
+// Composition mirrors the home page: the name sits at the top, the meta is
+// pinned to the bottom, and the space between them is deliberate rather than
+// leftover. Cap-aligning the name to the padding keeps the optical top margin
+// equal to the side margins.
+const CAP = 0.72; // Neue Montreal cap height, in em
+const nameBaseline = PAD + nameSize * CAP;
+
+// Lede hangs just above the rule, bottom-anchored.
+const ledeLastBaseline = ruleY - 48;
+const ledeTop = ledeLastBaseline - (ledeLines.length - 1) * ledeLH;
+
+const svg = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+  <rect width="${W}" height="${H}" fill="${BLUE}"/>
+
+  <text x="${PAD}" y="${nameBaseline}" font-family="${TEXT}" font-size="${nameSize.toFixed(2)}"
+        letter-spacing="${(NAME_LS * nameSize).toFixed(2)}" fill="${PAPER}">${esc(NAME)}</text>
+
+  ${ledeLines
+    .map(
+      (l, i) =>
+        `<text x="${PAD}" y="${ledeTop + i * ledeLH}" font-family="${TEXT}" font-size="${ledeSize}" letter-spacing="${(ledeLS * ledeSize).toFixed(2)}" fill="${PAPER}" fill-opacity="0.85">${esc(l)}</text>`
+    )
+    .join('\n  ')}
+
+  <line x1="${PAD}" y1="${ruleY}" x2="${W - PAD}" y2="${ruleY}" stroke="${PAPER}" stroke-opacity="0.3" stroke-width="1"/>
+  <text x="${PAD}" y="${ruleY + 40}" font-family="${TEXT}" font-size="20" letter-spacing="2.6" fill="${PAPER}" fill-opacity="0.75">MIGUEL-ESCOBAR.COM</text>
+  <text x="${W - PAD}" y="${ruleY + 40}" text-anchor="end" font-family="${TEXT}" font-size="20" letter-spacing="2.6" fill="${PAPER}" fill-opacity="0.75">SINGAPORE</text>
 </svg>`;
 
-const resvg = new Resvg(svg, {
-  fitTo: { mode: 'width', value: 1200 },
-  font: {
-    fontFiles: [
-      path.join(fonts, 'PPNeueMontreal-Regular.otf'),
-    ],
-    loadSystemFonts: false,
-    defaultFontFamily: TEXT,
-  },
-});
-writeFileSync(path.join(outDir, 'og-image.png'), resvg.render().asPng());
-console.log('Wrote public/og-image.png (1200x630)');
+const png = new Resvg(svg, {
+  fitTo: { mode: 'width', value: W },
+  font: { fontFiles: [OTF], loadSystemFonts: false, defaultFontFamily: TEXT },
+})
+  .render()
+  .asPng();
+
+writeFileSync(path.join(outDir, 'og-image.png'), png);
+console.log(
+  `Wrote public/og-image.png (${W}x${H}) — name fitted at ${nameSize.toFixed(1)}px, lede on ${ledeLines.length} line(s)`
+);
