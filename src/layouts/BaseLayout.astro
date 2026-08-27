@@ -35,7 +35,15 @@ const { bare = false } = Astro.props;
 
     <style>
       .page {
+        /* svh is the viewport with the mobile browser's address bar SHOWING —
+           the smallest it gets. Plain vh resolves to the *large* viewport (bar
+           hidden), which on a phone is taller than what's actually visible, so
+           a "one viewport" page ends up needing a small scroll to reach its
+           bottom edge. svh guarantees it fits without scrolling; dvh would also
+           fit but re-flows as the bar slides, which would re-run the Home hero
+           fit mid-gesture. vh first as the fallback for older browsers. */
         min-height: 100vh;
+        min-height: 100svh;
         display: flex;
         flex-direction: column;
       }

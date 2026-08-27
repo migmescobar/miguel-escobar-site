@@ -111,6 +111,20 @@ const doors = [
       border-top: 1px solid var(--hairline);
     }
   }
+
+  /* Short viewports — mostly a phone in landscape. The doors stack on WIDTH, so
+     a 740×320 screen gets three tall rows even though it has room for columns,
+     and the page would need a scroll to reach them. Tighten the vertical
+     rhythm here so the doors stay on-screen; this is the only place the page
+     would otherwise overflow. */
+  @media (max-height: 420px) {
+    .spacer {
+      min-height: 16px;
+    }
+    .door {
+      padding: 12px 0 14px;
+    }
+  }
 </style>
 
 <script>
