@@ -26,10 +26,22 @@ import { CONTACT } from '../consts';
 </footer>
 
 <style>
+  /* The one inverted block on the site. No border-top: the colour change is
+     the boundary, and a light hairline would read as a stray line on paper.
+     Everything inside inherits currentColor, so the rules and muted text
+     invert with it. */
   .site-footer {
-    border-top: 1px solid var(--hairline);
+    background: var(--footer-bg);
+    color: var(--paper);
     margin-top: clamp(56px, 8vw, 112px);
     padding: clamp(32px, 4.5vw, 60px) var(--pad) 0;
+  }
+  /* The global hover underline is --accent (blue), which sits at 1.5:1 on this
+     ground — effectively invisible. Inside the footer the underline goes to
+     full currentColor instead: same "underline shifts on hover" behaviour,
+     tonal rather than chromatic, and no new brand colour. */
+  .site-footer a:hover {
+    text-decoration-color: currentColor;
   }
 
   .upper {
@@ -74,9 +86,11 @@ import { CONTACT } from '../consts';
     gap: 6px 24px;
     justify-content: space-between;
     font-family: var(--font-mono);
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 400;
-    letter-spacing: 0.14em;
-    opacity: 0.5;
+    letter-spacing: 0.12em;
+    /* .5 measured 3.74:1 on the new dark ground — below AA for text this
+       small. .65 keeps it recessive at a comfortable 5.2:1. */
+    opacity: 0.65;
   }
 </style>

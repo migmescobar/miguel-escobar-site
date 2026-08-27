@@ -24,6 +24,7 @@
   --paper: #eae7e1;
   --ink: #141414;
   --accent: #0047bb; /* link-underline hover */
+  --footer-bg: #3b351d; /* the footer is the one inverted block on the site */
 
   --ink-90: rgba(20, 20, 20, 0.9); /* body copy */
   --ink-70: rgba(20, 20, 20, 0.7); /* deks / subheads */
