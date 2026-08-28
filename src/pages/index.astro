@@ -4,14 +4,14 @@ import { SITE_DESCRIPTION } from '../consts';
 
 // The three "doors" carry their flood colours as data attributes; the script
 // paints them onto the flood surface on hover.
-// Each door carries its own ink because the greens and blues differ in
-// luminance: #1DC970 is a LIGHT colour (rel. luminance .43), so light type on it
-// measures 1.76:1 — unreadable. Dark ink there gives 8.46:1. The other two are
-// dark grounds and take light ink (6.5:1 and 6.8:1). The doors are large type,
-// so the bar is 3:1; every pairing here clears it with room.
+// All three flood dark and take light ink — keep it that way. A brighter green
+// (#1DC970) was tried and pulled: at rel. luminance .43 it needed dark ink to
+// stay readable, which broke the consistency. #0E7A45 holds the same hue family
+// while measuring 4.38:1 against light type. Doors are large type (3:1 bar), so
+// all three clear it with room: 6.5 / 4.4 / 6.8.
 const doors = [
   { label: 'About', href: '/about/', bg: '#0047BB', ink: '#EAE7E1' },
-  { label: 'Work', href: '/work/', bg: '#1DC970', ink: '#141414' },
+  { label: 'Work', href: '/work/', bg: '#0E7A45', ink: '#EAE7E1' },
   { label: 'Thoughts', href: '/thoughts/', bg: '#624647', ink: '#EAE7E1' },
 ];
 ---
@@ -84,10 +84,13 @@ const doors = [
     min-height: clamp(40px, 8vh, 120px);
   }
 
+  /* Full-strength currentColor rather than the 25% --hairline used elsewhere:
+     on this very spare page the rule reads as a deliberate graphic element, and
+     because it follows currentColor it flips to the ink colour under a flood. */
   .doors {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    border-top: 1px solid var(--hairline);
+    border-top: 1px solid currentColor;
   }
   .door {
     display: flex;
@@ -113,7 +116,7 @@ const doors = [
       padding: 18px 0 20px;
     }
     .door + .door {
-      border-top: 1px solid var(--hairline);
+      border-top: 1px solid currentColor;
     }
   }
 
