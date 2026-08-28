@@ -4,6 +4,11 @@
 // single line, fitted edge to edge, on a flood colour with light type. Social
 // feeds are overwhelmingly white, so the saturated ground is what makes it
 // carry at thumbnail size.
+//
+// Two elements only — the name and the positioning line. A URL and a location
+// were tried along a bottom rule and cut: at the size a card actually gets
+// looked at they were unreadable furniture, and the space buys the positioning
+// line enough size to be read in the feed instead of after the click.
 import { Resvg } from '@resvg/resvg-js';
 import { openSync } from 'fontkit';
 import { writeFileSync, mkdirSync } from 'node:fs';
@@ -88,23 +93,23 @@ const NAME_LS = -0.03;
 const nameSize = fitSize(NAME, INNER, NAME_LS);
 
 // ── Positioning line ───────────────────────────────────────────────────────
+// Set as display type, not body copy: 60px is the largest size that still
+// breaks on the comma into two even lines, and the tracking goes slightly
+// negative the way the site's own large headings do.
 const LEDE = 'Editorial instincts and creative acuity, rewired for the scale and stakes of tech';
-const ledeSize = 34;
-const ledeLS = 0.004;
+const ledeSize = 60;
+const ledeLS = -0.006;
 const ledeLines = wrapBalanced(LEDE, ledeSize, INNER, ledeLS);
-const ledeLH = Math.round(ledeSize * 1.35);
+const ledeLH = Math.round(ledeSize * 1.22);
 
-const ruleY = H - 92;
-
-// Composition mirrors the home page: the name sits at the top, the meta is
-// pinned to the bottom, and the space between them is deliberate rather than
-// leftover. Cap-aligning the name to the padding keeps the optical top margin
-// equal to the side margins.
+// Composition mirrors the home page: the name sits at the top, the positioning
+// line is pinned to the bottom, and the space between them is deliberate rather
+// than leftover. The name is cap-aligned to the top padding and the lede's last
+// line is baseline-aligned to the bottom padding, so both optical margins match
+// the 80px sides.
 const CAP = 0.72; // Neue Montreal cap height, in em
 const nameBaseline = PAD + nameSize * CAP;
-
-// Lede hangs just above the rule, bottom-anchored.
-const ledeLastBaseline = ruleY - 48;
+const ledeLastBaseline = H - PAD;
 const ledeTop = ledeLastBaseline - (ledeLines.length - 1) * ledeLH;
 
 const svg = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
@@ -119,10 +124,6 @@ const svg = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http
         `<text x="${PAD}" y="${ledeTop + i * ledeLH}" font-family="${TEXT}" font-size="${ledeSize}" letter-spacing="${(ledeLS * ledeSize).toFixed(2)}" fill="${PAPER}" fill-opacity="0.85">${esc(l)}</text>`
     )
     .join('\n  ')}
-
-  <line x1="${PAD}" y1="${ruleY}" x2="${W - PAD}" y2="${ruleY}" stroke="${PAPER}" stroke-opacity="0.3" stroke-width="1"/>
-  <text x="${PAD}" y="${ruleY + 40}" font-family="${TEXT}" font-size="20" letter-spacing="2.6" fill="${PAPER}" fill-opacity="0.75">MIGUEL-ESCOBAR.COM</text>
-  <text x="${W - PAD}" y="${ruleY + 40}" text-anchor="end" font-family="${TEXT}" font-size="20" letter-spacing="2.6" fill="${PAPER}" fill-opacity="0.75">SINGAPORE</text>
 </svg>`;
 
 const png = new Resvg(svg, {
@@ -134,5 +135,5 @@ const png = new Resvg(svg, {
 
 writeFileSync(path.join(outDir, 'og-image.png'), png);
 console.log(
-  `Wrote public/og-image.png (${W}x${H}) — name fitted at ${nameSize.toFixed(1)}px, lede on ${ledeLines.length} line(s)`
+  `Wrote public/og-image.png (${W}x${H}) — name fitted at ${nameSize.toFixed(1)}px, lede ${ledeSize}px on ${ledeLines.length} line(s)`
 );

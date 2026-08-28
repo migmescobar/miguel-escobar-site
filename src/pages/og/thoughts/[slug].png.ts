@@ -1,9 +1,11 @@
 // Build-time Open Graph card for each Thoughts post: /og/thoughts/<slug>.png
 //
-// Companion to the site card in scripts/generate-og.mjs. Same composition —
-// eyebrow at the top, meta anchored to a rule at the bottom — but on paper
-// rather than the blue flood: a shared article is a reading surface, and the
-// tonal split makes a post distinguishable from the site card in a feed.
+// Companion to the site card in scripts/generate-og.mjs, but on paper rather
+// than the blue flood: a shared article is a reading surface, and the tonal
+// split makes a post distinguishable from the site card in a feed.
+//
+// This one keeps the bottom rule and meta the site card dropped — a date is
+// worth carrying on an article and worth nothing on the site card.
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 import { Resvg } from '@resvg/resvg-js';
