@@ -4,11 +4,15 @@ import { SITE_DESCRIPTION } from '../consts';
 
 // The three "doors" carry their flood colours as data attributes; the script
 // paints them onto the flood surface on hover.
-// All three flood to light-on-dark now — no ink flip between doors.
+// Each door carries its own ink because the greens and blues differ in
+// luminance: #1DC970 is a LIGHT colour (rel. luminance .43), so light type on it
+// measures 1.76:1 — unreadable. Dark ink there gives 8.46:1. The other two are
+// dark grounds and take light ink (6.5:1 and 6.8:1). The doors are large type,
+// so the bar is 3:1; every pairing here clears it with room.
 const doors = [
   { label: 'About', href: '/about/', bg: '#0047BB', ink: '#EAE7E1' },
-  { label: 'Work', href: '/work/', bg: '#3C6B64', ink: '#EAE7E1' },
-  { label: 'Thoughts', href: '/thoughts/', bg: '#937782', ink: '#EAE7E1' },
+  { label: 'Work', href: '/work/', bg: '#1DC970', ink: '#141414' },
+  { label: 'Thoughts', href: '/thoughts/', bg: '#624647', ink: '#EAE7E1' },
 ];
 ---
 
