@@ -8,7 +8,7 @@ export const SITE_URL = 'https://www.miguel-escobar.com';
 
 export const SITE_TITLE = 'Miguel Escobar';
 export const SITE_DESCRIPTION =
-  'Miguel Escobar is a Singapore-based creative communications professional with a deep editorial background in tech, media, and culture.';
+  'Miguel Escobar is a communications and editorial professional in Singapore, working across content governance, online safety, and brand storytelling in APAC markets.';
 
 /** Contact + footer details (used on every page). */
 export const CONTACT = {
