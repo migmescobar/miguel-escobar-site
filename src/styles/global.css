@@ -66,8 +66,12 @@ body {
   background: var(--paper);
   color: var(--ink);
   font-family: var(--font-sans);
-  /* Compensates for setting Neue Montreal Regular rather than the Text cut. */
-  letter-spacing: 0.015em;
+  /* Compensates for setting Neue Montreal Regular rather than the Text cut:
+     0.015em, plus the sitewide 0.005em loosening. Every tracking value on the
+     site carries that same +0.005em, so they keep their relative order. The two
+     exceptions both set the name — the wordmark and the home hero — and are
+     pinned where they were. */
+  letter-spacing: 0.02em;
   -webkit-font-smoothing: antialiased;
   font-kerning: normal;
   font-variant-ligatures: common-ligatures;

@@ -78,6 +78,8 @@ const current = (href: string) =>
   .wordmark {
     font-size: clamp(16px, 1.5vw, 20px);
     font-weight: 400;
+    /* Held at 0.015em while the rest of the site went to 0.02em: this is the
+       name, set to match the home hero. Don't sync it to body. */
     letter-spacing: 0.015em;
     line-height: 1;
     text-decoration: none;
