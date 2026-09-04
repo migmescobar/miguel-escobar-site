@@ -4,14 +4,22 @@ import { SITE_DESCRIPTION } from '../consts';
 
 // The three "doors" carry their flood colours as data attributes; the script
 // paints them onto the flood surface on hover.
-// All three flood dark and take light ink — keep it that way. A brighter green
-// (#1DC970) was tried and pulled: at rel. luminance .43 it needed dark ink to
-// stay readable, which broke the consistency. #0E7A45 holds the same hue family
-// while measuring 4.38:1 against light type. Doors are large type (3:1 bar), so
-// all three clear it with room: 6.5 / 4.4 / 6.8.
+// All three flood dark and take light ink — keep it that way. An earlier attempt
+// at a brighter Work colour (#1DC970) was pulled because it needed dark ink to
+// stay readable, which broke that consistency.
+//
+// Doors are large type, so the bar is 3:1. Measured against #EAE7E1:
+//   About     #0047BB  6.50:1
+//   Work      #d25a9b  2.998:1  <- chosen deliberately; see below
+//   Thoughts  #624647  6.84:1
+//
+// #d25a9b lands 0.002 under the 3:1 large-text bar — close enough that it is
+// invisible to the eye but an automated audit (axe, Lighthouse) will flag it.
+// It is here because it was picked by name. #d05999 is the same colour to look
+// at (-2,-1,-2 in RGB) and clears at 3.05:1 if that flag ever needs to go away.
 const doors = [
   { label: 'About', href: '/about/', bg: '#0047BB', ink: '#EAE7E1' },
-  { label: 'Work', href: '/work/', bg: '#0E7A45', ink: '#EAE7E1' },
+  { label: 'Work', href: '/work/', bg: '#d25a9b', ink: '#EAE7E1' },
   { label: 'Thoughts', href: '/thoughts/', bg: '#624647', ink: '#EAE7E1' },
 ];
 ---
