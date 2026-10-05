@@ -320,36 +320,59 @@ a.me-card:hover .me-card-desc {
   transform-box: fill-box;
   transform-origin: center;
 }
-@keyframes me-pulse {
-  0% {
-    r: var(--dot);
-    opacity: 0;
-    animation-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
+/* Singapore's pulse: glows in the hero's and Policy's colour profile (the same
+   stops, re-expressed as cyan over transparency so overlapping glows blend),
+   swelling out from Singapore across Southeast Asia and fading as they go,
+   two at a time, half a beat apart (three overlapping glows blur into a
+   steady blob; two still read as waves). They lie under the map's lines, as the hero's
+   glow lies under its arrow, and Singapore stays marked in ink on top. Each
+   glow is drawn at full reach and scaled up from --s0 (the dot's size). */
+.me-ripple {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+@keyframes me-glow-grow {
+  from {
+    transform: scale(var(--s0));
   }
-  7% {
-    opacity: 0.9;
-    animation-timing-function: ease-in;
+  to {
+    transform: none;
+  }
+}
+@keyframes me-glow-fade {
+  0% {
+    opacity: 0;
+    animation-timing-function: ease-out;
+  }
+  8% {
+    opacity: 1;
+  }
+  35% {
+    opacity: 1;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
   }
   100% {
-    r: var(--rip);
     opacity: 0;
   }
 }
 @media (prefers-reduced-motion: no-preference) {
   .me-ripple {
-    animation: me-pulse 4.2s infinite;
+    animation:
+      me-glow-grow 4.2s cubic-bezier(0.3, 0.2, 0.5, 1) infinite,
+      me-glow-fade 4.2s infinite;
   }
   .me-ripple:nth-child(2) {
-    animation-delay: -1.4s;
-  }
-  .me-ripple:nth-child(3) {
-    animation-delay: -2.8s;
+    animation-delay: -2.1s;
   }
 }
+/* Still: one glow at rest around Singapore. */
 @media (prefers-reduced-motion: reduce) {
+  .me-ripple {
+    opacity: 0;
+  }
   .me-ripple:first-child {
-    r: var(--rip);
-    opacity: 0.3;
+    transform: scale(0.8);
+    opacity: 0.85;
   }
 }
 @media (min-width: 900px) {
