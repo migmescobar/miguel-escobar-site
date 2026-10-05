@@ -6,6 +6,14 @@
     "no-inline-style": "off",
     "prefer-native-element": "off",
     "long-title": "off",
-    "doctype-style": "off"
+    "doctype-style": "off",
+    "no-autoplay": [
+      "error",
+      {
+        "include": [
+          "audio"
+        ]
+      }
+    ]
   }
 }

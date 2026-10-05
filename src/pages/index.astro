@@ -239,18 +239,30 @@ const arrowDown = icon(['M12 4v16', 'M5.5 13.5 12 20l6.5-6.5']);
         <div class="me-reel me-onvideo" data-reel>
           <div class="me-reelvid">
             <video
+              autoplay
               muted
               loop
               playsinline
-              preload="none"
+              preload="auto"
               poster="/media/highlights-reel-4x5-poster.jpg"
-              data-poster-m="/media/highlights-reel-vertical-poster.jpg"
               aria-hidden="true"
               tabindex="-1"
             >
               <source src="/media/highlights-reel-vertical.mp4" type="video/mp4" media="(max-width: 899px)" />
               <source src="/media/highlights-reel-4x5.mp4" type="video/mp4" />
             </video>
+            <script is:inline>
+              // Runs as the video is parsed, before playback can start: the phone's
+              // poster, and no autoplay at all with reduced motion.
+              (function () {
+                var v = document.currentScript.previousElementSibling;
+                if (matchMedia('(max-width: 899px)').matches) v.poster = '/media/highlights-reel-vertical-poster.jpg';
+                if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                  v.removeAttribute('autoplay');
+                  v.preload = 'metadata';
+                }
+              })();
+            </script>
           </div>
           <div class="me-rv me-reeltext">
             <div class="me-reelshade" aria-hidden="true"></div>
@@ -360,34 +372,46 @@ const arrowDown = icon(['M12 4v16', 'M5.5 13.5 12 20l6.5-6.5']);
     sync();
   }
 
-  // ── The reel: plays while on screen, never with reduced motion; the button pauses it ──
+  // ── The reel: autoplays muted and loops (the HTML asks for it, the iOS way:
+  // autoplay muted loop playsinline). It pauses off screen and resumes on it,
+  // never plays with reduced motion, and the button pauses and plays it. If the
+  // browser refuses to start it on its own (iOS in Low Power Mode does, even
+  // muted), the first tap anywhere on the page starts it.
   const reel = document.querySelector<HTMLElement>('[data-reel]');
   const video = reel?.querySelector('video');
   const btn = reel?.querySelector<HTMLButtonElement>('[data-reel-btn]');
   if (reel && video && btn) {
-    const phone = window.matchMedia('(max-width: 899px)').matches;
-    if (phone && video.dataset.posterM) video.poster = video.dataset.posterM;
     video.muted = true;
-    let userPaused = false;
-    const setPaused = (paused: boolean) => {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let userPaused = reduce;
+    let onScreen = true;
+
+    // The button shows what the video is actually doing.
+    const sync = () => {
+      const paused = video.paused;
       reel.classList.toggle('is-paused', paused);
       btn.setAttribute('aria-label', paused ? 'Play the reel' : 'Pause the reel');
     };
+    video.addEventListener('play', sync);
+    video.addEventListener('playing', sync);
+    video.addEventListener('pause', sync);
+
     const play = () => {
+      if (userPaused || !onScreen) return;
       const q = video.play();
-      if (q && q.catch) q.catch(() => {});
+      if (q && q.catch) q.catch(() => sync());
     };
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduce) {
-      userPaused = true;
-      setPaused(true);
-    } else if ('IntersectionObserver' in window) {
+
+    if (reduce) video.pause();
+    sync();
+
+    if ('IntersectionObserver' in window) {
       new IntersectionObserver(
         (entries) => {
           for (const en of entries) {
-            if (userPaused) continue;
-            if (en.isIntersecting) play();
-            else video.pause();
+            onScreen = en.isIntersecting;
+            if (onScreen) play();
+            else if (!video.paused) video.pause();
           }
         },
         { threshold: 0.1 }
@@ -395,15 +419,33 @@ const arrowDown = icon(['M12 4v16', 'M5.5 13.5 12 20l6.5-6.5']);
     } else {
       play();
     }
-    btn.addEventListener('click', () => {
+
+    // A tap is a user gesture, which lets a blocked video start. (Not a tap on
+    // the button: its own click handler decides, and would undo this.)
+    const kick = (e: Event) => {
+      if (e.target instanceof Node && btn.contains(e.target)) return;
+      if (video.paused) play();
+    };
+    document.addEventListener('touchend', kick, { passive: true });
+    document.addEventListener('click', kick);
+    video.addEventListener(
+      'playing',
+      () => {
+        document.removeEventListener('touchend', kick);
+        document.removeEventListener('click', kick);
+      },
+      { once: true }
+    );
+
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
       if (video.paused) {
         userPaused = false;
+        onScreen = true;
         play();
-        setPaused(false);
       } else {
         userPaused = true;
         video.pause();
-        setPaused(true);
       }
     });
   }
