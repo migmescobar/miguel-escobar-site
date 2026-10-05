@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Navigation bar, desktop</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+@font-face{font-family:'Neue Montreal';src:url('/_blob/9a4426dde9e70c65ccd45b0c0b192e4e') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Neue Montreal';src:url('/_blob/feaee5c532dd527b59acc4386d5ea837') format('woff2');font-weight:400;font-style:italic;font-display:swap}
+body{margin:0}
+.me-iconbtn{display:flex;align-items:center;justify-content:center;flex-shrink:0;width:44px;height:44px;padding:0;margin:0;border:0;border-radius:0;background:transparent;color:inherit;font:inherit;cursor:pointer}
+.me-nmask{display:block;overflow-x:visible;overflow-y:clip}
+.me-nw{display:block}
+a.me-navname{transition:opacity .25s ease}
+a.me-navname:hover{opacity:.6}
+</style>
+</helmet>
+<header style="position: relative; z-index: 1; width: 1440px; height: 72px; box-sizing: border-box; display: flex; align-items: center; justify-content: space-between; padding: 0 64px; background: transparent; color: var(--fg, #141414); font-family: 'Neue Montreal', Helvetica, Arial, sans-serif; font-size: 16px; letter-spacing: 0.02em; -webkit-font-smoothing: antialiased; font-kerning: normal; font-variant-ligatures: common-ligatures; text-rendering: optimizeLegibility;">
+<div class="me-glass" aria-hidden="true" style="position: absolute; left: 0; right: 0; top: 0; height: 128px; z-index: -1; pointer-events: none;"><div style="position: absolute; inset: 0; -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); -webkit-mask-image: linear-gradient(to bottom, #000 36px, rgba(0,0,0,0.957) 39.8px, rgba(0,0,0,0.844) 43.5px, rgba(0,0,0,0.684) 47.2px, rgba(0,0,0,0.5) 51px, rgba(0,0,0,0.316) 54.8px, rgba(0,0,0,0.156) 58.5px, rgba(0,0,0,0.043) 62.2px, transparent 66px); mask-image: linear-gradient(to bottom, #000 36px, rgba(0,0,0,0.957) 39.8px, rgba(0,0,0,0.844) 43.5px, rgba(0,0,0,0.684) 47.2px, rgba(0,0,0,0.5) 51px, rgba(0,0,0,0.316) 54.8px, rgba(0,0,0,0.156) 58.5px, rgba(0,0,0,0.043) 62.2px, transparent 66px);"></div><div style="position: absolute; inset: 0; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); -webkit-mask-image: linear-gradient(to bottom, #000 46px, rgba(0,0,0,0.957) 50.5px, rgba(0,0,0,0.844) 55px, rgba(0,0,0,0.684) 59.5px, rgba(0,0,0,0.5) 64px, rgba(0,0,0,0.316) 68.5px, rgba(0,0,0,0.156) 73px, rgba(0,0,0,0.043) 77.5px, transparent 82px); mask-image: linear-gradient(to bottom, #000 46px, rgba(0,0,0,0.957) 50.5px, rgba(0,0,0,0.844) 55px, rgba(0,0,0,0.684) 59.5px, rgba(0,0,0,0.5) 64px, rgba(0,0,0,0.316) 68.5px, rgba(0,0,0,0.156) 73px, rgba(0,0,0,0.043) 77.5px, transparent 82px);"></div><div style="position: absolute; inset: 0; -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); -webkit-mask-image: linear-gradient(to bottom, #000 58px, rgba(0,0,0,0.957) 63px, rgba(0,0,0,0.844) 68px, rgba(0,0,0,0.684) 73px, rgba(0,0,0,0.5) 78px, rgba(0,0,0,0.316) 83px, rgba(0,0,0,0.156) 88px, rgba(0,0,0,0.043) 93px, transparent 98px); mask-image: linear-gradient(to bottom, #000 58px, rgba(0,0,0,0.957) 63px, rgba(0,0,0,0.844) 68px, rgba(0,0,0,0.684) 73px, rgba(0,0,0,0.5) 78px, rgba(0,0,0,0.316) 83px, rgba(0,0,0,0.156) 88px, rgba(0,0,0,0.043) 93px, transparent 98px);"></div><div style="position: absolute; inset: 0; -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px); -webkit-mask-image: linear-gradient(to bottom, #000 70px, rgba(0,0,0,0.957) 75px, rgba(0,0,0,0.844) 80px, rgba(0,0,0,0.684) 85px, rgba(0,0,0,0.5) 90px, rgba(0,0,0,0.316) 95px, rgba(0,0,0,0.156) 100px, rgba(0,0,0,0.043) 105px, transparent 110px); mask-image: linear-gradient(to bottom, #000 70px, rgba(0,0,0,0.957) 75px, rgba(0,0,0,0.844) 80px, rgba(0,0,0,0.684) 85px, rgba(0,0,0,0.5) 90px, rgba(0,0,0,0.316) 95px, rgba(0,0,0,0.156) 100px, rgba(0,0,0,0.043) 105px, transparent 110px);"></div><div style="position: absolute; inset: 0; -webkit-backdrop-filter: blur(1px); backdrop-filter: blur(1px); -webkit-mask-image: linear-gradient(to bottom, #000 82px, rgba(0,0,0,0.957) 86.8px, rgba(0,0,0,0.844) 91.5px, rgba(0,0,0,0.684) 96.2px, rgba(0,0,0,0.5) 101px, rgba(0,0,0,0.316) 105.8px, rgba(0,0,0,0.156) 110.5px, rgba(0,0,0,0.043) 115.2px, transparent 120px); mask-image: linear-gradient(to bottom, #000 82px, rgba(0,0,0,0.957) 86.8px, rgba(0,0,0,0.844) 91.5px, rgba(0,0,0,0.684) 96.2px, rgba(0,0,0,0.5) 101px, rgba(0,0,0,0.316) 105.8px, rgba(0,0,0,0.156) 110.5px, rgba(0,0,0,0.043) 115.2px, transparent 120px);"></div><div style="position: absolute; inset: 0; -webkit-backdrop-filter: blur(0.5px); backdrop-filter: blur(0.5px); -webkit-mask-image: linear-gradient(to bottom, #000 92px, rgba(0,0,0,0.957) 96.5px, rgba(0,0,0,0.844) 101px, rgba(0,0,0,0.684) 105.5px, rgba(0,0,0,0.5) 110px, rgba(0,0,0,0.316) 114.5px, rgba(0,0,0,0.156) 119px, rgba(0,0,0,0.043) 123.5px, transparent 128px); mask-image: linear-gradient(to bottom, #000 92px, rgba(0,0,0,0.957) 96.5px, rgba(0,0,0,0.844) 101px, rgba(0,0,0,0.684) 105.5px, rgba(0,0,0,0.5) 110px, rgba(0,0,0,0.316) 114.5px, rgba(0,0,0,0.156) 119px, rgba(0,0,0,0.043) 123.5px, transparent 128px);"></div><div class="me-veil" style="position: absolute; inset: 0; background: var(--bg, #EAE7E1); opacity: 0.4; -webkit-mask-image: linear-gradient(to bottom, #000 48px, rgba(0,0,0,0.957) 56px, rgba(0,0,0,0.844) 64px, rgba(0,0,0,0.684) 72px, rgba(0,0,0,0.5) 80px, rgba(0,0,0,0.316) 88px, rgba(0,0,0,0.156) 96px, rgba(0,0,0,0.043) 104px, transparent 112px); mask-image: linear-gradient(to bottom, #000 48px, rgba(0,0,0,0.957) 56px, rgba(0,0,0,0.844) 64px, rgba(0,0,0,0.684) 72px, rgba(0,0,0,0.5) 80px, rgba(0,0,0,0.316) 88px, rgba(0,0,0,0.156) 96px, rgba(0,0,0,0.043) 104px, transparent 112px);"></div></div>
+<a class="me-navname" href="NewHomePlay.dc.html" aria-label="Miguel Escobar" style="position: relative; top: 1px; display: flex; gap: 0.2em; font-size: 15px; line-height: 0.86; letter-spacing: -0.03em; white-space: nowrap; color: inherit; text-decoration: none;"><span class="me-nmask"><span class="me-nw">MIGUEL</span></span><span class="me-nmask"><span class="me-nw">ESCOBAR</span></span></a>
+<button type="button" class="me-iconbtn me-navr" data-act="menu" aria-label="Menu" aria-controls="menu" aria-expanded="{{ menuOpen }}" onClick="{{ onMenu }}" style="margin-right: -13px;"><span style="display: flex; flex-direction: column; justify-content: space-between; width: 18px; height: 11px;"><span style="display: block; height: 1.5px; width: 100%; background: currentColor;"></span><span style="display: block; height: 1.5px; width: 100%; background: currentColor;"></span><span style="display: block; height: 1.5px; width: 100%; background: currentColor;"></span></span></button>
+</header>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"menuOpen": {"editor": null}, "openMenu": {"editor": null}, "$preview": {"width": 1440, "height": 72}}'>
+class Component extends DCLogic {
+renderVals() {
+const p = this.props;
+return {
+menuOpen: !!p.menuOpen,
+onMenu: () => { if (typeof p.openMenu === 'function') p.openMenu(); },
+};
+}
+}
+</script>
+</body>
+</html>

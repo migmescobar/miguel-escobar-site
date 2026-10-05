@@ -1,0 +1,477 @@
+{
+  "v": 3,
+  "attachments": {},
+  "boards": {
+    "About.dc.html": {
+      "h": 1448,
+      "is_interactive": true,
+      "title": "About",
+      "w": 1440,
+      "x": 1520,
+      "y": 0
+    },
+    "AboutMobile.dc.html": {
+      "h": 1413,
+      "is_interactive": true,
+      "title": "About (mobile)",
+      "w": 390,
+      "x": 940,
+      "y": 3720
+    },
+    "AdvertisingWork.dc.html": {
+      "h": 3300,
+      "is_interactive": true,
+      "title": "Advertising Work",
+      "w": 1440,
+      "x": 6080,
+      "y": 0
+    },
+    "AdvertisingWorkMobile.dc.html": {
+      "h": 2825,
+      "is_interactive": true,
+      "title": "Advertising Work (mobile)",
+      "w": 390,
+      "x": 2350,
+      "y": 3720
+    },
+    "EditorialWork.dc.html": {
+      "h": 3300,
+      "is_interactive": true,
+      "title": "Editorial Work",
+      "w": 1440,
+      "x": 4560,
+      "y": 0
+    },
+    "EditorialWorkMobile.dc.html": {
+      "h": 3227,
+      "is_interactive": true,
+      "title": "Editorial Work (mobile)",
+      "w": 390,
+      "x": 1880,
+      "y": 3720
+    },
+    "FooterDesktop.dc.html": {
+      "h": 317,
+      "title": "Footer, desktop",
+      "w": 1440,
+      "x": 4720,
+      "y": 8770
+    },
+    "FooterMobile.dc.html": {
+      "h": 314,
+      "title": "Footer, mobile",
+      "w": 390,
+      "x": 6240,
+      "y": 8751
+    },
+    "HeaderDesktop.dc.html": {
+      "h": 71,
+      "title": "Header, desktop",
+      "w": 1440,
+      "x": 4720,
+      "y": 8619
+    },
+    "HeaderMobile.dc.html": {
+      "h": 52,
+      "title": "Header, mobile",
+      "w": 390,
+      "x": 6240,
+      "y": 8619
+    },
+    "HomeHoverAbout.dc.html": {
+      "h": 900,
+      "is_interactive": true,
+      "title": "Home, About hovered",
+      "w": 1440,
+      "x": 0,
+      "y": 8619
+    },
+    "HomeHoverThoughts.dc.html": {
+      "h": 900,
+      "is_interactive": true,
+      "title": "Home, Thoughts hovered",
+      "w": 1440,
+      "x": 3040,
+      "y": 8619
+    },
+    "HomeHoverWork.dc.html": {
+      "h": 900,
+      "is_interactive": true,
+      "title": "Home, Work hovered",
+      "w": 1440,
+      "x": 1520,
+      "y": 8619
+    },
+    "HomeMobile.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "Home (mobile)",
+      "w": 390,
+      "x": 0,
+      "y": 3720
+    },
+    "LetsTalkDesktop.dc.html": {
+      "h": 582,
+      "page": "redesign",
+      "title": "Let’s talk footer, desktop",
+      "w": 1440,
+      "x": 0,
+      "y": 11232
+    },
+    "LetsTalkMobile.dc.html": {
+      "h": 598,
+      "page": "redesign",
+      "title": "Let’s talk footer, mobile",
+      "w": 390,
+      "x": 1520,
+      "y": 11216
+    },
+    "Main.dc.html": {
+      "h": 900,
+      "is_interactive": true,
+      "title": "Home",
+      "w": 1440,
+      "x": 0,
+      "y": 0
+    },
+    "MenuMobile.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "Menu open (mobile)",
+      "w": 390,
+      "x": 470,
+      "y": 3720
+    },
+    "NavBarDesktop.dc.html": {
+      "h": 72,
+      "page": "redesign",
+      "title": "Nav bar, desktop",
+      "w": 1440,
+      "x": 0,
+      "y": 11080
+    },
+    "NavBarMobile.dc.html": {
+      "h": 56,
+      "page": "redesign",
+      "title": "Nav bar, mobile",
+      "w": 390,
+      "x": 1520,
+      "y": 11080
+    },
+    "NewHome.dc.html": {
+      "h": 5068,
+      "is_interactive": true,
+      "page": "redesign",
+      "title": "Home (full page)",
+      "w": 1440,
+      "x": 0,
+      "y": 0
+    },
+    "NewHomeMobile.dc.html": {
+      "h": 5172,
+      "is_interactive": true,
+      "page": "redesign",
+      "title": "Home, mobile (full page)",
+      "w": 390,
+      "x": 0,
+      "y": 5488
+    },
+    "NewHomeMobilePlay.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "page": "redesign",
+      "title": "Home, mobile (scroll prototype)",
+      "w": 390,
+      "x": 470,
+      "y": 5488
+    },
+    "NewHomePlay.dc.html": {
+      "h": 900,
+      "is_interactive": true,
+      "page": "redesign",
+      "title": "Home (scroll prototype)",
+      "w": 1440,
+      "x": 1520,
+      "y": 0
+    },
+    "NewMenuDesktop.dc.html": {
+      "h": 900,
+      "is_interactive": true,
+      "page": "redesign",
+      "title": "Menu, desktop",
+      "w": 1440,
+      "x": 9120,
+      "y": 0
+    },
+    "NewMenuMobile.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "page": "redesign",
+      "title": "Menu, mobile",
+      "w": 390,
+      "x": 940,
+      "y": 5488
+    },
+    "NewNotFound.dc.html": {
+      "h": 1474,
+      "is_interactive": true,
+      "page": "redesign",
+      "title": "404",
+      "w": 1440,
+      "x": 7600,
+      "y": 0
+    },
+    "NewNotFoundMobile.dc.html": {
+      "h": 1306,
+      "is_interactive": true,
+      "page": "redesign",
+      "title": "404, mobile",
+      "w": 390,
+      "x": 2820,
+      "y": 5488
+    },
+    "NewThoughtPost.dc.html": {
+      "h": 3990,
+      "is_interactive": true,
+      "page": "redesign",
+      "title": "Thought post",
+      "w": 1440,
+      "x": 6080,
+      "y": 0
+    },
+    "NewThoughtPostMobile.dc.html": {
+      "h": 4749,
+      "is_interactive": true,
+      "page": "redesign",
+      "title": "Thought post, mobile",
+      "w": 390,
+      "x": 2350,
+      "y": 5488
+    },
+    "NewThoughts.dc.html": {
+      "h": 1554,
+      "is_interactive": true,
+      "page": "redesign",
+      "title": "Thoughts",
+      "w": 1440,
+      "x": 4560,
+      "y": 0
+    },
+    "NewThoughtsMobile.dc.html": {
+      "h": 1197,
+      "is_interactive": true,
+      "page": "redesign",
+      "title": "Thoughts, mobile",
+      "w": 390,
+      "x": 1880,
+      "y": 5488
+    },
+    "NewWork.dc.html": {
+      "h": 3412,
+      "is_interactive": true,
+      "page": "redesign",
+      "title": "Work",
+      "w": 1440,
+      "y": 0,
+      "x": 3040
+    },
+    "NewWorkMobile.dc.html": {
+      "h": 5182,
+      "is_interactive": true,
+      "page": "redesign",
+      "title": "Work, mobile",
+      "w": 390,
+      "y": 5488,
+      "x": 1410
+    },
+    "NotFound.dc.html": {
+      "h": 1044,
+      "is_interactive": true,
+      "title": "404",
+      "w": 1440,
+      "x": 10640,
+      "y": 0
+    },
+    "NotFoundMobile.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "404 (mobile)",
+      "w": 390,
+      "x": 3760,
+      "y": 3720
+    },
+    "ThoughtPost.dc.html": {
+      "h": 2874,
+      "is_interactive": true,
+      "title": "Thought post",
+      "w": 1440,
+      "x": 9120,
+      "y": 0
+    },
+    "ThoughtPostMobile.dc.html": {
+      "h": 4174,
+      "is_interactive": true,
+      "title": "Thought post (mobile)",
+      "w": 390,
+      "x": 3290,
+      "y": 3720
+    },
+    "Thoughts.dc.html": {
+      "h": 1024,
+      "is_interactive": true,
+      "title": "Thoughts",
+      "w": 1440,
+      "x": 7600,
+      "y": 0
+    },
+    "ThoughtsMobile.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "Thoughts (mobile)",
+      "w": 390,
+      "x": 2820,
+      "y": 3720
+    },
+    "Work.dc.html": {
+      "h": 2036,
+      "is_interactive": true,
+      "title": "Work",
+      "w": 1440,
+      "x": 3040,
+      "y": 0
+    },
+    "WorkMobile.dc.html": {
+      "h": 4479,
+      "is_interactive": true,
+      "title": "Work (mobile)",
+      "w": 390,
+      "x": 1410,
+      "y": 3720
+    }
+  },
+  "createdOnFiles": {
+    "at": "2026-09-23T11:40:29Z",
+    "v": 1
+  },
+  "designSystems": [],
+  "launch": {
+    "page": "redesign",
+    "view": "canvas"
+  },
+  "notes": {
+    "redesignComponents": {
+      "kind": "title1",
+      "maxW": 1910,
+      "page": "redesign",
+      "text": "Shared nav and footer",
+      "w": 240,
+      "x": 0,
+      "y": 10780
+    },
+    "redesignDesktop": {
+      "kind": "title1",
+      "maxW": 8000,
+      "page": "redesign",
+      "text": "Redesign · desktop 1440",
+      "w": 240,
+      "x": 0,
+      "y": -300
+    },
+    "redesignMobile": {
+      "kind": "title1",
+      "maxW": 3680,
+      "page": "redesign",
+      "text": "Redesign · mobile 390",
+      "w": 240,
+      "x": 0,
+      "y": 5188
+    },
+    "rowComponents": {
+      "kind": "title1",
+      "maxW": 1910,
+      "text": "Shared header and footer",
+      "w": 240,
+      "x": 4720,
+      "y": 8319
+    },
+    "rowDesktop": {
+      "kind": "title1",
+      "maxW": 8000,
+      "text": "Desktop · 1440",
+      "w": 240,
+      "x": 0,
+      "y": -300
+    },
+    "rowHover": {
+      "kind": "title1",
+      "maxW": 4480,
+      "text": "Home · door hover floods",
+      "w": 240,
+      "x": 0,
+      "y": 8319
+    },
+    "rowMobile": {
+      "kind": "title1",
+      "maxW": 4150,
+      "text": "Mobile · 390",
+      "w": 240,
+      "x": 0,
+      "y": 3420
+    }
+  },
+  "order": [
+    "Main.dc.html",
+    "About.dc.html",
+    "Work.dc.html",
+    "EditorialWork.dc.html",
+    "AdvertisingWork.dc.html",
+    "Thoughts.dc.html",
+    "ThoughtPost.dc.html",
+    "NotFound.dc.html",
+    "HomeMobile.dc.html",
+    "MenuMobile.dc.html",
+    "AboutMobile.dc.html",
+    "WorkMobile.dc.html",
+    "EditorialWorkMobile.dc.html",
+    "AdvertisingWorkMobile.dc.html",
+    "ThoughtsMobile.dc.html",
+    "ThoughtPostMobile.dc.html",
+    "NotFoundMobile.dc.html",
+    "HomeHoverAbout.dc.html",
+    "HomeHoverWork.dc.html",
+    "HomeHoverThoughts.dc.html",
+    "HeaderDesktop.dc.html",
+    "FooterDesktop.dc.html",
+    "HeaderMobile.dc.html",
+    "FooterMobile.dc.html",
+    "NewHome.dc.html",
+    "NewHomePlay.dc.html",
+    "NewWork.dc.html",
+    "NewThoughts.dc.html",
+    "NewThoughtPost.dc.html",
+    "NewNotFound.dc.html",
+    "NewHomeMobile.dc.html",
+    "NewHomeMobilePlay.dc.html",
+    "NewMenuMobile.dc.html",
+    "NewWorkMobile.dc.html",
+    "NewThoughtsMobile.dc.html",
+    "NewThoughtPostMobile.dc.html",
+    "NewNotFoundMobile.dc.html",
+    "NavBarDesktop.dc.html",
+    "LetsTalkDesktop.dc.html",
+    "NavBarMobile.dc.html",
+    "LetsTalkMobile.dc.html",
+    "NewMenuDesktop.dc.html"
+  ],
+  "pages": [
+    {
+      "id": "current",
+      "name": "Current site"
+    },
+    {
+      "id": "redesign",
+      "name": "Redesign"
+    }
+  ],
+  "title": "miguel-escobar.com"
+}
