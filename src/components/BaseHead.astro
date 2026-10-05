@@ -1,25 +1,15 @@
 ---
 // Per-page <head>: title, meta description, Open Graph/Twitter, canonical,
-// JSON-LD, self-hosted fonts, favicon, and (in production) analytics.
+// JSON-LD, the self-hosted font, favicon, and (in production) analytics.
 import { SITE_URL, SITE_TITLE, CONTACT, GOATCOUNTER_CODE, GOATCOUNTER_READY } from '../consts';
 
-// JetBrains Mono is metadata-only type (dates, form labels, footer). Self-hosted
-// via @fontsource rather than the Google Fonts CDN the hand-off suggested, so no
-// request leaves the domain. The display serif and text sans are self-hosted
-// woff2 declared in global.css.
-import '@fontsource/jetbrains-mono/latin-400.css';
-import '@fontsource/jetbrains-mono/latin-500.css';
 import '../styles/global.css';
 
-// Preload the faces used above the fold so the browser fetches them while the
-// CSS is still downloading. Without this they're only discovered after the CSS
-// parses, so text paints in fallback (Georgia / Helvetica) and visibly swaps.
-// Imported (not hard-coded) so each href tracks Astro's content hash.
-// Two only: the text sans (everything — this design has no display serif) and
-// mono 400 (the date sits above the fold on the article and Thoughts pages).
-// The italic face is left to normal discovery: nothing above the fold uses it.
+// Preload the one face used above the fold so the browser fetches it while the
+// CSS is still downloading (otherwise it's only discovered after the CSS parses
+// and text paints in the fallback first). Imported, not hard-coded, so the href
+// tracks Astro's content hash. The italic is left to normal discovery.
 import textSans from '../assets/fonts/neue-montreal-400.woff2?url';
-import metaMono from '@fontsource/jetbrains-mono/files/jetbrains-mono-latin-400-normal.woff2?url';
 
 interface Props {
   title: string;
@@ -89,7 +79,6 @@ const blogPosting =
 <!-- crossorigin is required even same-origin: fonts fetch in anonymous CORS
      mode, and without it the browser downloads the file a second time. -->
 <link rel="preload" href={textSans} as="font" type="font/woff2" crossorigin />
-<link rel="preload" href={metaMono} as="font" type="font/woff2" crossorigin />
 
 <title>{title}</title>
 <meta name="description" content={description} />
@@ -127,19 +116,6 @@ const blogPosting =
 {blogPosting && (
   <script type="application/ld+json" set:html={JSON.stringify(blogPosting)} />
 )}
-
-<!-- Reveal-on-scroll: opt in before paint (no flash), with a guaranteed failsafe. -->
-<script is:inline>
-  (function () {
-    var d = document.documentElement;
-    if (!window.matchMedia || !matchMedia('(prefers-reduced-motion: no-preference)').matches) return;
-    d.classList.add('reveal-ready');
-    setTimeout(function () {
-      var els = document.querySelectorAll('[data-reveal]:not(.is-visible)');
-      for (var i = 0; i < els.length; i++) els[i].classList.add('is-visible');
-    }, 1500);
-  })();
-</script>
 
 {GOATCOUNTER_READY && import.meta.env.PROD && (
   <script

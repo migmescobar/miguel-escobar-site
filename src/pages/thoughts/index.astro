@@ -1,8 +1,9 @@
 ---
+// Thoughts (boards NewThoughts*): the published posts, newest first, each a
+// headline that comes up to full ink on hover.
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import PageHead from '../../components/PageHead.astro';
-import { parseTitleParts } from '../../utils/postTitle';
+import { bindWords, parseTitleParts } from '../../utils/postTitle';
 
 // Published posts only (drafts excluded), newest first.
 const posts = (await getCollection('thoughts', ({ data }) => !data.draft)).sort(
@@ -10,75 +11,92 @@ const posts = (await getCollection('thoughts', ({ data }) => !data.draft)).sort(
 );
 
 const monthYear = (d: Date) =>
-  d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' }).toUpperCase();
+  d.toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' }).toUpperCase();
+const yearMonth = (d: Date) => d.toISOString().slice(0, 7);
 ---
 
 <BaseLayout
   title="Thoughts — Miguel Escobar"
   description="Thoughts by Miguel Escobar on communications, editorial craft, content governance, culture, and tech."
+  current="thoughts"
 >
-  <div class="wrap">
-    <PageHead title="Thoughts" subhead="Where I’m at on media, culture, and issues of the day" />
+  <section class="me-thoughts">
+    <div class="me-pagehead me-pagehead-flush">
+      <h1 class="t-xl me-pagetitle">Thoughts</h1>
+      <p class="t-lead me-pagesub">Where I’m at on media, culture, and issues of the day</p>
+    </div>
 
-    <section class="index" data-reveal>
+    <div class="me-entries">
+      {posts.length === 0 && <p class="t-lead me-empty">No posts yet — check back soon.</p>}
       {
-        posts.length > 0 ? (
-          <p class="entries">
-            {posts.map((post) => (
-              <>
-                <span class="date">{monthYear(post.data.pubDate)}</span>
-                <a href={`/thoughts/${post.id}/`}>{parseTitleParts(post.data.listTitle ?? post.data.title).map((p) => (p.em ? <em>{p.text}</em> : p.text))}</a>{' '}
-              </>
-            ))}
-          </p>
-        ) : (
-          <p class="empty">No posts yet — check back soon.</p>
-        )
+        posts.map((post) => (
+          <a class="me-entry" href={`/thoughts/${post.id}/`}>
+            <time class="t-label" datetime={yearMonth(post.data.pubDate)}>
+              {monthYear(post.data.pubDate)}
+            </time>
+            <h2 class="t-h1 me-entry-title">
+              {parseTitleParts(post.data.listTitle ?? post.data.title).map((p) =>
+                p.em ? <em>{bindWords(p.text)}</em> : bindWords(p.text)
+              )}
+            </h2>
+          </a>
+        ))
       }
-    </section>
-  </div>
+    </div>
+  </section>
 </BaseLayout>
 
 <style>
-  .index {
-    border-top: 1px solid var(--ink-30);
-    padding: clamp(32px, 4vw, 56px) 0 clamp(64px, 10vw, 140px);
+  .me-thoughts {
+    padding: 0 0 112px;
   }
-  .entries {
-    margin: 0;
-    font-size: clamp(30px, 4vw, 48px);
-    line-height: 1.2;
-    font-weight: 400;
-    letter-spacing: -0.009em;
-    text-wrap: pretty;
+  .me-pagehead-flush {
+    padding-bottom: 0;
   }
-  .date {
-    font-family: var(--font-mono);
-    font-size: 0.3em;
-    font-weight: 500;
-    letter-spacing: 0.105em;
-    vertical-align: 0.62em;
-    /* Hand-off says .5; darkened to clear AA at this small size. */
-    color: var(--ink-mute);
-    margin-right: 1.2em;
-    white-space: nowrap;
+  .me-entries {
+    margin: 48px var(--pad) 0;
+    border-top: var(--heavy) solid var(--fg);
   }
-  /* Dim until hover — a display list, not body copy. The hand-off's .3 resting
-     value fails AA even for large text, so this uses .5, which keeps the effect
-     and clears the 3:1 large-text threshold. Focus also lifts it to full ink,
-     which the hand-off flagged as worth doing. */
-  .entries a {
+  .me-empty {
+    margin: 24px 0 0;
+    color: var(--fg75);
+  }
+  .me-entry {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 24px 0 28px;
+    border-bottom: 1px solid var(--rule);
+    color: inherit;
     text-decoration: none;
-    color: var(--ink-dormant);
-    transition: color 0.35s ease;
   }
-  .entries a:hover,
-  .entries a:focus-visible {
-    color: var(--ink);
+  .me-entry-title {
+    opacity: 0.62;
+    transition: opacity 0.35s ease;
   }
-  .empty {
-    margin: 0;
-    font-size: 16px;
-    color: var(--ink-90);
+  .me-entry:hover .me-entry-title,
+  .me-entry:focus-visible .me-entry-title {
+    opacity: 1;
+  }
+  @media (min-width: 900px) {
+    .me-thoughts {
+      padding-bottom: clamp(128px, 13.333vw, 192px);
+    }
+    .me-entries {
+      margin-top: clamp(72px, 7.222vw, 104px);
+    }
+    .me-entry {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: var(--gap);
+      align-items: baseline;
+      padding: 40px 0 46px;
+    }
+    .me-entry time {
+      grid-column: 1 / span 2;
+    }
+    .me-entry-title {
+      grid-column: 7 / span 6;
+    }
   }
 </style>

@@ -1,50 +1,80 @@
 ---
+// 404 (boards NewNotFound*).
 import BaseLayout from '../layouts/BaseLayout.astro';
+
+const links = [
+  { href: '/', label: 'Home' },
+  { href: '/work/', label: 'Work' },
+  { href: '/thoughts/', label: 'Thoughts' },
+];
 ---
 
-<BaseLayout title="Page not found — Miguel Escobar" description="That page doesn’t exist. Head back to the homepage, or browse the work and writing."
-  noindex>
-  <div class="wrap notfound">
-    <div class="eyebrow">ERROR 404</div>
-    <h1>Page not found</h1>
-    <p>The page you’re looking for doesn’t exist or may have moved.</p>
-    <nav class="links" aria-label="Helpful links">
-      <a href="/">Home</a>
-      <a href="/editorial-work/">Editorial Work</a>
-      <a href="/advertising-work/">Advertising Work</a>
-      <a href="/thoughts/">Thoughts</a>
-    </nav>
-  </div>
+<BaseLayout
+  title="Page not found — Miguel Escobar"
+  description="That page doesn’t exist. Head back to the homepage, or browse the work and writing."
+  noindex
+>
+  <section class="me-404">
+    <p class="t-label">Error 404</p>
+    <h1 class="t-xl me-404-title">Page not found</h1>
+    <div class="me-404-grid">
+      <p class="t-lead me-404-text">The page you’re looking for doesn’t exist or may have moved.</p>
+      <div class="me-404-links">
+        <nav aria-label="Helpful links" class="lrows">
+          {
+            links.map(({ href, label }) => (
+              <a class="lrow" href={href}>
+                <span class="lrow-label">{label}</span>
+                <span class="lrow-arrow">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M4 12h16" />
+                    <path d="M13.5 5.5 20 12l-6.5 6.5" />
+                  </svg>
+                </span>
+              </a>
+            ))
+          }
+        </nav>
+      </div>
+    </div>
+  </section>
 </BaseLayout>
 
 <style>
-  .notfound {
-    padding: clamp(48px, 12vh, 140px) 0 clamp(64px, 12vw, 160px);
-    max-width: 720px;
+  .me-404 {
+    padding: 76px var(--pad) 112px;
   }
-  .eyebrow {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    letter-spacing: 0.085em;
-    color: var(--ink-mute);
-    margin-bottom: 20px;
+  .me-404-title {
+    margin-top: 22px;
   }
-  h1 {
-    margin: 0 0 22px;
-    font-size: clamp(42px, 6.4vw, 88px);
-    letter-spacing: -0.03em;
+  .me-404-text {
+    margin: 28px 0 0;
+    color: var(--fg75);
   }
-  p {
-    margin: 0 0 32px;
-    font-size: 18px;
-    line-height: 1.6;
-    color: var(--ink-90);
-    max-width: 460px;
+  .me-404-links {
+    margin-top: 48px;
   }
-  .links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px 28px;
-    font-size: 16px;
+  @media (min-width: 900px) {
+    .me-404 {
+      padding: clamp(96px, 9.03vw, 130px) var(--pad) clamp(128px, 13.333vw, 192px);
+    }
+    .me-404-title {
+      margin-top: 28px;
+    }
+    .me-404-grid {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: var(--gap);
+      align-items: start;
+      margin-top: clamp(72px, 7.222vw, 104px);
+    }
+    .me-404-text {
+      grid-column: 1 / span 5;
+      margin: -7px 0 0;
+    }
+    .me-404-links {
+      grid-column: 7 / span 6;
+      margin-top: 0;
+    }
   }
 </style>

@@ -1,0 +1,115 @@
+---
+// "Let’s talk": the site's footer and its whole contact surface (four links, no
+// form). Every link leaves the page, so each takes the up-right arrow.
+import { CONTACT } from '../consts';
+
+const rows = [
+  { href: `mailto:${CONTACT.email}`, label: CONTACT.email },
+  { href: CONTACT.phoneHref, label: CONTACT.phoneDisplay.replace(/ /g, ' ') },
+  { href: CONTACT.linkedin, label: 'LinkedIn', blank: true },
+  { href: CONTACT.cv, label: 'Download my CV', blank: true },
+];
+---
+
+<footer id="contact" class="me-foot">
+  <div class="me-foot-top">
+    <div class="me-foot-lede">
+      <h2 class="t-xl me-foot-title">Let’s talk</h2>
+      <p class="t-lead me-foot-sub">Hiring, briefing, or looking to connect?</p>
+    </div>
+    <div class="me-foot-links">
+      <nav aria-label="Contact" class="lrows">
+        {
+          rows.map(({ href, label, blank }) => (
+            <a
+              class="lrow ext"
+              href={href}
+              target={blank ? '_blank' : undefined}
+              rel={blank ? 'noopener' : undefined}
+            >
+              <span class="lrow-label">{label}</span>
+              <span class="lrow-arrow">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M7 17 17 7" />
+                  <path d="M8.5 7H17v8.5" />
+                </svg>
+              </span>
+            </a>
+          ))
+        }
+      </nav>
+    </div>
+  </div>
+  <div class="me-foot-space"></div>
+  <div class="t-label me-foot-base"><span>© 2026 Miguel Escobar</span><span>Ownself vibe code</span></div>
+</footer>
+
+<style is:global>
+  .me-foot {
+    position: relative;
+    z-index: 1;
+    /* The boards' footer heights; the spacer takes up the difference. */
+    min-height: 598px;
+    display: flex;
+    flex-direction: column;
+    padding: 72px var(--pad) 20px;
+    background: var(--fbg);
+    color: var(--ffg);
+    /* Its own colours for everything inside that reads the page's. */
+    --rule: var(--frule);
+    --fg: var(--ffg);
+  }
+  .me-foot-title {
+    white-space: nowrap;
+  }
+  .me-foot-sub {
+    margin: 28px 0 0;
+    color: var(--f75);
+  }
+  .me-foot-links {
+    margin-top: 48px;
+  }
+  .me-foot-space {
+    flex-grow: 1;
+    min-height: 72px;
+  }
+  .me-foot-base {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px 24px;
+    border-top: 1px solid var(--frule);
+    padding-top: 14px;
+    color: var(--f70);
+  }
+  @media (min-width: 900px) {
+    .me-foot {
+      min-height: 582px;
+      padding: 120px var(--pad) 28px;
+    }
+    .me-foot-top {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: var(--gap);
+      align-items: start;
+    }
+    .me-foot-lede {
+      grid-column: 1 / span 6;
+    }
+    .me-foot-sub {
+      margin-top: 56px;
+      /* Four of the lede's six columns. */
+      max-width: calc((100% - 5 * var(--gap)) / 6 * 4 + 3 * var(--gap));
+    }
+    .me-foot-links {
+      grid-column: 7 / span 6;
+      margin-top: 13px;
+    }
+    .me-foot-space {
+      min-height: 96px;
+    }
+    .me-foot-base {
+      padding-top: 18px;
+    }
+  }
+</style>

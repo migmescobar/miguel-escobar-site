@@ -1,7 +1,8 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
-import Contact from '../components/Contact.astro';
+import Nav from '../components/Nav.astro';
+import Menu from '../components/Menu.astro';
+import Footer from '../components/Footer.astro';
 
 interface Props {
   title: string;
@@ -13,11 +14,13 @@ interface Props {
   articleHeadline?: string;
   /** Keep this page out of search results (the 404). */
   noindex?: boolean;
-  /** Home is a single-viewport "door" page: no header, no footer, no scroll. */
-  bare?: boolean;
+  /** Home: the nav lies over the hero and changes colour with the ground under it. */
+  home?: boolean;
+  /** The menu item for this page. */
+  current?: 'home' | 'work' | 'thoughts';
 }
 
-const { bare = false } = Astro.props;
+const { home = false, current } = Astro.props;
 ---
 
 <!doctype html>
@@ -25,46 +28,26 @@ const { bare = false } = Astro.props;
   <head>
     <BaseHead {...Astro.props} />
   </head>
-  <body>
+  <body id={home ? undefined : 'top'} class:list={{ 'is-home': home, 'is-page': !home }}>
     <a class="skip-link" href="#main">Skip to content</a>
-    <div class="page">
-      {!bare && <Header />}
-      <main id="main" class:list={{ bare }}>
-        <slot />
-      </main>
-      {!bare && <Contact />}
-    </div>
+    <Nav home={home} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    <Menu current={current} />
 
-    <style>
-      .page {
-        /* svh is the viewport with the mobile browser's address bar SHOWING —
-           the smallest it gets. Plain vh resolves to the *large* viewport (bar
-           hidden), which on a phone is taller than what's actually visible, so
-           a "one viewport" page ends up needing a small scroll to reach its
-           bottom edge. svh guarantees it fits without scrolling; dvh would also
-           fit but re-flows as the bar slides, which would re-run the Home hero
-           fit mid-gesture. vh first as the fallback for older browsers. */
-        min-height: 100vh;
-        min-height: 100svh;
-        display: flex;
-        flex-direction: column;
-      }
+    <style is:global>
       main {
-        flex: 1;
-        padding: 0 var(--pad);
-      }
-      /* Home supplies its own padding and owns the full viewport. */
-      main.bare {
-        display: flex;
-        flex-direction: column;
-        padding: 0;
+        display: block;
+        background: var(--bg);
       }
       .skip-link {
         position: absolute;
         left: -9999px;
         top: 0;
-        background: var(--ink);
-        color: var(--paper);
+        background: var(--fg);
+        color: var(--bg);
         padding: 10px 16px;
         z-index: 100;
         text-decoration: none;
@@ -73,25 +56,53 @@ const { bare = false } = Astro.props;
         left: 8px;
         top: 8px;
       }
-    </style>
 
-    <script>
-      // Reveal-on-scroll observer. Only meaningful when the inline <head> script
-      // opted in (motion allowed); otherwise the CSS keeps everything visible.
-      if (document.documentElement.classList.contains('reveal-ready')) {
-        const io = new IntersectionObserver(
-          (entries) => {
-            for (const en of entries) {
-              if (en.isIntersecting) {
-                en.target.classList.add('is-visible');
-                io.unobserve(en.target);
-              }
-            }
-          },
-          { threshold: 0.1 }
-        );
-        document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
+      /* Pages other than Home: the nav goes paper over the footer, and its veil
+         clears as the footer comes up under it (a paper veil would lay a pale
+         strip across the ink). Browsers without scroll timelines keep the plain
+         veil and ink. */
+      @keyframes me-fg-foot {
+        to {
+          color: var(--ffg);
+        }
       }
-    </script>
+      @keyframes me-veil-out {
+        to {
+          opacity: 0;
+        }
+      }
+      @supports (animation-timeline: view()) {
+        body.is-page {
+          timeline-scope: --ch-foot;
+        }
+        body.is-page .me-foot {
+          view-timeline-name: --ch-foot;
+        }
+        body.is-page .me-nav {
+          animation-name: me-fg-foot;
+          animation-duration: auto;
+          animation-timing-function: linear(0, 0 44%, 1 56%, 1);
+          animation-fill-mode: both;
+          animation-timeline: --ch-foot;
+          animation-range: cover calc(100svh - var(--navh)) cover 100svh;
+        }
+        body.is-page .me-glass-d .me-veil {
+          animation-name: me-veil-out;
+          animation-duration: auto;
+          animation-timing-function: linear;
+          animation-fill-mode: both;
+          animation-timeline: --ch-foot;
+          animation-range: cover calc(100svh - 112px) cover calc(100svh - 24px);
+        }
+        body.is-page .me-glass-m .me-veil {
+          animation-name: me-veil-out;
+          animation-duration: auto;
+          animation-timing-function: linear;
+          animation-fill-mode: both;
+          animation-timeline: --ch-foot;
+          animation-range: cover calc(100svh - 90px) cover calc(100svh - 18px);
+        }
+      }
+    </style>
   </body>
 </html>

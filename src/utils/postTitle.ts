@@ -20,3 +20,12 @@ export function parseTitleParts(raw: string): TitlePart[] {
 export function plainTitle(raw: string): string {
   return raw.replace(/\*([^*]+)\*/g, '$1');
 }
+
+/**
+ * Line-breaking for headlines, as the redesign sets them: an article never ends a
+ * line (it stays with the word after it), and a word stays with an opening quote
+ * that follows it ("Nolan’s “Odyssey”").
+ */
+export function bindWords(text: string): string {
+  return text.replace(/(^|[\s“‘])(a|an|the) /gi, '$1$2\u00a0').replace(/(\S) “/g, '$1\u00a0“');
+}

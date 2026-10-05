@@ -1,205 +1,362 @@
 ---
+// Home: one continuous scroll (boards NewHome*/NewHomePlay*). The hero's statement
+// types itself in and the name rises; then Work (a rail of samples), About (the map),
+// Editorial beside Branded (the highlights reel), the pinned Policy stage, the footer.
+// Motion is in src/styles/home.css.
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Typed from '../components/Typed.astro';
+import Frame from '../components/Frame.astro';
 import { SITE_DESCRIPTION } from '../consts';
+import { typeChars, keepCompounds } from '../utils/typed';
+import '../styles/home.css';
 
-// The three "doors" carry their flood colours as data attributes; the script
-// paints them onto the flood surface on hover.
-// All three flood dark and take light ink — keep it that way. An earlier attempt
-// at a brighter Work colour (#1DC970) was pulled because it needed dark ink to
-// stay readable, which broke that consistency.
-//
-// Doors are large type, so the bar is 3:1. Measured against #EAE7E1:
-//   About     #0047BB  6.50:1
-//   Work      #d25a9b  2.998:1  <- chosen deliberately; see below
-//   Thoughts  #624647  6.84:1
-//
-// #d25a9b lands 0.002 under the 3:1 large-text bar — close enough that it is
-// invisible to the eye but an automated audit (axe, Lighthouse) will flag it.
-// It is here because it was picked by name. #d05999 is the same colour to look
-// at (-2,-1,-2 in RGB) and clears at 3.05:1 if that flag ever needs to go away.
-const doors = [
-  { label: 'About', href: '/about/', bg: '#0047BB', ink: '#EAE7E1' },
-  { label: 'Work', href: '/work/', bg: '#d25a9b', ink: '#EAE7E1' },
-  { label: 'Thoughts', href: '/thoughts/', bg: '#624647', ink: '#EAE7E1' },
+import mapDesktop from '../assets/map/map-desktop.svg.html?raw';
+import mapMobile from '../assets/map/map-mobile.svg.html?raw';
+
+import trust from '../assets/images/home-advertising.jpg';
+import ageChecks from '../assets/images/home-age-checks.jpg';
+import eddie from '../assets/images/home-editorial.jpg';
+import whitewash from '../assets/images/home-whitewash.jpg';
+import osc from '../assets/images/osc-phone-57.jpg';
+import nba from '../assets/images/ads-nba.jpg';
+import pulpit from '../assets/images/home-pulpit.jpg';
+import uson from '../assets/images/ph-politics-uson.jpg';
+import magazines from '../assets/images/editorial-magazines.webp';
+
+const STATEMENT = 'Editorial instincts and creative acuity for the scale and stakes of tech.';
+const WORK_HEAD = 'My work has been about honest, helpful, human storytelling.';
+
+// The samples on the rail (after Monocle's rails).
+const rail = [
+  {
+    href: 'https://www.marketing-interactive.com/trust-bank-million-dollars-campaign',
+    image: trust,
+    alt: 'A woman laughing, a Trust cashback Visa card held over one eye, as banknotes and confetti rain down.',
+    label: 'Fintech Campaign',
+    title: 'Trust Bank Singapore: Cashback Launch',
+  },
+  {
+    href: 'https://www.youtube.com/watch?v=HXkZmhEBnBQ',
+    image: ageChecks,
+    alt: 'A shopkeeper raising her hand to a boy holding beer beneath an “Under 18” sign, from the Age Assurance Measures campaign',
+    label: 'Public Service',
+    title: 'Age Assurance Measures in App Stores',
+  },
+  {
+    href: 'https://www.youtube.com/watch?v=yY4LLYrMHt8',
+    image: eddie,
+    alt: 'A dramatic, low-key editorial portrait of an older man against a black background.',
+    label: 'Cover Story',
+    title: 'Eddie Garcia for Esquire Philippines',
+  },
+  {
+    href: 'https://www.esquiremag.ph/politics/opinion/fighting-for-history-on-the-wikipedia-battlefield-a00207-20170817-lfrm2',
+    image: whitewash,
+    alt: 'Ferdinand Marcos collaged over a redacted Wikipedia “Martial law” article, for “How to Whitewash a Dictator”',
+    label: 'Investigative Feature',
+    title: 'The\u00a0Wikipedians at War Over Truth',
+  },
+  {
+    href: 'https://www.osc.gov.sg/',
+    image: osc,
+    alt: 'A hand in the dark, lit by the glow of a phone screen.',
+    label: 'Public Service',
+    title: 'Online Safety Commission Launch',
+  },
+  {
+    href: '/work/#advertising',
+    image: nba,
+    alt: 'A dramatic NBA promotional collage of San Antonio Spurs and New York Knicks players over city skylines, with a golden basketball.',
+    label: 'Branded Newsletter',
+    title: 'NBA Asia-Pacific Weeklies',
+  },
+  {
+    href: 'https://www.esquiremag.ph/long-reads/notes-and-essays/the-rise-of-pastor-culture-and-why-it-must-end-a1513-20170629-lfrm',
+    image: pulpit,
+    alt: 'Halftone hands reaching toward pixelated images inside retro computer windows, for “A Pulpit for Pastors of Porn.”',
+    label: 'Investigative Feature',
+    title: 'Exposing Intimate Image Abuse Groups',
+  },
+  {
+    href: '/work/#editorial',
+    image: uson,
+    alt: 'Mocha Uson in a black coat, her mouth covered with a strip of grey tape.',
+    label: 'Politics',
+    title: 'Interviews With Controversial Figures',
+  },
 ];
+const ext = (href: string) => href.startsWith('http');
+
+const ABOUT = {
+  head: 'I’m based in Singapore with regional scope.',
+  emph: 'Singapore',
+  body: 'I moved here from Manila and have since worked agency-side, on local and APAC-wide campaigns for clients including the NBA, Trust Bank, and the IMDA.',
+};
+const EDITORIAL = {
+  head: 'My editorial background informs everything I do.',
+  emph: 'editorial background',
+  body: 'In Manila, I was an editor at the local edition of Esquire magazine, covering culture, politics, and current affairs. This formative chapter of my career is a core memory — it gave me a journalistic perspective that I’ve since applied in everything I do.',
+};
+const BRANDED = {
+  head: 'But the bigger chunk of my career has been in branded content.',
+  emph: 'branded content',
+  body: 'Of my 12 years of experience, 10 have been in roles handling advertorials and brand campaigns. My strategic communication senses have been honed and sharpened for over a decade.',
+};
+const POLICY = {
+  head: 'Now, I’m learning about content policy and online safety.',
+  emph: 'content policy and online safety',
+  body: 'I’ve learned programming at NUS and have been plugged into tech news, especially global tech policy, for years. I’m looking to apply my editorial and communications skills towards custodianship of the internet.',
+};
+// A paragraph fades in once its headline is 60% typed.
+const fd = (t: { head: string; emph: string }) => `--fd: ${typeChars(t.head, t.emph).fd}ms;`;
+
+const icon = (d: [string, string]) => (s: number) =>
+  `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${d[0]}"></path><path d="${d[1]}"></path></svg>`;
+const arrowRight = icon(['M4 12h16', 'M13.5 5.5 20 12l-6.5 6.5']);
+const arrowLeft = icon(['M20 12H4', 'M10.5 5.5 4 12l6.5 6.5']);
+const arrowDown = icon(['M12 4v16', 'M5.5 13.5 12 20l6.5-6.5']);
 ---
 
 <BaseLayout
   title="Miguel Escobar — Strategic Communications & Editorial"
   description={SITE_DESCRIPTION}
   personSchema
-  bare
+  home
+  current="home"
 >
-  <div class="flood" data-flood>
-    <div class="inner">
-      <h1 class="hero" data-hero><span>MIGUEL</span><span>ESCOBAR</span></h1>
+  <section id="top" class="me-hero">
+    <div class="me-drift">
+      <Typed as="p" text={STATEMENT} class="t-h1 me-statement me-typeload" t0={350} />
+      <div class="me-grow"></div>
+      <div class="me-cuerow">
+        <span class="me-cueglow" aria-hidden="true"></span>
+        <a class="me-cue" href="#work" aria-label="Scroll to work" set:html={arrowDown(22)} />
+      </div>
+      <h1 class="me-rise me-name"><span>Miguel</span> <span>Escobar</span></h1>
+    </div>
+  </section>
 
-      <div class="spacer"></div>
-
-      <nav class="doors" aria-label="Primary">
+  <div class="me-chapters">
+    <section id="work" class="me-work">
+      <div class="heavy me-headrule me-workrule" aria-hidden="true"></div>
+      <div class="me-workhead">
+        <div class="me-rv">
+          <Typed text={WORK_HEAD} emph="honest helpful human storytelling" class="t-h1 me-hl" />
+        </div>
+        <div class="me-railnav">
+          <button class="me-railbtn" type="button" aria-label="Previous work" data-rail-prev disabled set:html={arrowLeft(18)} />
+          <button class="me-railbtn" type="button" aria-label="More work" data-rail-next set:html={arrowRight(18)} />
+        </div>
+      </div>
+      <div class="me-rv me-gal me-rail" data-rail>
         {
-          doors.map((d) => (
-            <a class="door" href={d.href} data-door data-bg={d.bg} data-ink={d.ink}>
-              <span class="door-label">{d.label}</span>
+          rail.map((c) => (
+            <a
+              class="me-card"
+              href={c.href}
+              target={ext(c.href) ? '_blank' : undefined}
+              rel={ext(c.href) ? 'noopener' : undefined}
+            >
+              <Frame
+                image={c.image}
+                alt={c.alt}
+                ratio="1 / 1.4"
+                sizes="(max-width: 899px) 220px, (max-width: 1199px) 30vw, 310px"
+                widths={[220, 310, 440, 620]}
+              />
+              <div class="me-cardtext">
+                <p class="t-label me-fade">{c.label}</p>
+                <p class="me-fade me-card-desc" set:html={keepCompounds(c.title)} />
+              </div>
             </a>
           ))
         }
-      </nav>
+      </div>
+    </section>
+
+    <section id="about" class="me-about">
+      <div class="me-exit me-aboutgrid">
+        <div class="me-abouttext">
+          <div class="heavy me-headrule" aria-hidden="true"></div>
+          <div class="me-textbox">
+            <div class="me-rv">
+              <Typed text={ABOUT.head} emph={ABOUT.emph} class="t-h2 me-hl" />
+            </div>
+            <div class="me-par-m me-gaptext">
+              <div class="me-rv">
+                <p class="t-bodyl me-fade me-chbody" style={fd(ABOUT)} set:html={keepCompounds(ABOUT.body)} />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="me-par-m me-plateholder">
+          <div class="me-rv me-plate">
+            <div class="me-map-d" set:html={mapDesktop} />
+            <div class="me-map-m" set:html={mapMobile} />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="me-pair">
+      <section id="editorial" class="me-editorial">
+        <div class="me-exit-m me-edcol">
+          <div class="heavy me-headrule" aria-hidden="true"></div>
+          <div class="me-textbox">
+            <div class="me-rv">
+              <Typed text={EDITORIAL.head} emph={EDITORIAL.emph} class="t-h2 me-hl" />
+            </div>
+            <div class="me-par-m me-gaptext">
+              <div class="me-rv">
+                <p class="t-bodyl me-fade me-chbody" style={fd(EDITORIAL)}>{EDITORIAL.body}</p>
+              </div>
+            </div>
+          </div>
+          <div class="me-par-m me-edimg">
+            <Frame
+              image={magazines}
+              alt="A pile of magazines, Esquire Philippines on top and Smile beneath it."
+              ratio="5 / 3"
+              cutout
+              sizes="(max-width: 899px) 92vw, 50vw"
+              widths={[480, 720, 960, 1240]}
+            />
+          </div>
+          <div class="me-edspace" aria-hidden="true"></div>
+          <div class="me-rv me-edlink">
+            <div class="me-fade" style={fd(EDITORIAL)}>
+              <a class="me-link" href="/work/#editorial"
+                ><span class="me-link-label">More Editorial Work</span><span class="me-ring"
+                  ><span class="me-arrow" set:html={arrowRight(17)} /></span
+                ></a
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="branded" class="me-branded">
+        <div class="me-reel me-onvideo" data-reel>
+          <div class="me-reelvid">
+            <video
+              muted
+              loop
+              playsinline
+              preload="none"
+              poster="/media/highlights-reel-4x5-poster.jpg"
+              data-poster-m="/media/highlights-reel-vertical-poster.jpg"
+              aria-hidden="true"
+              tabindex="-1"
+            >
+              <source src="/media/highlights-reel-vertical.mp4" type="video/mp4" media="(max-width: 899px)" />
+              <source src="/media/highlights-reel-4x5.mp4" type="video/mp4" />
+            </video>
+          </div>
+          <div class="me-rv me-reeltext">
+            <div class="me-reelshade" aria-hidden="true"></div>
+            <div class="me-reelinner">
+              <div class="me-headrule me-reelrule" aria-hidden="true"></div>
+              <Typed text={BRANDED.head} emph={BRANDED.emph} class="t-h2 me-hl" />
+              <p class="t-bodyl me-fade me-reelbody" style={fd(BRANDED)}>{BRANDED.body}</p>
+              <div class="me-fade me-reellink" style={fd(BRANDED)}>
+                <a class="me-link" href="/work/#advertising"
+                  ><span class="me-link-label">More Advertising Work</span><span class="me-ring"
+                    ><span class="me-arrow" set:html={arrowRight(17)} /></span
+                  ></a
+                >
+              </div>
+            </div>
+          </div>
+          <button type="button" class="me-reelbtn" data-reel-btn aria-label="Pause the reel">
+            <svg class="me-ico-pause" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"
+              ><rect x="4" y="3" width="2.25" height="10" fill="currentColor"></rect><rect x="9.75" y="3" width="2.25" height="10" fill="currentColor"></rect></svg
+            >
+            <svg class="me-ico-play" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"
+              ><path d="M5 3.2v9.6L12.6 8z" fill="currentColor"></path></svg
+            >
+          </button>
+        </div>
+      </section>
     </div>
+
+    <section id="policy" class="me-pol">
+      <div class="me-pol-stage">
+        <div class="me-pol-glow" aria-hidden="true"></div>
+        <div class="me-pol-content">
+          <Typed text={POLICY.head} emph={POLICY.emph} class="t-h1 me-pol-hl me-pol-focus" />
+          <div class="me-pol-focus me-pol-focus-2 me-pol-box">
+            <p>{POLICY.body}</p>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
 </BaseLayout>
 
-<style>
-  .flood {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    padding: clamp(26px, 3vh, 44px) var(--pad) 0;
-    background: var(--paper);
-    color: var(--ink);
-    transition:
-      background 0.55s cubic-bezier(0.16, 1, 0.3, 1),
-      color 0.55s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .inner {
-    container-type: inline-size;
-    max-width: var(--maxw);
-    width: 100%;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-  }
-
-  /* Both words sit in one nowrap row so the fit script scales them together —
-     they must never wrap or be set at different sizes. font-size here is only a
-     starting value; the script overwrites it in cqw. */
-  .hero {
-    margin: 0;
-    display: flex;
-    gap: 0.2em;
-    align-items: baseline;
-    font-weight: 400;
-    font-size: 11.5cqw;
-    line-height: 0.86;
-    /* Exempt from the sitewide +0.005em loosening — this is the name. */
-    letter-spacing: -0.03em;
-    white-space: nowrap;
-    font-kerning: normal;
-  }
-
-  .spacer {
-    flex: 1;
-    min-height: clamp(40px, 8vh, 120px);
-  }
-
-  /* Full-strength currentColor rather than the 25% --hairline used elsewhere:
-     on this very spare page the rule reads as a deliberate graphic element, and
-     because it follows currentColor it flips to the ink colour under a flood. */
-  .doors {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    border-top: 1px solid currentColor;
-  }
-  .door {
-    display: flex;
-    padding: 26px 24px 30px 0;
-    text-decoration: none;
-    opacity: 1;
-    transition: opacity 0.45s ease;
-  }
-  .door:last-child {
-    padding-right: 0;
-  }
-  .door-label {
-    font-size: clamp(26px, 3vw, 34px);
-    line-height: 1.06;
-    letter-spacing: 0.001em;
-  }
-
-  @media (max-width: 760px) {
-    .doors {
-      grid-template-columns: 1fr;
-    }
-    .door {
-      padding: 18px 0 20px;
-    }
-    .door + .door {
-      border-top: 1px solid currentColor;
-    }
-  }
-
-  /* Short viewports — mostly a phone in landscape. The doors stack on WIDTH, so
-     a 740×320 screen gets three tall rows even though it has room for columns,
-     and the page would need a scroll to reach them. Tighten the vertical
-     rhythm here so the doors stay on-screen; this is the only place the page
-     would otherwise overflow. */
-  @media (max-height: 420px) {
-    .spacer {
-      min-height: 16px;
-    }
-    .door {
-      padding: 12px 0 14px;
-    }
-  }
-</style>
-
 <script>
-  const flood = document.querySelector<HTMLElement>('[data-flood]');
-  const hero = document.querySelector<HTMLElement>('[data-hero]');
-  const doors = [...document.querySelectorAll<HTMLAnchorElement>('[data-door]')];
-
-  // ── Hero size fitting ──────────────────────────────────────────────────────
-  // Measure the rendered text with a Range and rewrite font-size as cqw scaled
-  // by available/measured. Keeps MIGUEL and ESCOBAR on one line at one size at
-  // every width — that equality is the requirement, so never let it wrap.
-  function fitHero() {
-    if (!hero) return;
-    const box = hero.parentElement;
-    if (!box) return;
-    const cs = getComputedStyle(box);
-    const available =
-      box.clientWidth - parseFloat(cs.paddingLeft || '0') - parseFloat(cs.paddingRight || '0');
-    if (available <= 0) return;
-
-    const range = document.createRange();
-    range.selectNodeContents(hero);
-    const measured = range.getBoundingClientRect().width;
-    if (!measured) return;
-
-    const current = parseFloat(getComputedStyle(hero).fontSize);
-    // 0.997 is a hair of safety against sub-pixel overflow.
-    const targetPx = (current * available) / measured * 0.997;
-    hero.style.fontSize = `${(targetPx / box.clientWidth) * 100}cqw`;
+  // ── The rail: the rings beside the headline page it, a screen at a time ──
+  const rail = document.querySelector<HTMLElement>('[data-rail]');
+  const prev = document.querySelector<HTMLButtonElement>('[data-rail-prev]');
+  const next = document.querySelector<HTMLButtonElement>('[data-rail-next]');
+  if (rail && prev && next) {
+    const gap = () => parseFloat(getComputedStyle(rail).columnGap) || 0;
+    const page = (dir: number) => rail.scrollBy({ left: dir * (rail.clientWidth + gap()), behavior: 'smooth' });
+    prev.addEventListener('click', () => page(-1));
+    next.addEventListener('click', () => page(1));
+    const sync = () => {
+      prev.disabled = rail.scrollLeft < 8;
+      next.disabled = rail.scrollLeft > rail.scrollWidth - rail.clientWidth - 8;
+    };
+    rail.addEventListener('scroll', sync, { passive: true });
+    window.addEventListener('resize', sync);
+    sync();
   }
 
-  fitHero();
-  window.addEventListener('resize', fitHero);
-  document.fonts?.ready.then(fitHero);
-
-  // ── Colour flood (desktop only) ────────────────────────────────────────────
-  // Everything on the page inherits currentColor, so recolouring the surface
-  // inverts the whole page — nothing else needs restyling.
-  const desktop = window.matchMedia('(min-width: 761px)');
-
-  function reset() {
-    if (!flood) return;
-    flood.style.background = '';
-    flood.style.color = '';
-    doors.forEach((d) => (d.style.opacity = '1'));
-  }
-
-  doors.forEach((door) => {
-    door.addEventListener('mouseenter', () => {
-      if (!desktop.matches || !flood) return;
-      flood.style.background = door.dataset.bg || '';
-      flood.style.color = door.dataset.ink || '';
-      doors.forEach((d) => (d.style.opacity = d === door ? '1' : '0.3'));
+  // ── The reel: plays while on screen, never with reduced motion; the button pauses it ──
+  const reel = document.querySelector<HTMLElement>('[data-reel]');
+  const video = reel?.querySelector('video');
+  const btn = reel?.querySelector<HTMLButtonElement>('[data-reel-btn]');
+  if (reel && video && btn) {
+    const phone = window.matchMedia('(max-width: 899px)').matches;
+    if (phone && video.dataset.posterM) video.poster = video.dataset.posterM;
+    video.muted = true;
+    let userPaused = false;
+    const setPaused = (paused: boolean) => {
+      reel.classList.toggle('is-paused', paused);
+      btn.setAttribute('aria-label', paused ? 'Play the reel' : 'Pause the reel');
+    };
+    const play = () => {
+      const q = video.play();
+      if (q && q.catch) q.catch(() => {});
+    };
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) {
+      userPaused = true;
+      setPaused(true);
+    } else if ('IntersectionObserver' in window) {
+      new IntersectionObserver(
+        (entries) => {
+          for (const en of entries) {
+            if (userPaused) continue;
+            if (en.isIntersecting) play();
+            else video.pause();
+          }
+        },
+        { threshold: 0.1 }
+      ).observe(video);
+    } else {
+      play();
+    }
+    btn.addEventListener('click', () => {
+      if (video.paused) {
+        userPaused = false;
+        play();
+        setPaused(false);
+      } else {
+        userPaused = true;
+        video.pause();
+        setPaused(true);
+      }
     });
-  });
-
-  flood?.addEventListener('mouseleave', reset);
-  desktop.addEventListener('change', (e) => {
-    if (!e.matches) reset();
-  });
+  }
 </script>

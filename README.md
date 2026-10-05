@@ -123,43 +123,35 @@ commented so you can see what each one is.
 replace that file with a new PDF, keeping the **same file name** — the "Download my CV" link
 then just works.
 
-**Page wording** lives in the matching files under `src/pages/` — `index.astro` (the Home
-"doors" page), `about.astro`, `work.astro`, `editorial-work.astro`, `advertising-work.astro`. The text is plain English inside
-the file; edit between the tags. If in doubt, ask a developer or Claude.
+**Page wording** lives in the matching files under `src/pages/` — `index.astro` (Home),
+`work.astro` (Work), `thoughts/index.astro` (the Thoughts list) and `404.astro`. The text is plain
+English inside the file (Home's and Work's words sit in lists near the top); edit between the
+quotes or tags. If in doubt, ask a developer or Claude.
 
 ### Swapping in your real images
 
-Every image on the site is now your real art. They live in `src/assets/images/`, and the file
-names tell you which slot each one is:
+Every image on the site lives in `src/assets/images/`. The file names say where each one shows:
 
 | File | Where it shows |
 |---|---|
-| `home_*.png` (6) | the six cards on the **Work** page |
-| `editorial_*.png` (4) | the four rows on the Editorial Work page |
-| `ads_*.png` (4) | the four rows on the Advertising Work page |
+| `home-*.jpg`, `osc-phone-57.jpg`, `ph-politics-uson.jpg`, `ads-nba.jpg` | the cards on the Home rail (cropped tall, about 5:7) |
+| `editorial-magazines.webp` | Home, beside "My editorial background" (a cut-out with a transparent background) |
+| `home-age-checks.jpg`, `home-whitewash.jpg`, `home-pulpit.jpg`, `osc-phone-43.jpg` | Work → Highlights (4:3) |
+| `ads-*.jpg` | Work → More Advertising Work (4:3) |
+| `editorial-*.jpg`, `ph-politics-uson.jpg`, `work-*.jpg` | Work → More Editorial Work (4:3) |
 
-**You do _not_ need to optimise images yourself.** The site does it for you at build time — it
-generates modern AVIF/WebP versions at several sizes, lazy-loads them, and sets exact dimensions
-so nothing jumps around. Just give it a reasonable source file:
+The highlights reel on Home is a video in `public/media/` (a 4:5 cut for desktops, a vertical cut
+for phones, each with a poster image). Replace those files keeping the same names.
 
-- **Format:** JPG or PNG.
-- **Size:** roughly **1600 px on the long edge** is plenty; keep it under a few MB. (No need to
-  upload 40-megapixel camera originals — they only slow the build.)
-- **Shape (important):** home cards are **3:4 portrait**; Editorial/Advertising rows are **4:3
-  landscape**. Images are cropped to fill, so crop to roughly the right shape or the edges get
-  trimmed.
+**You do _not_ need to optimise images yourself.** The site does it at build time — it generates
+modern AVIF/WebP versions at several sizes, lazy-loads them, and sets exact dimensions so nothing
+jumps around. Just give it a reasonable source file: JPG, about **1200–1600 px on the long edge**,
+roughly the right shape (images are cropped to fill their frame).
 
-**To replace one image:**
-1. Put your photo in `src/assets/images/` (e.g. `my-photo.jpg`).
-2. Open the page it belongs to — `src/pages/work.astro`, `editorial-work.astro`, or
-   `advertising-work.astro`. Near the top you'll see lines like
-   `import whitewash from '../assets/images/home_whitewash.png';` — change that path to your
-   file, e.g. `'../assets/images/my-photo.jpg'`.
-3. Update the matching `alt="…"` text to describe the real photo (good for accessibility + SEO).
-4. Save and [publish](#6-publish-changes-it-deploys-itself).
-
-**Easiest of all:** send the images to Claude, say which slot each one is for, and it'll drop
-them in, write the alt text, and publish.
+**To replace one image:** put the new file in `src/assets/images/`, change the matching `import`
+line near the top of `src/pages/index.astro` or `src/pages/work.astro` to point at it, and update
+its `alt` text (a short description of the picture, for screen readers). Or send the image to
+Claude and say which slot it's for.
 
 ---
 
@@ -267,56 +259,58 @@ slightly; look for "DNS settings" or "Custom records"). Add these records:
 ```
 src/
   pages/                     Each file = one web page
-    index.astro              Home (/) — the name + three "doors", no header/footer
-    about.astro              /about/
-    work.astro               /work/ — the six-card index
-    editorial-work.astro     /editorial-work/  ("More Editorial Work")
-    advertising-work.astro   /advertising-work/  ("More Advertising Work")
+    index.astro              Home (/) — one long scroll: the name, Work, About, Editorial/Branded, Policy
+    work.astro               /work/ — Highlights, More Advertising Work, More Editorial Work
     thoughts/
       index.astro            Thoughts list (/thoughts/)
       [...slug].astro        The template every post uses
     404.astro                "Page not found"
   content/thoughts/          YOUR POSTS live here (one .md file each)
-  components/                Shared pieces (header, footer/contact, image)
-  layouts/                   Page shells
-  consts.ts                  ← contact details, nav links, GoatCounter setting
-  styles/global.css          Colours, fonts, and shared styles
-  assets/images/             Site images (your real art; optimised automatically at build)
+  components/                Shared pieces: Nav, Menu, Footer ("Let’s talk"), Frame (images), Typed
+  layouts/                   The page shell
+  consts.ts                  ← contact details, site description, GoatCounter setting
+  styles/global.css          Colours, the typeface, text styles shared by every page
+  styles/home.css            Home's layout and all of its scroll motion
+  assets/images/             Site images (optimised automatically at build)
   assets/fonts/              Self-hosted Neue Montreal woff2 (licence in /licenses)
-public/                      Files served as-is: CV, favicon, OG image, robots.txt
+public/                      Files served as-is: CV, reel videos, favicon, OG image, robots.txt
+redesign-2026/               The approved 2026 design (Claude Design boards) the site is built from
 ```
+
+The old addresses `/about/`, `/editorial-work/` and `/advertising-work/` redirect to Home and to
+the matching sections of Work.
 
 ---
 
 ## 9. For developers
 
 - **Stack:** Astro 5 (static output, `output: 'static'`), zero client framework. Small vanilla
-  scripts only (mobile menu, scroll-reveal, Home hero-fit + colour flood). `@astrojs/sitemap`
-  for the sitemap.
-- **Fonts:** two families, both self-hosted, both `font-display: swap`. **PP Neue Montreal**
-  (`--font-sans`) carries the entire site — body, nav, and every heading; **JetBrains Mono**
-  (`--font-mono`, via `@fontsource`) is metadata only: dates and the footer meta line. There is
-  **no display serif** in this design. Neue Montreal is a Pangram Pangram free-personal-use
-  release; keep its EULA in `/licenses`. Three faces ship (roman, italic, semibold); semibold
-  exists solely for the current item in the mobile nav. The retail OTFs carry Cyrillic/Greek this
-  site never renders, so `assets:fonts` subsets them — ~83KB to ~26KB a face.
-
-- **Images:** `astro:assets` `<Picture>` → responsive AVIF/WebP with a JPEG fallback + `srcset`,
-  explicit dimensions (no layout shift), lazy below the fold. See `src/components/WorkImage.astro`,
-  which exposes a `quality` prop (default 80; the work pages pass higher values). Every image slot
-  now uses real art (see §4 → "Swapping in your real images").
-- **Motion:** scroll-reveal is opt-in via an inline head snippet + IntersectionObserver, fully
-  disabled under `prefers-reduced-motion`, with a guaranteed failsafe so content can't get stuck
-  hidden.
+  scripts only (see Motion). `@astrojs/sitemap` for the sitemap.
+- **Design source:** `redesign-2026/` — the approved boards (`boards/*.dc.html`, desktop at
+  1440px and phone at 390px) and the generator that wrote them (`source/gen_v47.py`, whose comments
+  record why each value is what it is). Phone values apply below 900px, desktop values from 900px;
+  desktop display type and margins scale with the viewport below 1440 and stop there, and content
+  never runs wider than 1600px. Light theme only.
+- **Fonts:** one face at one weight — **PP Neue Montreal** Regular (plus its italic for emphasis in
+  posts), self-hosted, `font-display: swap`, the roman preloaded. Pangram Pangram licence in
+  `/licenses`. The retail OTFs carry Cyrillic/Greek this site never renders, so `assets:fonts`
+  subsets them (~83KB to ~26KB a face).
+- **Images:** `astro:assets` `<Picture>` via `src/components/Frame.astro` → responsive AVIF/WebP
+  with a JPEG fallback (PNG for cut-outs) + `srcset`, explicit dimensions, lazy below the fold.
+- **Motion:** all CSS — scroll-driven animations (`animation-timeline: scroll()` / `view()`) for
+  Home's reveals, typed headlines, the nav's colour changes and name, and the Policy stage; the
+  boards' pixel ranges are re-expressed as fractions of the screen height (`svh`). Every animation
+  has a still end state under `prefers-reduced-motion` and in browsers without scroll timelines.
+  Small vanilla scripts only: the menu, the Home rail's buttons, and the reel (plays only while on
+  screen, never with reduced motion, pause button).
 - **SEO:** per-page title/description, Open Graph + Twitter tags, canonical URLs on
   `www.miguel-escobar.com`, JSON-LD `Person` on the home page, `robots.txt`, generated sitemap,
   and a design-matched OG image (`public/og-image.png`).
-- **Config knobs:** `src/consts.ts` (contact info, `NAV_LINKS`, `GOATCOUNTER_CODE`).
+- **Config knobs:** `src/consts.ts` (contact info, `GOATCOUNTER_CODE`).
 - **Build hook:** `integrations/prune-assets.mjs` deletes the untransformed original images
   Astro emits on import but never references, so `dist/` stays lean.
 - **Checks:** `npm run build` then `npm run validate:html` (html-validate). Accessibility was
-  verified with axe-core (0 violations) and the home page scores 99/100/100/100 on Lighthouse
-  (perf / a11y / best-practices / SEO).
+  verified with axe-core on the previous design; re-run it after big changes.
 
 ### One-off asset scripts (already run; outputs are committed)
 These regenerate the derived assets. They need the optional tools (`@resvg/resvg-js`, `fontkit`,

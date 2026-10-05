@@ -1,0 +1,22 @@
+---
+// A typed line: the characters for sighted readers (see src/utils/typed.ts), the
+// plain sentence for screen readers. With a subject phrase the line is two-tone:
+// the rest of it in the quieter text colour.
+import { typeChars } from '../utils/typed';
+
+interface Props {
+  as?: 'h1' | 'h2' | 'p';
+  text: string;
+  emph?: string;
+  class?: string;
+  /** Typing starts this many ms after the line comes into play. */
+  t0?: number;
+}
+const { as: Tag = 'h2', text, emph = '', class: cls = '', t0 } = Astro.props;
+const { html, dt } = typeChars(text, emph);
+const style = `--dt: ${dt}ms;${t0 ? ` --t0: ${t0}ms;` : ''}`;
+---
+
+<Tag class:list={['me-type', { 'me-two': !!emph }, cls]} style={style}
+  ><span class="me-sr">{text}</span><span aria-hidden="true" set:html={html} /></Tag
+>

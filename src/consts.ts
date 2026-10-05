@@ -28,10 +28,3 @@ export const GOATCOUNTER_CODE = 'YOUR_GOATCOUNTER_CODE';
 
 /** True once the GoatCounter code has been filled in. */
 export const GOATCOUNTER_READY = GOATCOUNTER_CODE !== 'YOUR_GOATCOUNTER_CODE';
-
-/** Primary navigation (shared header). */
-export const NAV_LINKS = [
-  { href: '/about/', label: 'About' },
-  { href: '/work/', label: 'Work' },
-  { href: '/thoughts/', label: 'Thoughts' },
-];

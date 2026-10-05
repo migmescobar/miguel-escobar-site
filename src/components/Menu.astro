@@ -1,0 +1,204 @@
+---
+// The menu: a full-screen overlay listing Home, Work, Thoughts and Contact. The
+// page you are on is marked (muted, aria-current) and takes you to its top.
+interface Props {
+  current?: 'home' | 'work' | 'thoughts';
+}
+const { current } = Astro.props;
+
+const items = [
+  { key: 'home', label: 'Home', href: '/' },
+  { key: 'work', label: 'Work', href: '/work/' },
+  { key: 'thoughts', label: 'Thoughts', href: '/thoughts/' },
+  { key: 'contact', label: 'Contact', href: '#contact' },
+];
+---
+
+<div id="menu" class="me-menu" role="dialog" aria-modal="true" aria-label="Menu" hidden>
+  <div class="me-menu-bar">
+    <a class="me-navname" href={current === 'home' ? '#top' : '/'} aria-label="Miguel Escobar" data-menu-close-link
+      ><span class="me-nmask"><span class="me-nw">MIGUEL</span></span><span class="me-nmask"
+        ><span class="me-nw">ESCOBAR</span></span
+      ></a
+    >
+    <button type="button" class="me-iconbtn" data-menu-close aria-label="Close menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"
+        ><path d="M5 5l14 14"></path><path d="M19 5 5 19"></path></svg
+      >
+    </button>
+  </div>
+  <div class="me-menu-space"></div>
+  <nav aria-label="Menu" class="me-menu-list">
+    {
+      items.map(({ key, label, href }) => {
+        const here = key === current;
+        const inPage = here || href.startsWith('#');
+        return (
+          <a
+            class:list={['me-mi', { 'is-current': here }]}
+            href={here ? '#top' : href}
+            aria-current={here ? 'page' : undefined}
+            data-menu-close-link={inPage ? '' : undefined}
+          >
+            <span class="me-mlabel">{label}</span>
+          </a>
+        );
+      })
+    }
+  </nav>
+</div>
+
+<style is:global>
+  .me-menu {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    height: 100dvh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 0 var(--pad) 28px;
+    background: var(--bg);
+    color: var(--fg);
+    visibility: hidden;
+    opacity: 0;
+    transition:
+      opacity 0.3s ease,
+      visibility 0s linear 0.3s;
+  }
+  .me-menu[hidden] {
+    display: none;
+  }
+  .me-menu.is-open {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+  }
+  .me-menu-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+    height: var(--navh);
+  }
+  .me-menu-space {
+    flex-grow: 1;
+  }
+  .me-menu-list {
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid var(--rule);
+  }
+  a.me-mi {
+    display: block;
+    padding: 14px 0 18px;
+    border-top: 1px solid var(--rule);
+    font-size: 40px;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: inherit;
+    text-decoration: none;
+    transform: translateY(16px);
+    opacity: 0;
+    transition:
+      transform 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+      opacity 0.45s ease;
+  }
+  a.me-mi:first-child {
+    border-top: var(--heavy) solid var(--fg);
+  }
+  a.me-mi.is-current {
+    color: var(--muted);
+  }
+  .me-menu.is-open .me-mi {
+    transform: none;
+    opacity: 1;
+  }
+  .me-menu.is-open .me-mi:nth-child(2) {
+    transition-delay: 0.05s;
+  }
+  .me-menu.is-open .me-mi:nth-child(3) {
+    transition-delay: 0.1s;
+  }
+  .me-menu.is-open .me-mi:nth-child(4) {
+    transition-delay: 0.15s;
+  }
+  a.me-mi:hover .me-mlabel {
+    text-decoration-line: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.12em;
+  }
+  @media (min-width: 900px) {
+    .me-menu {
+      padding-bottom: 64px;
+    }
+    a.me-mi {
+      padding: 20px 0 26px;
+      font-size: clamp(56px, 5.833vw, 84px);
+      letter-spacing: -0.026em;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .me-menu,
+    .me-mi {
+      transition: none !important;
+    }
+  }
+  html.me-menu-lock {
+    overflow: hidden;
+  }
+</style>
+
+<script>
+  const menu = document.getElementById('menu');
+  const openers = document.querySelectorAll<HTMLButtonElement>('[data-menu-open]');
+  const closer = menu?.querySelector<HTMLButtonElement>('[data-menu-close]');
+  // Everything outside the menu goes inert while it is open, so focus and the
+  // reading order stay inside it.
+  const outside = () =>
+    [...document.body.children].filter((el) => el !== menu && el.tagName !== 'SCRIPT') as HTMLElement[];
+  let lastOpener: HTMLElement | null = null;
+
+  function setOpen(open: boolean, restoreFocus = true) {
+    if (!menu) return;
+    if (open) {
+      menu.hidden = false;
+      // Next frame, so the fade and the items' rise run from their closed state.
+      requestAnimationFrame(() => {
+        menu.classList.add('is-open');
+        // Only once it is visible can it take focus.
+        closer?.focus({ preventScroll: true });
+      });
+      document.documentElement.classList.add('me-menu-lock');
+      outside().forEach((el) => (el.inert = true));
+    } else {
+      menu.classList.remove('is-open');
+      document.documentElement.classList.remove('me-menu-lock');
+      outside().forEach((el) => (el.inert = false));
+      const done = () => {
+        if (!menu.classList.contains('is-open')) menu.hidden = true;
+      };
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) done();
+      else setTimeout(done, 300);
+      if (restoreFocus) lastOpener?.focus({ preventScroll: true });
+    }
+    openers.forEach((b) => b.setAttribute('aria-expanded', String(open)));
+  }
+
+  openers.forEach((b) =>
+    b.addEventListener('click', () => {
+      lastOpener = b;
+      setOpen(true);
+    })
+  );
+  closer?.addEventListener('click', () => setOpen(false));
+  // In-page links (this page's own item, Contact) close the menu and then go.
+  menu?.querySelectorAll('[data-menu-close-link]').forEach((a) =>
+    a.addEventListener('click', () => setOpen(false, false))
+  );
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && menu?.classList.contains('is-open')) setOpen(false);
+  });
+</script>

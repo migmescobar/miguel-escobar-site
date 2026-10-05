@@ -1,0 +1,1149 @@
+/* ── Home ──────────────────────────────────────────────────────────────────────
+   Ported from redesign-2026/boards/NewHome*.dc.html (layout) and NewHomePlay*.dc.html
+   (motion: proto_css, pol_css, glass_v110 in the generator). Phone values first,
+   desktop from 900px.
+
+   The boards' scroll ranges are pixels on a 900px (desktop) or 844px (phone)
+   screen. Here they are the same fractions of the screen's height (svh), and the
+   nav's height where a range is "the nav's foot", so they hold on any screen.
+   Everything is CSS: scroll timelines where supported, with a still end state
+   everywhere else and under prefers-reduced-motion. */
+
+/* ── Colours of the parts ─────────────────────────────────────────────────── */
+.me-two {
+  color: var(--muted);
+}
+.me-em {
+  color: var(--accent);
+}
+/* On the reel: paper type on the footage. */
+.me-onvideo {
+  --fg: #eae7e1;
+  --bg: #141414;
+  --muted: rgba(234, 231, 225, 0.6);
+  --accent: #eae7e1;
+  --caret: #eae7e1;
+  --ring: rgba(234, 231, 225, 0.55);
+}
+
+/* ── Hero ─────────────────────────────────────────────────────────────────── */
+.me-hero {
+  /* The arrow's glow reaches past the page's right edge; clip it there (clip, not
+     hidden, so nothing becomes a scroller). */
+  overflow-x: clip;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  padding: var(--navh) var(--pad) 24px;
+  background: var(--bg);
+  color: var(--fg);
+}
+.me-drift {
+  isolation: isolate;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  /* The name is fitted to this width (cqw). */
+  container-type: inline-size;
+}
+.me-statement {
+  margin: clamp(32px, 8.65svh, 73px) 0 0;
+}
+.me-grow {
+  flex-grow: 1;
+}
+.me-cuerow {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  margin: 24px 0 22px;
+}
+.me-cue {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border: 1px solid var(--ring);
+  border-radius: 50%;
+  color: inherit;
+}
+.me-cue svg {
+  width: 20px;
+  height: 20px;
+}
+/* A soft cyan glow behind the arrow (CUE_GLOW_SOFT); it overlaps its neighbours. */
+.me-cueglow {
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  right: -154px;
+  top: -154px;
+  width: 360px;
+  height: 360px;
+  background: radial-gradient(circle closest-side, #1ab0e7 0%, #1bb4ea 5.52%, #1bb8eb 10.97%, #1cbcec 16.48%, #1cbfec 22%, #1fc1eb 26.61%, #27c1ea 31.22%, #43c2e8 35.94%, #59c6e6 40.55%, #6ec7e6 45.16%, #7dcbe4 49.88%, #8dcee4 54.49%, #98d0e5 59.1%, #a6d4e4 63.71%, #b0d8e4 68.43%, #bcd9e4 73.04%, #c5dbe4 77.65%, #d0dfe4 82.37%, #d6e2e2 86.98%, #e2e4e3 91.59%, #e8e6e1 96.31%, #eae7e1 100%);
+}
+/* The name, fitted to the column (fit.json: 78px across 350px on the phone, two
+   lines; 160.85px across 1312px on the desktop, one line). */
+.me-name {
+  position: relative;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  font-size: 22.2857cqw;
+  font-weight: 400;
+  line-height: 0.86;
+  letter-spacing: -0.03em;
+  /* Capitals by CSS, so the heading reads as a name rather than an acronym. */
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: clip;
+}
+
+@media (min-width: 900px) {
+  .me-hero {
+    padding-bottom: 34px;
+  }
+  .me-statement {
+    margin-top: clamp(40px, 13.44svh, 121px);
+    max-width: 83%;
+  }
+  .me-cuerow {
+    margin-bottom: 30px;
+  }
+  .me-cue {
+    width: 64px;
+    height: 64px;
+  }
+  .me-cue svg {
+    width: 22px;
+    height: 22px;
+  }
+  .me-cueglow {
+    right: -188px;
+    top: -188px;
+    width: 440px;
+    height: 440px;
+    background: radial-gradient(circle closest-side, #1ab0e7 0%, #1bb4ea 2.51%, #1bb8eb 4.98%, #1cbcec 7.49%, #1cbfec 10%, #1fc1eb 15.32%, #27c1ea 20.64%, #43c2e8 26.09%, #59c6e6 31.4%, #6ec7e6 36.72%, #7dcbe4 42.17%, #8dcee4 47.49%, #98d0e5 52.81%, #a6d4e4 58.12%, #b0d8e4 63.57%, #bcd9e4 68.89%, #c5dbe4 74.21%, #d0dfe4 79.66%, #d6e2e2 84.98%, #e2e4e3 90.3%, #e8e6e1 95.75%, #eae7e1 100%);
+  }
+  .me-name {
+    flex-direction: row;
+    gap: 0.2em;
+    font-size: 12.2599cqw;
+  }
+}
+
+/* ── Chapters ─────────────────────────────────────────────────────────────── */
+.me-chapters {
+  margin-top: -4px;
+  padding-top: 4px;
+  background: var(--bg);
+}
+.me-headrule {
+  margin-bottom: 22px;
+}
+@media (min-width: 900px) {
+  .me-headrule {
+    margin-bottom: 28px;
+  }
+}
+
+/* Work: the samples on one rail. A desktop shows four at a time (three on a
+   narrow one) and the rings beside the headline page it; a phone shows two and
+   the edge of a third, runs to the screen's edges, and is swiped. */
+.me-work {
+  position: relative;
+  padding: 82px var(--pad) 36px;
+}
+.me-railnav {
+  display: none;
+}
+.me-rail {
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  gap: 16px;
+  margin: 32px calc(-1 * var(--pad)) 0;
+  padding: 0 var(--pad);
+  scroll-padding-inline: var(--pad);
+}
+.me-rail::-webkit-scrollbar {
+  display: none;
+}
+.me-card {
+  position: relative;
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  display: block;
+  width: 220px;
+  border: 1px solid var(--fg);
+  background: var(--bg);
+  color: inherit;
+  text-decoration: none;
+}
+.me-cardtext {
+  padding: 0 12px 12px;
+}
+.me-cardtext .t-label {
+  margin-top: 12px;
+}
+.me-card-desc {
+  margin: 4px 0 0;
+  font-size: 16px;
+  line-height: 1.3;
+  letter-spacing: 0.012em;
+  text-wrap: balance;
+}
+a.me-card:hover .me-card-desc {
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 5px;
+}
+.me-railbtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 1px solid var(--ring);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--fg);
+  cursor: pointer;
+  transition:
+    background-color 0.35s ease,
+    border-color 0.35s ease,
+    color 0.35s ease,
+    opacity 0.35s ease;
+}
+.me-railbtn:hover:not(:disabled) {
+  background: var(--fg);
+  border-color: var(--fg);
+  color: var(--bg);
+}
+.me-railbtn:disabled {
+  opacity: 0.28;
+  cursor: default;
+}
+@media (min-width: 900px) {
+  .me-work {
+    padding: clamp(104px, 10.14vw, 146px) var(--pad) 96px;
+  }
+  .me-workhead {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--gap);
+    align-items: end;
+  }
+  .me-workhead > .me-rv {
+    grid-column: 1 / span 10;
+  }
+  .me-railnav {
+    grid-column: 11 / span 2;
+    justify-self: end;
+    display: flex;
+    gap: 12px;
+    margin-bottom: 11px;
+  }
+  .me-rail {
+    gap: var(--gap);
+    margin: 64px 0 0;
+    padding: 0;
+    scroll-padding-inline: 0;
+  }
+  .me-card {
+    width: calc((100% - 3 * var(--gap)) / 4);
+  }
+  .me-cardtext {
+    padding: 0 20px 20px;
+  }
+  .me-cardtext .t-label {
+    margin-top: 16px;
+  }
+  .me-card-desc {
+    margin-top: 6px;
+    font-size: 22px;
+    letter-spacing: 0.005em;
+  }
+}
+@media (min-width: 900px) and (max-width: 1199px) {
+  .me-card {
+    width: calc((100% - 2 * var(--gap)) / 3);
+  }
+  .me-card-desc {
+    font-size: 19px;
+  }
+}
+
+/* About: the map, Singapore marked, rings pulsing out across Southeast Asia. */
+.me-about {
+  position: relative;
+  padding: 56px var(--pad);
+}
+.me-aboutgrid {
+  position: relative;
+}
+.me-gaptext {
+  margin-top: 13.15px;
+}
+.me-chbody {
+  margin: 0;
+  color: var(--fg85);
+  max-width: 36em;
+}
+.me-plateholder {
+  margin-top: 32px;
+}
+.me-plate {
+  aspect-ratio: 350 / 171;
+}
+.me-map-d {
+  display: none;
+}
+.me-plate svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.me-plate > div {
+  width: 100%;
+  height: 100%;
+}
+.me-dot {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+@keyframes me-pulse {
+  0% {
+    r: var(--dot);
+    opacity: 0;
+    animation-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+  7% {
+    opacity: 0.9;
+    animation-timing-function: ease-in;
+  }
+  100% {
+    r: var(--rip);
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .me-ripple {
+    animation: me-pulse 4.2s infinite;
+  }
+  .me-ripple:nth-child(2) {
+    animation-delay: -1.4s;
+  }
+  .me-ripple:nth-child(3) {
+    animation-delay: -2.8s;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .me-ripple:first-child {
+    r: var(--rip);
+    opacity: 0.3;
+  }
+}
+@media (min-width: 900px) {
+  .me-about {
+    padding: 96px var(--pad);
+  }
+  .me-aboutgrid {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--gap);
+    align-items: start;
+  }
+  .me-abouttext {
+    grid-column: 8 / span 5;
+    grid-row: 1;
+    min-width: 0;
+  }
+  .me-plateholder {
+    grid-column: 1 / span 7;
+    grid-row: 1;
+    margin-top: 0;
+  }
+  .me-plate {
+    /* The drawing is 731px of the seven columns' 750.67 at 1440. */
+    width: 97.42%;
+    aspect-ratio: 731 / 357;
+  }
+  .me-map-d {
+    display: block;
+  }
+  .me-map-m {
+    display: none;
+  }
+  .me-textbox {
+    max-width: 580px;
+  }
+  .me-gaptext {
+    margin-top: 20.3px;
+  }
+  .me-chbody {
+    max-width: none;
+  }
+}
+
+/* Editorial beside Branded (the reel). */
+.me-editorial {
+  position: relative;
+  padding: 56px var(--pad);
+}
+.me-edimg {
+  margin-top: 32px;
+}
+.me-edspace {
+  display: none;
+}
+.me-edlink {
+  margin-top: 32px;
+}
+.me-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 19px;
+  line-height: 1.3;
+  letter-spacing: 0.005em;
+  color: inherit;
+  text-decoration: none;
+}
+.me-ring {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--ring);
+  border-radius: 50%;
+}
+.me-arrow {
+  display: flex;
+}
+a.me-link .me-ring {
+  transition:
+    background-color 0.35s ease,
+    border-color 0.35s ease,
+    color 0.35s ease;
+}
+a.me-link .me-arrow {
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+a.me-link:hover .me-ring {
+  background-color: var(--fg);
+  border-color: var(--fg);
+  color: var(--bg);
+}
+a.me-link:hover .me-arrow {
+  transform: translateX(3px);
+}
+a.me-link:hover .me-link-label {
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 5px;
+}
+
+.me-branded {
+  position: relative;
+  padding: 56px 0 0;
+}
+.me-reel {
+  position: relative;
+  height: 780px;
+  max-height: 100svh;
+  min-height: 600px;
+  overflow: clip;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background: #141414;
+  color: #eae7e1;
+}
+.me-reelvid {
+  position: absolute;
+  inset: 0;
+}
+.me-reelvid video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.me-reeltext {
+  padding: 0 var(--pad) 28px;
+}
+.me-reelshade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(20, 20, 20, 0.18) 0%, rgba(20, 20, 20, 0.72) 42%, rgba(20, 20, 20, 0.84) 100%);
+  pointer-events: none;
+}
+.me-reelinner {
+  position: relative;
+}
+.me-reelrule {
+  border-top: var(--heavy) solid #eae7e1;
+}
+.me-reelbody {
+  margin: 13.15px 0 0;
+  color: rgba(234, 231, 225, 0.9);
+  max-width: 36em;
+}
+.me-reellink {
+  margin-top: 32px;
+}
+.me-reelbtn {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid rgba(234, 231, 225, 0.6);
+  border-radius: 50%;
+  background: rgba(20, 20, 20, 0.3);
+  color: #eae7e1;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.me-reelbtn:hover {
+  background: rgba(20, 20, 20, 0.6);
+}
+.me-ico-play {
+  display: none;
+}
+.me-reel.is-paused .me-ico-play {
+  display: block;
+}
+.me-reel.is-paused .me-ico-pause {
+  display: none;
+}
+
+@media (min-width: 900px) {
+  .me-pair {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--gap);
+    align-items: start;
+    padding: 96px var(--pad);
+  }
+  .me-editorial {
+    grid-column: 1 / span 6;
+    min-width: 0;
+    align-self: stretch;
+    padding: 0 24px 32px 0;
+  }
+  .me-edcol {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  .me-edspace {
+    display: block;
+    flex: 1 1 auto;
+    min-height: 32px;
+  }
+  .me-edlink {
+    margin-top: 0;
+  }
+  .me-branded {
+    grid-column: 7 / span 6;
+    min-width: 0;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+  }
+  .me-reel {
+    flex: 1 1 auto;
+    height: auto;
+    max-height: none;
+    min-height: clamp(640px, 55.9vw, 805px);
+  }
+  .me-reeltext {
+    padding: 0 32px 32px;
+  }
+  .me-reelbody {
+    margin-top: 20.3px;
+    max-width: none;
+  }
+}
+
+/* Policy: a pinned stage. The words pull into focus as you scroll and the glow
+   radiates outward with them. */
+.me-pol {
+  position: relative;
+  height: 150vh;
+  height: 150svh;
+  --accent: #141414;
+  --caret: #141414;
+  --pol-text: rgba(20, 20, 20, 0.85);
+  --pol-muted: rgba(20, 20, 20, 0.58);
+  color: #141414;
+}
+.me-pol ::selection {
+  background: #141414;
+  color: #eae7e1;
+}
+.me-pol-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  overflow: clip;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #eae7e1;
+}
+.me-pol-glow {
+  position: absolute;
+  left: 50%;
+  top: 46.2%;
+  width: 400px;
+  height: 400px;
+  margin: -200px 0 0 -200px;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 50%, #1ab0e7 0px, #1bb4ea 16.2px, #1bb8eb 32.2px, #1cbcec 48.4px, #1cbfec 64.6px, #1fc1eb 72.6px, #27c1ea 80.6px, #43c2e8 88.8px, #59c6e6 96.8px, #6ec7e6 104.8px, #7dcbe4 113px, #8dcee4 121px, #98d0e5 129px, #a6d4e4 137px, #b0d8e4 145.2px, #bcd9e4 153.2px, #c5dbe4 161.2px, #d0dfe4 169.4px, #d6e2e2 177.4px, #e2e4e3 185.4px, #e8e6e1 193.6px, #eae7e1 200px);
+}
+.me-pol-content {
+  position: relative;
+  width: 100%;
+  padding: 0 var(--pad);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.me-pol-hl {
+  max-width: 350px;
+  color: var(--pol-muted);
+}
+.me-pol-focus {
+  transform-origin: 50% 50%;
+}
+.me-pol-box {
+  margin-top: 28px;
+  width: 320px;
+  max-width: 100%;
+  padding: 14px 16px 10px;
+  border: 1px solid #141414;
+  background: #eae7e1;
+}
+.me-pol-box p {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.65;
+  letter-spacing: 0.01em;
+  color: var(--pol-text);
+  text-wrap: balance;
+}
+@media (min-width: 900px) {
+  .me-pol-glow {
+    top: 50%;
+    width: 860px;
+    height: 860px;
+    margin: -430px 0 0 -430px;
+    background: radial-gradient(circle at 50% 50%, #1ab0e7 0px, #1bb4ea 34.8px, #1bb8eb 69.2px, #1cbcec 104.1px, #1cbfec 138.9px, #1fc1eb 156.1px, #27c1ea 173.3px, #43c2e8 190.9px, #59c6e6 208.1px, #6ec7e6 225.3px, #7dcbe4 242.9px, #8dcee4 260.1px, #98d0e5 277.4px, #a6d4e4 294.6px, #b0d8e4 312.2px, #bcd9e4 329.4px, #c5dbe4 346.6px, #d0dfe4 364.2px, #d6e2e2 381.4px, #e2e4e3 398.6px, #e8e6e1 416.2px, #eae7e1 430px);
+  }
+  .me-pol-hl {
+    max-width: min(978px, 100%);
+  }
+  .me-pol-box {
+    margin-top: 40px;
+    width: 644px;
+    padding: 24px 32px 20px;
+  }
+  .me-pol-box p {
+    font-size: 22px;
+    line-height: 1.55;
+    letter-spacing: 0.005em;
+  }
+}
+
+/* The footer meets the stage on its own rule. */
+.is-home .me-foot {
+  margin-top: -4px;
+}
+
+/* ── Motion ───────────────────────────────────────────────────────────────── */
+@keyframes me-fg-ink {
+  to {
+    color: #141414;
+  }
+}
+@keyframes me-fg-body {
+  to {
+    color: var(--fg);
+  }
+}
+@keyframes me-fg-paper {
+  to {
+    color: #eae7e1;
+  }
+}
+@keyframes me-fg-foot {
+  to {
+    color: var(--ffg);
+  }
+}
+@keyframes me-rise {
+  from {
+    transform: translateY(104%);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes me-bob {
+  0%,
+  100% {
+    transform: translateY(-3px);
+  }
+  50% {
+    transform: translateY(5px);
+  }
+}
+@keyframes me-drift {
+  to {
+    transform: translateY(-160px);
+  }
+}
+@keyframes me-in {
+  from,
+  to {
+    --in: 1;
+  }
+}
+@keyframes me-par {
+  from {
+    transform: translateY(18px);
+  }
+  50%,
+  to {
+    transform: none;
+  }
+}
+@keyframes me-exit {
+  to {
+    transform: translateY(-32px);
+  }
+}
+@media (min-width: 900px) {
+  @keyframes me-par {
+    from {
+      transform: translateY(40px);
+    }
+    50%,
+    to {
+      transform: none;
+    }
+  }
+  @keyframes me-exit {
+    to {
+      transform: translateY(-56px);
+    }
+  }
+}
+@keyframes me-type {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes me-caret {
+  from,
+  to {
+    opacity: 1;
+  }
+}
+@keyframes me-caret-end {
+  0%,
+  24% {
+    opacity: 1;
+  }
+  25%,
+  49% {
+    opacity: 0;
+  }
+  50%,
+  74% {
+    opacity: 1;
+  }
+  75%,
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes me-veil-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes me-smoke-in-m {
+  to {
+    background-position: 0 -100px;
+  }
+}
+@keyframes me-smoke-out-m {
+  to {
+    background-position: 0 -200px;
+  }
+}
+@keyframes me-smoke-in-d {
+  to {
+    background-position:
+      0 0,
+      0 -128px;
+  }
+}
+@keyframes me-smoke-out-d {
+  to {
+    background-position:
+      0 0,
+      0 -256px;
+  }
+}
+@keyframes me-cue-recede {
+  0% {
+    transform: none;
+    opacity: 1;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  100% {
+    transform: scale(0.15);
+    opacity: 0;
+  }
+}
+
+/* On load: the name rises into its mask, the statement types itself in, the
+   arrow bobs. */
+.me-rise > span {
+  display: inline-block;
+  animation: me-rise 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.me-rise > span:nth-child(2) {
+  animation-delay: 0.09s;
+}
+.me-cue svg {
+  animation: me-bob 2.6s ease-in-out infinite;
+}
+.me-type .w {
+  display: inline-block;
+}
+.me-type .c {
+  position: relative;
+}
+.me-type .c::after {
+  content: '';
+  position: absolute;
+  top: 0.12em;
+  bottom: -0.04em;
+  right: -0.05em;
+  width: max(2px, 0.034em);
+  background: var(--caret);
+  opacity: 0;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .me-typeload .c {
+    animation: me-type 0.14s ease-out both;
+    animation-delay: calc(var(--t0, 0ms) + var(--i) * var(--dt));
+  }
+  .me-typeload .c::after {
+    animation: me-caret linear;
+    animation-duration: var(--dt);
+    animation-delay: calc(var(--t0, 0ms) + var(--i) * var(--dt));
+  }
+  .me-typeload .c.last::after {
+    animation-name: me-caret-end;
+    animation-duration: 2.4s;
+  }
+}
+
+/* Scroll-driven: each chapter's parts come into play as it scrolls in (--in
+   flips to 1 and stays), the hero drifts up, the nav's colour follows the ground
+   beneath it. */
+@supports (animation-timeline: view()) {
+  body.is-home {
+    timeline-scope: --ch-reel, --ch-foot, --ch-pol, --ch-work;
+  }
+  .me-pol {
+    view-timeline-name: --ch-pol;
+  }
+  .me-reel {
+    view-timeline-name: --ch-reel;
+  }
+  .is-home .me-foot {
+    view-timeline-name: --ch-foot;
+  }
+  .me-workrule {
+    view-timeline-name: --ch-work;
+  }
+
+  .me-drift {
+    animation: me-drift linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0px 100svh;
+  }
+
+  /* Phone: the reel runs the screen's width, so the whole nav turns paper over it. */
+  .is-home .me-nav {
+    animation-name: me-fg-paper, me-fg-body, me-fg-ink, me-fg-foot;
+    animation-duration: auto;
+    animation-fill-mode: both;
+    animation-timing-function: linear(0, 0 44%, 1 56%, 1);
+    animation-timeline: --ch-reel, --ch-reel, --ch-pol, --ch-foot;
+    animation-range:
+      cover calc(100svh - var(--navh)) cover 100svh,
+      cover calc(100% - var(--navh)) cover 100%,
+      cover calc(100svh - var(--navh)) cover 100svh,
+      cover calc(100svh - var(--navh)) cover 100svh;
+  }
+
+  .me-rv {
+    --in: 0;
+    animation: me-in linear forwards;
+    animation-timeline: view();
+    animation-range: cover 16svh cover 100%;
+  }
+  .me-rv.me-plate {
+    animation-range: cover 6svh cover 100%;
+  }
+  .me-rv.me-gal {
+    animation-range: cover 30svh cover 100%;
+  }
+  .me-par-m {
+    animation: me-par linear both;
+    animation-timeline: view();
+    animation-range: cover 0% cover 100%;
+  }
+  .me-exit,
+  .me-exit-m {
+    animation: me-exit linear both;
+    animation-timeline: view();
+    animation-range: cover 80svh cover 100%;
+  }
+
+  .is-home .me-glass-m .me-veil {
+    animation-name: me-veil-out, me-smoke-in-m, me-smoke-out-m;
+    animation-duration: auto;
+    animation-fill-mode: both;
+    animation-timing-function: linear;
+    animation-timeline: --ch-pol, --ch-reel, --ch-reel;
+    animation-range:
+      cover calc(100svh - 90px) cover calc(100svh - 18px),
+      cover calc(100svh - 100px) cover 100svh,
+      cover calc(100% - 100px) cover 100%;
+  }
+  .is-home .me-glass-d .me-veil {
+    animation-name: me-veil-out, me-smoke-in-d, me-smoke-out-d;
+    animation-duration: auto;
+    animation-fill-mode: both;
+    animation-timing-function: linear;
+    animation-timeline: --ch-pol, --ch-reel, --ch-reel;
+    animation-range:
+      cover calc(100svh - 112px) cover calc(100svh - 24px),
+      cover calc(100svh - 128px) cover 100svh,
+      cover calc(100% - 128px) cover 100%;
+  }
+
+  @media (min-width: 900px) {
+    /* Desktop: the reel lies in the right-hand columns, under the menu button
+       only, so only the button turns paper over it. */
+    .is-home .me-nav {
+      animation-name: me-fg-ink, me-fg-foot;
+      animation-timeline: --ch-pol, --ch-foot;
+      animation-range:
+        cover calc(100svh - var(--navh)) cover 100svh,
+        cover calc(100svh - var(--navh)) cover 100svh;
+    }
+    .is-home .me-nav .me-navr {
+      animation-name: me-fg-paper, me-fg-body, me-fg-ink, me-fg-foot;
+      animation-duration: auto;
+      animation-fill-mode: both;
+      animation-timing-function: linear(0, 0 44%, 1 56%, 1);
+      animation-timeline: --ch-reel, --ch-reel, --ch-pol, --ch-foot;
+      animation-range:
+        cover calc(100svh - var(--navh)) cover 100svh,
+        cover calc(100% - var(--navh)) cover 100%,
+        cover calc(100svh - var(--navh)) cover 100svh,
+        cover calc(100svh - var(--navh)) cover 100svh;
+    }
+    .me-par-m,
+    .me-exit-m {
+      animation: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    @container style(--in: 0) {
+      .me-hl .c {
+        opacity: 0;
+      }
+      .me-fade {
+        opacity: 0;
+        transform: translateY(16px);
+        transition:
+          opacity 0s linear 99999s,
+          transform 0s linear 99999s;
+      }
+      .me-plate .me-ink,
+      .me-ripples {
+        opacity: 0;
+        transition: opacity 0s linear 99999s;
+      }
+      .me-dot {
+        transform: scale(0);
+        transition: transform 0s linear 99999s;
+      }
+    }
+    @container style(--in: 1) {
+      .me-hl .c {
+        animation: me-type 0.14s ease-out both;
+        animation-delay: calc(var(--t0, 0ms) + var(--i) * var(--dt));
+      }
+      .me-hl .c::after {
+        animation: me-caret linear;
+        animation-duration: var(--dt);
+        animation-delay: calc(var(--t0, 0ms) + var(--i) * var(--dt));
+      }
+      .me-hl .c.last::after {
+        animation-name: me-caret-end;
+        animation-duration: 2.4s;
+      }
+      .me-fade {
+        transition:
+          opacity 1s cubic-bezier(0.16, 1, 0.3, 1) var(--fd, 0.45s),
+          transform 1s cubic-bezier(0.16, 1, 0.3, 1) var(--fd, 0.45s);
+      }
+      .me-plate .me-ink {
+        transition: opacity 1s ease 0.05s;
+      }
+      .me-dot {
+        transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.65s;
+      }
+      .me-ripples {
+        transition: opacity 0.9s ease 1s;
+      }
+    }
+  }
+
+  /* Policy: once the stage is mostly up, the words resolve from blur to sharp
+     and the glow radiates outward (POL_RADIATE). */
+  .me-pol {
+    --in: 0;
+    animation: me-in linear forwards;
+    animation-timeline: --ch-pol;
+    animation-range: cover 82svh cover 100%;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    @container style(--in: 0) {
+      .me-pol-focus {
+        filter: blur(0.26em);
+        opacity: 0.5;
+        transform: scale(1.035);
+        transition:
+          filter 0s linear 99999s,
+          opacity 0s linear 99999s,
+          transform 0s linear 99999s;
+      }
+      .me-pol-glow {
+        transform: scale(0.45);
+        transition: transform 0s linear 99999s;
+      }
+    }
+    @container style(--in: 1) {
+      .me-pol-focus {
+        transition:
+          filter 1.6s cubic-bezier(0.33, 1, 0.68, 1),
+          opacity 0.96s ease-out,
+          transform 1.6s cubic-bezier(0.33, 1, 0.68, 1);
+      }
+      .me-pol-focus-2 {
+        transition-delay: 0.35s;
+      }
+      .me-pol-glow {
+        transition: transform 1.6s cubic-bezier(0.33, 1, 0.68, 1);
+      }
+    }
+  }
+}
+
+/* The nav's name: hidden while the hero's name is on screen; once the Work
+   chapter's rule reaches the nav's foot its two words rise into their masks, as
+   the hero's rose, and drop back out on the way up (NAVNAME_LATE). */
+@supports (animation-timeline: view()) {
+  .me-navhome {
+    --in: 0;
+    animation: me-in linear forwards;
+    animation-timeline: --ch-work;
+    animation-range: cover calc(100svh - var(--navh)) cover calc(100svh - var(--navh) + 1px);
+  }
+  @container style(--in: 0) {
+    .me-navhome .me-navname {
+      visibility: hidden;
+      transition: visibility 0s linear 0.3s;
+    }
+    .me-navhome .me-nw {
+      transform: translateY(104%);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 1, 1);
+    }
+  }
+  @container style(--in: 1) {
+    .me-navhome .me-navname {
+      visibility: visible;
+    }
+    .me-navhome .me-nw {
+      transform: none;
+      transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .me-navhome .me-nmask + .me-nmask .me-nw {
+      transition-delay: 0.09s;
+    }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .me-navhome .me-nw {
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
+/* The arrow's glow recedes into it over the first 40% of a screen's scroll. */
+@supports (animation-timeline: scroll()) {
+  .me-cueglow {
+    animation: me-cue-recede linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0px 40svh;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .me-rise > span,
+  .me-cue svg,
+  .me-drift,
+  .me-par-m,
+  .me-exit,
+  .me-exit-m,
+  .me-cueglow {
+    animation: none !important;
+  }
+}

@@ -1,0 +1,155 @@
+---
+// The nav: the name at the left (a link home), the menu button at the right, over
+// glass — stacked backdrop blurs that thin out down the glass's length on eased
+// masks, under a veil of the page's own colour (GLASS_V110 in the generator).
+// The phone and the desktop each have their own glass; CSS shows one.
+//
+// On Home (`home`) the nav lies over the hero, its name hidden until the Work
+// chapter's rule reaches the nav's foot, and the veil over the reel is smoke, not
+// milk. Its colour changes with the ground beneath it are in src/styles/home.css.
+interface Props {
+  home?: boolean;
+}
+const { home = false } = Astro.props;
+
+const P = '#EAE7E1';
+const INK = '#141414';
+const fmt = (n: number) => String(Number(n.toFixed(3)));
+
+/** A mask on from the top to s, off by e, along a smoothstep (no line where it ends). */
+function easeMask(s: number, e: number, n = 8) {
+  const stops = [`#000 ${fmt(s)}px`];
+  for (let i = 1; i < n; i++) {
+    const t = i / n;
+    const a = Math.round((1 - t * t * (3 - 2 * t)) * 1000) / 1000;
+    stops.push(`rgba(0,0,0,${fmt(a)}) ${fmt(Math.round((s + (e - s) * t) * 10) / 10)}px`);
+  }
+  stops.push(`transparent ${fmt(e)}px`);
+  return `linear-gradient(to bottom, ${stops.join(', ')})`;
+}
+
+const GLASS = {
+  d: {
+    h: 128,
+    layers: [
+      [16, 36, 66],
+      [8, 46, 82],
+      [4, 58, 98],
+      [2, 70, 110],
+      [1, 82, 120],
+      [0.5, 92, 128],
+    ],
+    veil: [0.4, 48, 112],
+  },
+  m: {
+    h: 100,
+    layers: [
+      [12, 26, 50],
+      [6, 34, 64],
+      [3, 44, 76],
+      [1.5, 54, 86],
+      [0.75, 62, 94],
+      [0.4, 70, 100],
+    ],
+    veil: [0.4, 40, 90],
+  },
+};
+// The half-width of the smoke band's paper/ink boundaries; of the reel panel's sides (desktop).
+const SMOKE_SOFT = 8;
+const SMOKE_FEATHER = 20;
+
+function glass(k: 'd' | 'm') {
+  const g = GLASS[k];
+  const h = g.h;
+  const layers = g.layers
+    .map(([b, s, e]) => {
+      const m = easeMask(s, e);
+      return `<div style="position:absolute;inset:0;-webkit-backdrop-filter:blur(${fmt(b)}px);backdrop-filter:blur(${fmt(b)}px);-webkit-mask-image:${m};mask-image:${m}"></div>`;
+    })
+    .join('');
+  const [a, s, e] = g.veil;
+  let ground = `background:var(--bg)`;
+  if (home) {
+    const kk = SMOKE_SOFT;
+    // A band three glass-heights tall (paper, ink, paper) that slides up with the scroll, so its
+    // paper/ink boundaries ride on the reel panel's top and bottom edges as they cross the glass.
+    const band = `linear-gradient(to bottom, ${P} ${h - kk}px, ${INK} ${h + kk}px, ${INK} ${2 * h - kk}px, ${P} ${2 * h + kk}px)`;
+    if (k === 'm') {
+      ground = `background-color:${P};background-image:${band};background-size:100% ${3 * h}px;background-repeat:no-repeat`;
+    } else {
+      // Desktop: only within the panel's columns (7 to 12), its sides feathered. The panel's left
+      // edge is half the page plus half a gutter at every width; its right edge is the margin.
+      const f = SMOKE_FEATHER;
+      const cols = `linear-gradient(to right, ${P} calc(50% + ${12 - f}px), transparent calc(50% + ${12 + f}px), transparent calc(100% - var(--pad) - ${f}px), ${P} calc(100% - var(--pad) + ${f}px))`;
+      ground = `background-color:${P};background-image:${cols}, ${band};background-size:100% 100%, 100% ${3 * h}px;background-repeat:no-repeat`;
+    }
+  }
+  const vm = easeMask(s, e);
+  const veil = `<div class="me-veil" style="position:absolute;inset:0;${ground};opacity:${a};-webkit-mask-image:${vm};mask-image:${vm}"></div>`;
+  return `<div class="me-glass me-glass-${k}" aria-hidden="true" style="height:${h}px">${layers}${veil}</div>`;
+}
+
+const name = `<span class="me-nmask"><span class="me-nw">MIGUEL</span></span><span class="me-nmask"><span class="me-nw">ESCOBAR</span></span>`;
+---
+
+<header class:list={['me-nav', { 'me-nav-home': home }]}>
+  <Fragment set:html={glass('d')} />
+  <Fragment set:html={glass('m')} />
+  {
+    home ? (
+      <div class="me-navhome">
+        <a class="me-navname" href="#top" aria-label="Miguel Escobar" set:html={name} />
+      </div>
+    ) : (
+      <a class="me-navname" href="/" aria-label="Miguel Escobar" set:html={name} />
+    )
+  }
+  <button
+    type="button"
+    class="me-iconbtn me-navr"
+    data-menu-open
+    aria-label="Menu"
+    aria-controls="menu"
+    aria-expanded="false"
+  >
+    <span class="me-bars"><span></span><span></span><span></span></span>
+  </button>
+</header>
+
+<style is:global>
+  .me-nav {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    height: var(--navh);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--pad);
+    color: var(--fg);
+    background: transparent;
+  }
+  /* Home: the nav lies over the hero. */
+  .me-nav-home {
+    margin-bottom: calc(-1 * var(--navh));
+  }
+  .me-glass {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: -1;
+    pointer-events: none;
+  }
+  .me-glass-d {
+    display: none;
+  }
+  @media (min-width: 900px) {
+    .me-glass-d {
+      display: block;
+    }
+    .me-glass-m {
+      display: none;
+    }
+  }
+</style>
