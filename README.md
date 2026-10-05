@@ -317,8 +317,8 @@ These regenerate the derived assets. They need the optional tools (`@resvg/resvg
 `wawoff2`, and `fonttools` on PATH for `assets:fonts`). You normally never need these.
 
 ```bash
-npm run assets:og            # public/og-image.png (1200×630, Neue Montreal masthead + brand dot)
-npm run assets:icons         # public/apple-touch-icon.png (derived from favicon.png)
+npm run assets:og            # public/og-image.png (1200×630: the Home hero — statement, name, cyan glow)
+npm run assets:icons         # favicon.svg/.png + apple-touch-icon.png: a circle in the glow's cyan (#1AB0E7)
 npm run assets:fonts         # PP OTFs → subsetted, self-hosted woff2 (needs `pip install fonttools`)
 ```
 

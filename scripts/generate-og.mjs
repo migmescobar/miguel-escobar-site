@@ -1,14 +1,10 @@
 // Generate the 1200x630 Open Graph card. Run: npm run assets:og
 //
-// The card echoes the home page's one big gesture: MIGUEL ESCOBAR set on a
-// single line, fitted edge to edge, on a flood colour with light type. Social
-// feeds are overwhelmingly white, so the saturated ground is what makes it
-// carry at thumbnail size.
-//
-// Two elements only — the name and the positioning line. A URL and a location
-// were tried along a bottom rule and cut: at the size a card actually gets
-// looked at they were unreadable furniture, and the space buys the positioning
-// line enough size to be read in the feed instead of after the click.
+// The card is the Home hero in miniature (redesign-2026, NewHome): paper ground,
+// the statement in ink at the top left, the name fitted edge to edge along the
+// foot, and the soft cyan glow off to the right where the hero's arrow sits.
+// The glow is the one colour in the identity, so it is what makes the card
+// carry in a white feed; the name is what makes it legible as a thumbnail.
 import { Resvg } from '@resvg/resvg-js';
 import { openSync } from 'fontkit';
 import { writeFileSync, mkdirSync } from 'node:fs';
@@ -26,12 +22,12 @@ const OTF = path.join(fonts, 'PPNeueMontreal-Regular.otf');
 const font = openSync(OTF);
 const TEXT = font.familyName;
 
-const BLUE = '#0047BB'; // the About door's flood colour; the site's one accent
 const PAPER = '#EAE7E1';
+const INK = '#141414';
 
 const W = 1200;
 const H = 630;
-const PAD = 80;
+const PAD = 56; // the hero's 64px side margin at 1440, scaled to the card
 const INNER = W - PAD * 2;
 
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -58,21 +54,19 @@ function wrap(text, size, maxPx, lsEm) {
 }
 
 /**
- * Same line count as a greedy wrap, but broken so the lines come out even —
- * greedy leaves a one-word orphan ("… and stakes of / tech"), which reads badly
- * at card size. Searches every split into N lines and keeps the one whose
- * longest line is shortest.
+ * Same line count as a greedy wrap, broken so the lines come out even (the
+ * site's text-wrap: balance). An article never ends a line, as on the site.
  */
 function wrapBalanced(text, size, maxPx, lsEm) {
   const words = text.split(/\s+/);
   const target = wrap(text, size, maxPx, lsEm).length;
-  if (target < 2) return words.length ? [text] : [];
+  if (target < 2) return [text];
+  const ok = (line) => !/\b(a|an|the)$/i.test(line);
 
   let best = null;
   const walk = (start, remaining, acc) => {
     if (remaining === 1) {
-      const last = words.slice(start).join(' ');
-      const lines = [...acc, last];
+      const lines = [...acc, words.slice(start).join(' ')];
       const widest = Math.max(...lines.map((l) => emWidth(l, lsEm) * size));
       if (widest <= maxPx && (!best || widest < best.widest)) best = { lines, widest };
       return;
@@ -80,50 +74,60 @@ function wrapBalanced(text, size, maxPx, lsEm) {
     for (let end = start + 1; end <= words.length - (remaining - 1); end++) {
       const line = words.slice(start, end).join(' ');
       if (emWidth(line, lsEm) * size > maxPx) break;
-      walk(end, remaining - 1, [...acc, line]);
+      if (ok(line)) walk(end, remaining - 1, [...acc, line]);
     }
   };
   walk(0, target, []);
   return best ? best.lines : wrap(text, size, maxPx, lsEm);
 }
 
-// ── Name, fitted edge to edge like the home hero ───────────────────────────
+const CAP = 0.72; // Neue Montreal cap height, in em
+
+// ── The statement (the hero's, verbatim), set as the hero sets it ──────────
+const STATEMENT = 'Editorial instincts and creative acuity for the scale and stakes of tech.';
+const stmtSize = 60;
+const stmtLS = -0.026;
+const stmtLH = Math.round(stmtSize * 1.02);
+// The hero holds the statement to 83% of the column.
+const stmtLines = wrapBalanced(STATEMENT, stmtSize, INNER * 0.83, stmtLS);
+const stmtTop = PAD + stmtSize * CAP;
+
+// ── The name, fitted edge to edge, its baseline on the bottom margin ───────
 const NAME = 'MIGUEL ESCOBAR';
 const NAME_LS = -0.03;
 const nameSize = fitSize(NAME, INNER, NAME_LS);
+const nameBaseline = H - PAD + 6; // capitals sit on the baseline; nudge for the optical margin
 
-// ── Positioning line ───────────────────────────────────────────────────────
-// Set as display type, not body copy: 60px is the largest size that still
-// breaks on the comma into two even lines, and the tracking goes slightly
-// negative the way the site's own large headings do.
-const LEDE = 'Editorial instincts and creative acuity, rewired for the scale and stakes of tech';
-const ledeSize = 60;
-const ledeLS = -0.006;
-const ledeLines = wrapBalanced(LEDE, ledeSize, INNER, ledeLS);
-const ledeLH = Math.round(ledeSize * 1.22);
-
-// Composition mirrors the home page: the name sits at the top, the positioning
-// line is pinned to the bottom, and the space between them is deliberate rather
-// than leftover. The name is cap-aligned to the top padding and the lede's last
-// line is baseline-aligned to the bottom padding, so both optical margins match
-// the 80px sides.
-const CAP = 0.72; // Neue Montreal cap height, in em
-const nameBaseline = PAD + nameSize * CAP;
-const ledeLastBaseline = H - PAD;
-const ledeTop = ledeLastBaseline - (ledeLines.length - 1) * ledeLH;
+// ── The glow: the hero's softened profile, centred where its arrow is ──────
+const GLOW = [
+  ['#1AB0E7', 0], ['#1BB4EA', 2.51], ['#1BB8EB', 4.98], ['#1CBCEC', 7.49], ['#1CBFEC', 10],
+  ['#1FC1EB', 15.32], ['#27C1EA', 20.64], ['#43C2E8', 26.09], ['#59C6E6', 31.4], ['#6EC7E6', 36.72],
+  ['#7DCBE4', 42.17], ['#8DCEE4', 47.49], ['#98D0E5', 52.81], ['#A6D4E4', 58.12], ['#B0D8E4', 63.57],
+  ['#BCD9E4', 68.89], ['#C5DBE4', 74.21], ['#D0DFE4', 79.66], ['#D6E2E2', 84.98], ['#E2E4E3', 90.3],
+  ['#E8E6E1', 95.75], ['#EAE7E1', 100],
+];
+const glowR = 210;
+const glowCx = W - PAD - 30;
+const glowCy = nameBaseline - nameSize * CAP - 92;
 
 const svg = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
-  <rect width="${W}" height="${H}" fill="${BLUE}"/>
+  <defs>
+    <radialGradient id="glow" cx="${glowCx}" cy="${glowCy}" r="${glowR}" gradientUnits="userSpaceOnUse">
+      ${GLOW.map(([c, o]) => `<stop offset="${o}%" stop-color="${c}"/>`).join('')}
+    </radialGradient>
+  </defs>
+  <rect width="${W}" height="${H}" fill="${PAPER}"/>
+  <rect width="${W}" height="${H}" fill="url(#glow)"/>
 
-  <text x="${PAD}" y="${nameBaseline}" font-family="${TEXT}" font-size="${nameSize.toFixed(2)}"
-        letter-spacing="${(NAME_LS * nameSize).toFixed(2)}" fill="${PAPER}">${esc(NAME)}</text>
-
-  ${ledeLines
+  ${stmtLines
     .map(
       (l, i) =>
-        `<text x="${PAD}" y="${ledeTop + i * ledeLH}" font-family="${TEXT}" font-size="${ledeSize}" letter-spacing="${(ledeLS * ledeSize).toFixed(2)}" fill="${PAPER}" fill-opacity="0.85">${esc(l)}</text>`
+        `<text x="${PAD}" y="${(stmtTop + i * stmtLH).toFixed(1)}" font-family="${TEXT}" font-size="${stmtSize}" letter-spacing="${(stmtLS * stmtSize).toFixed(2)}" fill="${INK}">${esc(l)}</text>`
     )
     .join('\n  ')}
+
+  <text x="${PAD}" y="${nameBaseline.toFixed(1)}" font-family="${TEXT}" font-size="${nameSize.toFixed(2)}"
+        letter-spacing="${(NAME_LS * nameSize).toFixed(2)}" fill="${INK}">${esc(NAME)}</text>
 </svg>`;
 
 const png = new Resvg(svg, {
@@ -135,5 +139,5 @@ const png = new Resvg(svg, {
 
 writeFileSync(path.join(outDir, 'og-image.png'), png);
 console.log(
-  `Wrote public/og-image.png (${W}x${H}) — name fitted at ${nameSize.toFixed(1)}px, lede ${ledeSize}px on ${ledeLines.length} line(s)`
+  `Wrote public/og-image.png (${W}x${H}) — statement ${stmtSize}px on ${stmtLines.length} line(s), name fitted at ${nameSize.toFixed(1)}px`
 );
