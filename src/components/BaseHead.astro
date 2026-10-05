@@ -117,6 +117,18 @@ const blogPosting =
   <script type="application/ld+json" set:html={JSON.stringify(blogPosting)} />
 )}
 
+<!-- Scripted reveals on Home: hide their parts only when script runs, and show
+     everything anyway if the page's own script hasn't started within 4s. -->
+<script is:inline>
+  (function () {
+    var d = document.documentElement;
+    d.classList.add('js');
+    setTimeout(function () {
+      if (!d.classList.contains('js-ready')) d.classList.remove('js');
+    }, 4000);
+  })();
+</script>
+
 {GOATCOUNTER_READY && import.meta.env.PROD && (
   <script
     is:inline

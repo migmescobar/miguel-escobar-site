@@ -724,12 +724,6 @@ a.me-link:hover .me-link-label {
     transform: translateY(-160px);
   }
 }
-@keyframes me-in {
-  from,
-  to {
-    --in: 1;
-  }
-}
 @keyframes me-par {
   from {
     transform: translateY(18px);
@@ -878,12 +872,13 @@ a.me-link:hover .me-link-label {
   }
 }
 
-/* Scroll-driven: each chapter's parts come into play as it scrolls in (--in
-   flips to 1 and stays), the hero drifts up, the nav's colour follows the ground
-   beneath it. */
+/* Scroll-linked, where the browser has scroll timelines: the hero drifts up,
+   the chapters ease in and out, the nav's colour and veil follow the ground
+   beneath it. Elsewhere they hold still, and the script in Nav.astro keeps the
+   nav's colour right. */
 @supports (animation-timeline: view()) {
   body.is-home {
-    timeline-scope: --ch-reel, --ch-foot, --ch-pol, --ch-work;
+    timeline-scope: --ch-reel, --ch-foot, --ch-pol;
   }
   .me-pol {
     view-timeline-name: --ch-pol;
@@ -893,9 +888,6 @@ a.me-link:hover .me-link-label {
   }
   .is-home .me-foot {
     view-timeline-name: --ch-foot;
-  }
-  .me-workrule {
-    view-timeline-name: --ch-work;
   }
 
   .me-drift {
@@ -918,18 +910,6 @@ a.me-link:hover .me-link-label {
       cover calc(100svh - var(--navh)) cover 100svh;
   }
 
-  .me-rv {
-    --in: 0;
-    animation: me-in linear forwards;
-    animation-timeline: view();
-    animation-range: cover 16svh cover 100%;
-  }
-  .me-rv.me-plate {
-    animation-range: cover 6svh cover 100%;
-  }
-  .me-rv.me-gal {
-    animation-range: cover 30svh cover 100%;
-  }
   .me-par-m {
     animation: me-par linear both;
     animation-timeline: view();
@@ -992,133 +972,98 @@ a.me-link:hover .me-link-label {
       animation: none;
     }
   }
+}
 
-  @media (prefers-reduced-motion: no-preference) {
-    @container style(--in: 0) {
-      .me-hl .c {
-        opacity: 0;
-      }
-      .me-fade {
-        opacity: 0;
-        transform: translateY(16px);
-        transition:
-          opacity 0s linear 99999s,
-          transform 0s linear 99999s;
-      }
-      .me-plate .me-ink,
-      .me-ripples {
-        opacity: 0;
-        transition: opacity 0s linear 99999s;
-      }
-      .me-dot {
-        transform: scale(0);
-        transition: transform 0s linear 99999s;
-      }
-    }
-    @container style(--in: 1) {
-      .me-hl .c {
-        animation: me-type 0.14s ease-out both;
-        animation-delay: calc(var(--t0, 0ms) + var(--i) * var(--dt));
-      }
-      .me-hl .c::after {
-        animation: me-caret linear;
-        animation-duration: var(--dt);
-        animation-delay: calc(var(--t0, 0ms) + var(--i) * var(--dt));
-      }
-      .me-hl .c.last::after {
-        animation-name: me-caret-end;
-        animation-duration: 2.4s;
-      }
-      .me-fade {
-        transition:
-          opacity 1s cubic-bezier(0.16, 1, 0.3, 1) var(--fd, 0.45s),
-          transform 1s cubic-bezier(0.16, 1, 0.3, 1) var(--fd, 0.45s);
-      }
-      .me-plate .me-ink {
-        transition: opacity 1s ease 0.05s;
-      }
-      .me-dot {
-        transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.65s;
-      }
-      .me-ripples {
-        transition: opacity 0.9s ease 1s;
-      }
-    }
+/* ── Reveals ─────────────────────────────────────────────────────────────
+   Each chapter's parts come into play once as it scrolls in: the headline types
+   itself, the paragraph and links fade up, the map draws and Singapore pings;
+   Policy's words pull into focus and its glow radiates outward (POL_RADIATE).
+   The boards trigger these from scroll timelines through container style
+   queries; here a small script (src/pages/index.astro) adds .is-in at the same
+   points, so they run in every browser. Without the script (html:not(.js)),
+   or with reduced motion, everything simply shows. */
+@media (prefers-reduced-motion: no-preference) {
+  .js .me-rv:not(.is-in) .me-hl .c {
+    opacity: 0;
+  }
+  .js .me-rv:not(.is-in) .me-fade {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  .js .me-plate:not(.is-in) .me-ink,
+  .js .me-plate:not(.is-in) .me-ripples {
+    opacity: 0;
+  }
+  .js .me-plate:not(.is-in) .me-dot {
+    transform: scale(0);
+  }
+  .me-rv.is-in .me-hl .c {
+    animation: me-type 0.14s ease-out both;
+    animation-delay: calc(var(--t0, 0ms) + var(--i) * var(--dt));
+  }
+  .me-rv.is-in .me-hl .c::after {
+    animation: me-caret linear;
+    animation-duration: var(--dt);
+    animation-delay: calc(var(--t0, 0ms) + var(--i) * var(--dt));
+  }
+  .me-rv.is-in .me-hl .c.last::after {
+    animation-name: me-caret-end;
+    animation-duration: 2.4s;
+  }
+  .me-rv.is-in .me-fade {
+    transition:
+      opacity 1s cubic-bezier(0.16, 1, 0.3, 1) var(--fd, 0.45s),
+      transform 1s cubic-bezier(0.16, 1, 0.3, 1) var(--fd, 0.45s);
+  }
+  .me-plate.is-in .me-ink {
+    transition: opacity 1s ease 0.05s;
+  }
+  .me-plate.is-in .me-dot {
+    transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.65s;
+  }
+  .me-plate.is-in .me-ripples {
+    transition: opacity 0.9s ease 1s;
   }
 
-  /* Policy: once the stage is mostly up, the words resolve from blur to sharp
-     and the glow radiates outward (POL_RADIATE). */
-  .me-pol {
-    --in: 0;
-    animation: me-in linear forwards;
-    animation-timeline: --ch-pol;
-    animation-range: cover 82svh cover 100%;
+  .js .me-pol:not(.is-in) .me-pol-focus {
+    filter: blur(0.26em);
+    opacity: 0.5;
+    transform: scale(1.035);
   }
-  @media (prefers-reduced-motion: no-preference) {
-    @container style(--in: 0) {
-      .me-pol-focus {
-        filter: blur(0.26em);
-        opacity: 0.5;
-        transform: scale(1.035);
-        transition:
-          filter 0s linear 99999s,
-          opacity 0s linear 99999s,
-          transform 0s linear 99999s;
-      }
-      .me-pol-glow {
-        transform: scale(0.45);
-        transition: transform 0s linear 99999s;
-      }
-    }
-    @container style(--in: 1) {
-      .me-pol-focus {
-        transition:
-          filter 1.6s cubic-bezier(0.33, 1, 0.68, 1),
-          opacity 0.96s ease-out,
-          transform 1.6s cubic-bezier(0.33, 1, 0.68, 1);
-      }
-      .me-pol-focus-2 {
-        transition-delay: 0.35s;
-      }
-      .me-pol-glow {
-        transition: transform 1.6s cubic-bezier(0.33, 1, 0.68, 1);
-      }
-    }
+  .js .me-pol:not(.is-in) .me-pol-glow {
+    transform: scale(0.45);
+  }
+  .me-pol.is-in .me-pol-focus {
+    transition:
+      filter 1.6s cubic-bezier(0.33, 1, 0.68, 1),
+      opacity 0.96s ease-out,
+      transform 1.6s cubic-bezier(0.33, 1, 0.68, 1);
+  }
+  .me-pol.is-in .me-pol-focus-2 {
+    transition-delay: 0.35s;
+  }
+  .me-pol.is-in .me-pol-glow {
+    transition: transform 1.6s cubic-bezier(0.33, 1, 0.68, 1);
   }
 }
 
 /* The nav's name: hidden while the hero's name is on screen; once the Work
    chapter's rule reaches the nav's foot its two words rise into their masks, as
-   the hero's rose, and drop back out on the way up (NAVNAME_LATE). */
-@supports (animation-timeline: view()) {
-  .me-navhome {
-    --in: 0;
-    animation: me-in linear forwards;
-    animation-timeline: --ch-work;
-    animation-range: cover calc(100svh - var(--navh)) cover calc(100svh - var(--navh) + 1px);
-  }
-  @container style(--in: 0) {
-    .me-navhome .me-navname {
-      visibility: hidden;
-      transition: visibility 0s linear 0.3s;
-    }
-    .me-navhome .me-nw {
-      transform: translateY(104%);
-      transition: transform 0.3s cubic-bezier(0.4, 0, 1, 1);
-    }
-  }
-  @container style(--in: 1) {
-    .me-navhome .me-navname {
-      visibility: visible;
-    }
-    .me-navhome .me-nw {
-      transform: none;
-      transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .me-navhome .me-nmask + .me-nmask .me-nw {
-      transition-delay: 0.09s;
-    }
-  }
+   the hero's rose, and drop back out on the way up (NAVNAME_LATE). The script
+   toggles .is-in; without it the name simply shows. */
+.js .me-navhome:not(.is-in) .me-navname {
+  visibility: hidden;
+  transition: visibility 0s linear 0.3s;
+}
+.js .me-navhome:not(.is-in) .me-nw {
+  transform: translateY(104%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 1, 1);
+}
+.me-navhome.is-in .me-nw {
+  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.me-navhome.is-in .me-nmask + .me-nmask .me-nw {
+  transition-delay: 0.09s;
 }
 @media (prefers-reduced-motion: reduce) {
   .me-navhome .me-nw {

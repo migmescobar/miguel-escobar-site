@@ -294,6 +294,54 @@ const arrowDown = icon(['M12 4v16', 'M5.5 13.5 12 20l6.5-6.5']);
 </BaseLayout>
 
 <script>
+  document.documentElement.classList.add('js-ready');
+
+  // ── Reveals: each part comes into play once, when its top is this far up the
+  // screen (the boards' animation-range starts: 16%, the map 6%, the rail 30%,
+  // Policy 82%). Anything already scrolled past counts as in.
+  const reveal = (selector: string, percent: number) => {
+    const els = document.querySelectorAll(selector);
+    if (!els.length) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const en of entries) {
+          if (en.isIntersecting || en.boundingClientRect.top < 0) {
+            en.target.classList.add('is-in');
+            io.unobserve(en.target);
+          }
+        }
+      },
+      { rootMargin: `0px 0px -${percent}% 0px` }
+    );
+    els.forEach((el) => io.observe(el));
+  };
+  reveal('.me-rv:not(.me-plate):not(.me-gal)', 16);
+  reveal('.me-plate', 6);
+  reveal('.me-gal', 30);
+  reveal('.me-pol', 82);
+
+  // ── The nav's name: in once the Work chapter's rule reaches the nav's foot,
+  // out again above it.
+  const navhome = document.querySelector<HTMLElement>('.me-navhome');
+  const rule = document.querySelector<HTMLElement>('.me-workrule');
+  const nav = document.querySelector<HTMLElement>('.me-nav');
+  if (navhome && rule && nav) {
+    let queued = false;
+    const update = () => {
+      queued = false;
+      navhome.classList.toggle('is-in', rule.getBoundingClientRect().top <= nav.offsetHeight);
+    };
+    const queue = () => {
+      if (!queued) {
+        queued = true;
+        requestAnimationFrame(update);
+      }
+    };
+    window.addEventListener('scroll', queue, { passive: true });
+    window.addEventListener('resize', queue);
+    update();
+  }
+
   // ── The rail: the rings beside the headline page it, a screen at a time ──
   const rail = document.querySelector<HTMLElement>('[data-rail]');
   const prev = document.querySelector<HTMLButtonElement>('[data-rail-prev]');

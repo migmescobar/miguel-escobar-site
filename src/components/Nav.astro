@@ -152,4 +152,48 @@ const name = `<span class="me-nmask"><span class="me-nw">MIGUEL</span></span><sp
       display: none;
     }
   }
+  /* Set by the script below where there are no scroll timelines. */
+  .me-nav.me-nav-paper,
+  .me-nav.me-navr-paper .me-navr {
+    color: #eae7e1;
+  }
+  .me-nav.me-nav-paper .me-veil {
+    opacity: 0;
+  }
 </style>
+
+<script>
+  // Where the browser has no scroll timelines (iOS before 26, Firefox), the CSS
+  // in home.css and BaseLayout.astro can't turn the nav paper over the reel and
+  // the footer, and its ink would vanish on them. This does the same from the
+  // scroll position: the switch comes when the dark edge reaches the middle of
+  // the nav, as in the CSS.
+  if (!(window.CSS && CSS.supports('animation-timeline: view()'))) {
+    const nav = document.querySelector<HTMLElement>('.me-nav');
+    const reel = document.querySelector<HTMLElement>('.me-reel');
+    const foot = document.querySelector<HTMLElement>('.me-foot');
+    const desktop = window.matchMedia('(min-width: 900px)');
+    if (nav) {
+      let queued = false;
+      const update = () => {
+        queued = false;
+        const y = nav.offsetHeight / 2;
+        const r = reel?.getBoundingClientRect();
+        const onReel = !!r && r.top <= y && r.bottom >= y;
+        const onFoot = !!foot && foot.getBoundingClientRect().top <= y;
+        // On a desktop the reel lies under the menu button only.
+        nav.classList.toggle('me-nav-paper', onFoot || (onReel && !desktop.matches));
+        nav.classList.toggle('me-navr-paper', onReel && desktop.matches && !onFoot);
+      };
+      const queue = () => {
+        if (!queued) {
+          queued = true;
+          requestAnimationFrame(update);
+        }
+      };
+      window.addEventListener('scroll', queue, { passive: true });
+      window.addEventListener('resize', queue);
+      update();
+    }
+  }
+</script>
