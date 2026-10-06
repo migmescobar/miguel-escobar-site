@@ -12,8 +12,7 @@
     "validate:html": "html-validate \"dist/**/*.html\"",
     "assets:fonts": "node scripts/convert-fonts.mjs",
     "assets:og": "node scripts/generate-og.mjs",
-    "assets:icons": "node scripts/generate-icons.mjs",
-    "assets:riso": "node scripts/generate-riso.mjs"
+    "assets:icons": "node scripts/generate-icons.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.0",

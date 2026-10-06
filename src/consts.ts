@@ -28,11 +28,3 @@ export const GOATCOUNTER_CODE = 'YOUR_GOATCOUNTER_CODE';
 
 /** True once the GoatCounter code has been filled in. */
 export const GOATCOUNTER_READY = GOATCOUNTER_CODE !== 'YOUR_GOATCOUNTER_CODE';
-
-/**
- * Home's three glows (behind the hero's arrow, behind Policy, Singapore's pulse
- * on the map) as risograph halftones instead of smooth gradients. Set to false
- * to put the smooth gradients back; nothing else changes. The halftone images
- * are drawn by scripts/generate-riso.mjs (npm run assets:riso).
- */
-export const RISO_GLOWS = true;
