@@ -6,7 +6,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Typed from '../components/Typed.astro';
 import Frame from '../components/Frame.astro';
-import { SITE_DESCRIPTION, RISO_GLOWS } from '../consts';
+import { SITE_DESCRIPTION } from '../consts';
 import { typeChars, keepCompounds } from '../utils/typed';
 import '../styles/home.css';
 
@@ -129,7 +129,7 @@ const arrowDown = icon(['M12 4v16', 'M5.5 13.5 12 20l6.5-6.5']);
       <Typed as="p" text={STATEMENT} class="t-h1 me-statement me-typeload" t0={350} />
       <div class="me-grow"></div>
       <div class="me-cuerow">
-        <span class="me-cueglow" aria-hidden="true" data-riso={RISO_GLOWS ? '' : undefined}></span>
+        <span class="me-cueglow" aria-hidden="true"></span>
         <a class="me-cue" href="#work" aria-label="Scroll to work" set:html={arrowDown(22)} />
       </div>
       <h1 class="me-rise me-name"><span>Miguel</span> <span>Escobar</span></h1>
@@ -293,7 +293,7 @@ const arrowDown = icon(['M12 4v16', 'M5.5 13.5 12 20l6.5-6.5']);
 
     <section id="policy" class="me-pol">
       <div class="me-pol-stage">
-        <div class="me-pol-glow" aria-hidden="true" data-riso={RISO_GLOWS ? '' : undefined}></div>
+        <div class="me-pol-glow" aria-hidden="true"></div>
         <div class="me-pol-content">
           <Typed text={POLICY.head} emph={POLICY.emph} class="t-h1 me-pol-hl me-pol-focus" />
           <div class="me-pol-focus me-pol-focus-2 me-pol-box">
@@ -306,10 +306,7 @@ const arrowDown = icon(['M12 4v16', 'M5.5 13.5 12 20l6.5-6.5']);
 </BaseLayout>
 
 <script>
-  import { initRisoGlows } from '../scripts/riso-glow';
-
   document.documentElement.classList.add('js-ready');
-  initRisoGlows();
 
   // ── Reveals: each part comes into play once, when its top is this far up the
   // screen (the boards' animation-range starts: 16%, the map 6%, the rail 30%,
