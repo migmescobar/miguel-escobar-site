@@ -28,3 +28,10 @@ export const GOATCOUNTER_CODE = 'YOUR_GOATCOUNTER_CODE';
 
 /** True once the GoatCounter code has been filled in. */
 export const GOATCOUNTER_READY = GOATCOUNTER_CODE !== 'YOUR_GOATCOUNTER_CODE';
+
+/**
+ * Home's hero-arrow and Policy glows as risograph halftone prints (drawn in the
+ * browser by src/scripts/riso-glow.ts) over their smooth CSS gradients, which
+ * stay as the fallback. Set to false to show just the smooth gradients again.
+ */
+export const RISO_GLOWS = true;
