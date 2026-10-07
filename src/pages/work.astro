@@ -1,6 +1,7 @@
 ---
 // Work (boards NewWork*): one page in three sections, after Monocle and The
-// Economist — Highlights, More Advertising Work, More Editorial Work. It replaces
+// Economist — Highlights, More Advertising Work, More Editorial Work. The three
+// are coequal: the same cards (image over words) on the same grid. It replaces
 // the old Editorial Work and Advertising Work pages, which redirect here.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Frame from '../components/Frame.astro';
@@ -158,7 +159,8 @@ const editorial: Card[] = [
   },
 ];
 
-const more = [
+const sections = [
+  { id: 'highlights', title: 'Highlights', cards: highlights },
   { id: 'advertising', title: 'More Advertising Work', cards: advertising },
   { id: 'editorial', title: 'More Editorial Work', cards: editorial },
 ];
@@ -174,66 +176,41 @@ const more = [
     <p class="t-lead me-pagesub">Twelve years of stories and campaigns, from Manila to Singapore</p>
   </div>
 
-  <section id="highlights" class="me-wsec me-wsec-first" aria-labelledby="highlights-h">
-    <div class="me-wrule" aria-hidden="true"></div>
-    <h2 id="highlights-h" class="me-wsec-title">Highlights</h2>
-    <div class="me-hgrid">
-      {
-        highlights.map((c) => (
-          <a class="me-wcard me-hcard" href={c.href} target="_blank" rel="noopener">
-            <Frame
-              image={c.image}
-              alt={c.alt}
-              ratio="4 / 3"
-              position={c.position}
-              sizes="(max-width: 599px) 92vw, (max-width: 1199px) 46vw, 23vw"
-              widths={[360, 540, 720, 1080]}
-            />
-            <p class="t-label me-hlabel">{c.label}</p>
-            <h3 class="me-wtitle me-htitle" set:html={keepCompounds(c.title)} />
-            <p class="me-hdesc" set:html={keepCompounds(c.desc)} />
-          </a>
-        ))
-      }
-    </div>
-  </section>
-
   {
-    more.map((s, i) => (
+    sections.map((s, i) => (
       <section
         id={s.id}
-        class:list={['me-wsec', { 'me-wsec-last': i === more.length - 1 }]}
+        class:list={['me-wsec', { 'me-wsec-first': i === 0, 'me-wsec-last': i === sections.length - 1 }]}
         aria-labelledby={`${s.id}-h`}
       >
         <div class="me-wrule" aria-hidden="true" />
         <h2 id={`${s.id}-h`} class="me-wsec-title">
           {s.title}
         </h2>
-        <div class="me-mgrid">
+        <div class="me-wgrid">
           {s.cards.map((c) => {
+            // The whole card links, unless its copy carries its own links.
             const Tag = c.href ? 'a' : 'div';
             return (
               <Tag
-                class="me-wcard me-mcard"
+                class="me-wcard"
                 href={c.href}
                 target={c.href ? '_blank' : undefined}
                 rel={c.href ? 'noopener' : undefined}
               >
-                <div class="me-mimg">
-                  <Frame
-                    image={c.image}
-                    alt={c.alt}
-                    ratio="4 / 3"
-                    position={c.position}
-                    sizes="(max-width: 899px) 96px, (max-width: 1099px) 30vw, 15vw"
-                    widths={[192, 320, 480]}
-                  />
+                <Frame
+                  image={c.image}
+                  alt={c.alt}
+                  ratio="4 / 3"
+                  position={c.position}
+                  sizes="(max-width: 599px) 92vw, (max-width: 1199px) 46vw, 23vw"
+                  widths={[360, 540, 720, 1080]}
+                />
+                <p class="t-label me-wlabel">{c.label}</p>
+                <div class="me-wbody">
+                  <h3 class="me-wtitle" set:html={keepCompounds(c.title)} />
+                  <p class="me-wdesc" set:html={keepCompounds(c.desc)} />
                 </div>
-                <div class="me-mhead">
-                  <p class="t-label">{c.label}</p>
-                  <h3 class="me-wtitle me-mtitle" set:html={keepCompounds(c.title)} />
-                </div>
-                <p class="me-mdesc" set:html={keepCompounds(c.desc)} />
               </Tag>
             );
           })}
@@ -263,7 +240,16 @@ const more = [
     line-height: 1.12;
     letter-spacing: -0.012em;
   }
+  /* Cards: image over label, title and words; four to a row on the desktop,
+     two on tablets and small laptops, one on phones. */
+  .me-wgrid {
+    margin-top: 28px;
+    display: grid;
+    gap: 20px;
+  }
   .me-wcard {
+    display: block;
+    padding-bottom: 12px;
     color: inherit;
     text-decoration: none;
     border: 1px solid var(--fg);
@@ -274,38 +260,23 @@ const more = [
     text-decoration-thickness: 1px;
     text-underline-offset: 0.14em;
   }
+  .me-wlabel,
+  .me-wbody {
+    padding: 0 12px;
+  }
+  .me-wlabel {
+    margin-top: 16px;
+  }
   .me-wtitle {
-    margin: 0;
+    margin: 8px 0 0;
+    font-size: 26px;
     font-weight: 400;
+    line-height: 1.12;
+    letter-spacing: -0.012em;
     color: var(--fg);
     text-wrap: balance;
   }
-
-  /* Highlights: big cards, image over words. */
-  .me-hgrid {
-    margin-top: 28px;
-    display: grid;
-    gap: 20px;
-  }
-  .me-hcard {
-    display: block;
-    padding-bottom: 12px;
-  }
-  .me-hlabel,
-  .me-htitle,
-  .me-hdesc {
-    padding: 0 12px;
-  }
-  .me-hlabel {
-    margin-top: 16px;
-  }
-  .me-htitle {
-    margin-top: 8px;
-    font-size: 26px;
-    line-height: 1.12;
-    letter-spacing: -0.012em;
-  }
-  .me-hdesc {
+  .me-wdesc {
     margin: 7.6px 0 0;
     font-size: 15px;
     line-height: 1.55;
@@ -314,41 +285,9 @@ const more = [
     text-wrap: pretty;
   }
   @media (min-width: 600px) and (max-width: 899px) {
-    .me-hgrid {
+    .me-wgrid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
-  }
-
-  /* More: a thumbnail beside the label and title, the words under them. */
-  .me-mgrid {
-    margin-top: 28px;
-    display: grid;
-    gap: 20px;
-  }
-  .me-mcard {
-    display: grid;
-    grid-template-columns: 96px minmax(0, 1fr);
-    column-gap: 16px;
-    align-items: start;
-    padding: 12px;
-  }
-  .me-mhead {
-    margin-top: -3.14px;
-  }
-  .me-mtitle {
-    margin-top: 8px;
-    font-size: 22px;
-    line-height: 1.18;
-    letter-spacing: -0.008em;
-  }
-  .me-mdesc {
-    grid-column: 1 / -1;
-    margin: 16px 0 0;
-    font-size: 15px;
-    line-height: 1.55;
-    letter-spacing: 0.02em;
-    color: var(--fg85);
-    text-wrap: pretty;
   }
 
   @media (min-width: 900px) {
@@ -367,88 +306,54 @@ const more = [
       letter-spacing: -0.014em;
     }
 
-    .me-hgrid {
+    /* Each card spans three rows of the grid (subgrid), so the images, labels
+       and titles of the cards in a row line up across it; each card's words
+       follow its title. */
+    .me-wgrid {
       margin-top: 48px;
       grid-template-columns: repeat(12, minmax(0, 1fr));
       column-gap: var(--gap);
       row-gap: 0;
     }
-    .me-hcard {
+    .me-wcard {
       grid-column: span 3;
-      grid-row: span 4;
+      grid-row: span 3;
       display: grid;
       grid-template-rows: subgrid;
       row-gap: 0;
       padding-bottom: 0;
     }
-    .me-hlabel,
-    .me-htitle,
-    .me-hdesc {
+    .me-wlabel,
+    .me-wbody {
       padding: 0 20px;
     }
-    .me-hlabel {
+    .me-wlabel {
       margin-top: 20px;
     }
-    .me-htitle {
+    .me-wtitle {
       margin-top: 10px;
       line-height: 1.14;
       letter-spacing: -0.01em;
     }
-    .me-hdesc {
+    .me-wdesc {
       margin-top: 4.52px;
-      padding-bottom: 20px;
+      margin-bottom: 20px;
       font-size: 17px;
       line-height: 1.65;
       letter-spacing: 0.01em;
     }
-
-    .me-mgrid {
-      margin-top: 48px;
-      grid-template-columns: repeat(12, minmax(0, 1fr));
-      column-gap: var(--gap);
-      row-gap: var(--gap);
-    }
-    .me-mcard {
-      grid-column: span 6;
-      grid-template-columns: repeat(6, minmax(0, 1fr));
-      grid-template-rows: auto 1fr;
-      column-gap: var(--gap);
-      padding: 20px;
-    }
-    .me-mimg {
-      grid-column: 1 / span 2;
-      grid-row: 1 / span 2;
-    }
-    .me-mhead {
-      grid-column: 3 / span 4;
-      margin-top: -3.42px;
-    }
-    .me-mtitle {
-      margin-top: 10px;
-      font-size: 24px;
-      line-height: 1.16;
-    }
-    .me-mdesc {
-      grid-column: 3 / span 4;
-      margin-top: 2.32px;
-      font-size: 17px;
-      line-height: 1.65;
-      letter-spacing: 0.01em;
-    }
-  }
-  @media (min-width: 900px) and (max-width: 1199px) {
-    .me-hcard {
-      grid-column: span 6;
-    }
-    /* The second pair's gap goes on the cards, not the grid: a row gap there
-       would also open between the rows each card shares (subgrid). */
-    .me-hcard:nth-child(n + 3) {
+    /* Rows after the first: the gap goes on the cards, not the grid, since a
+       row gap would also open between the rows each card shares. */
+    .me-wcard:nth-child(n + 5) {
       margin-top: var(--gap);
     }
   }
-  @media (min-width: 900px) and (max-width: 1099px) {
-    .me-mcard {
-      grid-column: span 12;
+  @media (min-width: 900px) and (max-width: 1199px) {
+    .me-wcard {
+      grid-column: span 6;
+    }
+    .me-wcard:nth-child(n + 3) {
+      margin-top: var(--gap);
     }
   }
 </style>
