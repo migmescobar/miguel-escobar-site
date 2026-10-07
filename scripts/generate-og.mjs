@@ -84,7 +84,7 @@ function wrapBalanced(text, size, maxPx, lsEm) {
 const CAP = 0.72; // Neue Montreal cap height, in em
 
 // ── The statement (the hero's, verbatim), set as the hero sets it ──────────
-const STATEMENT = 'Editorial instincts and creative acuity for the scale and stakes of tech.';
+const STATEMENT = 'Editorial instincts and creative acuity for clarifying a chaotic world';
 const stmtSize = 60;
 const stmtLS = -0.026;
 const stmtLH = Math.round(stmtSize * 1.02);
