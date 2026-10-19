@@ -322,7 +322,7 @@ never need these.
 
 ```bash
 npm run assets:og            # public/og-image.png (1200×630: Home's masthead — rule, name, dateline, deck)
-npm run assets:icons         # favicon.svg/.png + apple-touch-icon.png: a circle in the site's cyan (#00AEEF)
+npm run assets:icons         # favicon.svg/.png + apple-touch-icon.png: a circle in the site's butter paper (#F8F5D7)
 ```
 
 ### Note on `npm audit`
