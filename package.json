@@ -10,7 +10,6 @@
     "preview": "astro preview",
     "astro": "astro",
     "validate:html": "html-validate \"dist/**/*.html\"",
-    "assets:fonts": "node scripts/convert-fonts.mjs",
     "assets:og": "node scripts/generate-og.mjs",
     "assets:icons": "node scripts/generate-icons.mjs"
   },
@@ -23,8 +22,5 @@
   },
   "devDependencies": {
     "html-validate": "^9.7.1"
-  },
-  "optionalDependencies": {
-    "wawoff2": "^2.0.1"
   }
 }

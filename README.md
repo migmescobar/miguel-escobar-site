@@ -277,7 +277,6 @@ src/
   assets/images/             Site images (optimised automatically at build)
   assets/fonts/              Self-hosted Writer and Neue York woff2 (Pangram Pangram)
 public/                      Files served as-is: CV, reel videos, favicon, OG image, robots.txt
-redesign-2026/               The earlier 2026 design (Claude Design boards); superseded by the sketch rebuild
 ```
 
 The old addresses `/about/`, `/editorial-work/` and `/advertising-work/` redirect to Home and to
@@ -293,11 +292,12 @@ the matching sections of Work.
   (https://claude.ai/artifact/K1ihWWgnKJb9zWDwyXXzHP; boards `Sk*`, with `SkSystem` setting out the
   system): paper `#F8F5D7`, white panels, black ink, one grey, cyan for editorial and magenta for
   brand work; twenty columns from 900px (margin 8.33% of the window, content stops at 1440px), six
-  on phones. Light theme only. `redesign-2026/` holds the earlier design it replaces.
+  on phones. Light theme only.
 - **Fonts:** **PP Writer** Regular Text (and Italic) for statements and prose, **PP Neue York**
   Normal Medium for titles, copy and labels, **PP Neue York Narrow** Extrabold for emphasis
-  (Pangram Pangram), self-hosted woff2, `font-display: swap`, Writer and Neue York preloaded. The
-  OG image scripts still use Neue Montreal (`scripts/fonts`).
+  (Pangram Pangram, free for personal use, confirmed with the foundry), self-hosted woff2,
+  `font-display: swap`, Writer and Neue York preloaded. OTF copies in `scripts/fonts/` are for the
+  OG image renderer, which can't read woff2.
 - **Images:** `astro:assets` `<Picture>` via `src/components/Frame.astro` → responsive AVIF/WebP
   with a JPEG fallback + `srcset`, explicit dimensions, lazy below the fold.
 - **Motion:** CSS transitions triggered by small vanilla scripts — parts and words rise into place
@@ -308,7 +308,8 @@ the matching sections of Work.
   `prefers-reduced-motion`, and shown anyway if script hasn't run within 4s.
 - **SEO:** per-page title/description, Open Graph + Twitter tags, canonical URLs on
   `www.miguel-escobar.com`, JSON-LD `Person` on the home page, `robots.txt`, generated sitemap,
-  and a design-matched OG image (`public/og-image.png`).
+  a design-matched site card (`public/og-image.png`) and a card per post, drawn at build time
+  (`src/pages/og/thoughts/[slug].png.ts`).
 - **Config knobs:** `src/consts.ts` (contact info, `GOATCOUNTER_CODE`).
 - **Build hook:** `integrations/prune-assets.mjs` deletes the untransformed original images
   Astro emits on import but never references, so `dist/` stays lean.
@@ -316,13 +317,12 @@ the matching sections of Work.
   verified with axe-core on the previous design; re-run it after big changes.
 
 ### One-off asset scripts (already run; outputs are committed)
-These regenerate the derived assets. They need the optional tools (`@resvg/resvg-js`, `fontkit`,
-`wawoff2`, and `fonttools` on PATH for `assets:fonts`). You normally never need these.
+These regenerate the derived assets (with `@resvg/resvg-js`, `fontkit` and `sharp`). You normally
+never need these.
 
 ```bash
-npm run assets:og            # public/og-image.png (1200×630: the Home hero — statement, name, cyan glow)
-npm run assets:icons         # favicon.svg/.png + apple-touch-icon.png: a circle in the glow's cyan (#1AB0E7)
-npm run assets:fonts         # PP OTFs → subsetted, self-hosted woff2 (needs `pip install fonttools`)
+npm run assets:og            # public/og-image.png (1200×630: Home's masthead — rule, name, dateline, deck)
+npm run assets:icons         # favicon.svg/.png + apple-touch-icon.png: a circle in the site's cyan (#00AEEF)
 ```
 
 ### Note on `npm audit`

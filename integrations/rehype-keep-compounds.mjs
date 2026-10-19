@@ -1,7 +1,6 @@
 // Rehype plugin for Thoughts posts: a hyphenated compound ("real-world") never
 // splits across lines, nor does a spaced em dash leave the word before it — the
-// same rule the redesign's generator applies to every paragraph on the site
-// (keep_compounds in redesign-2026/source/gen_v47.py).
+// same rule src/utils/text.ts (keepCompounds) applies to the site's own copy.
 const COMPOUND = /([^\s]+-[^\s]+)/g;
 const SKIP = new Set(['code', 'pre', 'script', 'style']);
 

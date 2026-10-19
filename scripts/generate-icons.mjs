@@ -1,5 +1,5 @@
-// Draw the site's icons: a plain circle in the azure-cyan at the centre of the
-// site's glow (#1AB0E7, the first stop of the hero and Policy gradients).
+// Draw the site's icons: a plain circle in the site's cyan (#00AEEF, process
+// cyan, the colour of the editorial work).
 // Run: npm run assets:icons
 //
 //   public/favicon.svg           the icon browsers prefer; crisp at any size
@@ -15,8 +15,8 @@ import path from 'node:path';
 const root = path.dirname(fileURLToPath(import.meta.url)) + '/..';
 const out = (f) => path.join(root, 'public', f);
 
-const CYAN = '#1AB0E7';
-const PAPER = '#EAE7E1';
+const CYAN = '#00AEEF';
+const PAPER = '#F8F5D7';
 
 // The circle fills 90% of the favicon's box, as the previous mark did.
 const favicon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><circle cx="256" cy="256" r="231" fill="${CYAN}"/></svg>\n`;

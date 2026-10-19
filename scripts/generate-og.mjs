@@ -1,10 +1,9 @@
 // Generate the 1200x630 Open Graph card. Run: npm run assets:og
 //
-// The card is the Home hero in miniature (redesign-2026, NewHome): paper ground,
-// the statement in ink at the top left, the name fitted edge to edge along the
-// foot, and the soft cyan glow off to the right where the hero's arrow sits.
-// The glow is the one colour in the identity, so it is what makes the card
-// carry in a white feed; the name is what makes it legible as a thumbnail.
+// The card is Home's masthead in miniature (the sketch rebuild, board SkHome):
+// butter paper, the nav's hairline across the top, the name in Writer capitals
+// fitted edge to edge under it, the dateline, and the deck in its white box with
+// the heavy black frame, centred below.
 import { Resvg } from '@resvg/resvg-js';
 import { openSync } from 'fontkit';
 import { writeFileSync, mkdirSync } from 'node:fs';
@@ -18,126 +17,80 @@ mkdirSync(outDir, { recursive: true });
 
 // resvg's font loader only reads OTF/TTF — handing it a woff2 renders a
 // silently blank image — and it matches fonts by internal family name.
-const OTF = path.join(fonts, 'PPNeueMontreal-Regular.otf');
-const font = openSync(OTF);
-const TEXT = font.familyName;
+const SERIF_OTF = path.join(fonts, 'PPWriter-RegularText.otf');
+const SANS_OTF = path.join(fonts, 'PPNeueYork-NormalMedium.otf');
+const serif = openSync(SERIF_OTF);
+const sans = openSync(SANS_OTF);
+const SERIF = serif.familyName;
+const SANS = sans.familyName;
 
-const PAPER = '#EAE7E1';
-const INK = '#141414';
+const PAPER = '#F8F5D7';
+const WHITE = '#FFFFFF';
+const INK = '#000000';
 
 const W = 1200;
 const H = 630;
-const PAD = 56; // the hero's 64px side margin at 1440, scaled to the card
+const PAD = 56;
 const INNER = W - PAD * 2;
+const CAP = 0.71; // Writer's and Neue York's cap height, in em
 
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-/** Width of a string in em, including SVG letter-spacing (applied per glyph). */
-const emWidth = (s, lsEm) => font.layout(s).advanceWidth / font.unitsPerEm + lsEm * s.length;
+/** Width of a string in em in a font, including SVG letter-spacing (applied per glyph). */
+const emWidth = (font, s, lsEm) => font.layout(s).advanceWidth / font.unitsPerEm + lsEm * s.length;
 
-/** Largest font-size that fits `s` into `maxPx` at the given tracking. */
-const fitSize = (s, maxPx, lsEm) => (maxPx / emWidth(s, lsEm)) * 0.998;
+// ── The nav's hairline ──────────────────────────────────────────────────────
+const ruleY = PAD;
 
-/** Greedy wrap at a fixed size — the minimum number of lines that fits. */
-function wrap(text, size, maxPx, lsEm) {
-  const lines = [];
-  let cur = '';
-  for (const word of text.split(/\s+/)) {
-    const test = cur ? `${cur} ${word}` : word;
-    if (cur && emWidth(test, lsEm) * size > maxPx) {
-      lines.push(cur);
-      cur = word;
-    } else cur = test;
-  }
-  if (cur) lines.push(cur);
-  return lines;
-}
-
-/**
- * Same line count as a greedy wrap, broken so the lines come out even (the
- * site's text-wrap: balance). An article never ends a line, as on the site.
- */
-function wrapBalanced(text, size, maxPx, lsEm) {
-  const words = text.split(/\s+/);
-  const target = wrap(text, size, maxPx, lsEm).length;
-  if (target < 2) return [text];
-  const ok = (line) => !/\b(a|an|the)$/i.test(line);
-
-  let best = null;
-  const walk = (start, remaining, acc) => {
-    if (remaining === 1) {
-      const lines = [...acc, words.slice(start).join(' ')];
-      const widest = Math.max(...lines.map((l) => emWidth(l, lsEm) * size));
-      if (widest <= maxPx && (!best || widest < best.widest)) best = { lines, widest };
-      return;
-    }
-    for (let end = start + 1; end <= words.length - (remaining - 1); end++) {
-      const line = words.slice(start, end).join(' ');
-      if (emWidth(line, lsEm) * size > maxPx) break;
-      if (ok(line)) walk(end, remaining - 1, [...acc, line]);
-    }
-  };
-  walk(0, target, []);
-  return best ? best.lines : wrap(text, size, maxPx, lsEm);
-}
-
-const CAP = 0.72; // Neue Montreal cap height, in em
-
-// ── The statement (the hero's, verbatim), set as the hero sets it ──────────
-const STATEMENT = 'Editorial instincts and creative acuity for clarifying a chaotic world';
-const stmtSize = 60;
-const stmtLS = -0.026;
-const stmtLH = Math.round(stmtSize * 1.02);
-// The hero holds the statement to 83% of the column.
-const stmtLines = wrapBalanced(STATEMENT, stmtSize, INNER * 0.83, stmtLS);
-const stmtTop = PAD + stmtSize * CAP;
-
-// ── The name, fitted edge to edge, its baseline on the bottom margin ───────
+// ── The name: Writer capitals at the display tracking, fitted to the measure ─
 const NAME = 'MIGUEL ESCOBAR';
-const NAME_LS = -0.03;
-const nameSize = fitSize(NAME, INNER, NAME_LS);
-const nameBaseline = H - PAD + 6; // capitals sit on the baseline; nudge for the optical margin
+const NAME_LS = -0.05;
+const nameSize = (INNER / emWidth(serif, NAME, NAME_LS)) * 0.998;
+const nameBaseline = ruleY + 0.2 * nameSize + nameSize * CAP;
+const nameX = PAD - 0.03 * nameSize; // the site's optical margin for the M
 
-// ── The glow: the hero's softened profile, centred where its arrow is ──────
-const GLOW = [
-  ['#1AB0E7', 0], ['#1BB4EA', 2.51], ['#1BB8EB', 4.98], ['#1CBCEC', 7.49], ['#1CBFEC', 10],
-  ['#1FC1EB', 15.32], ['#27C1EA', 20.64], ['#43C2E8', 26.09], ['#59C6E6', 31.4], ['#6EC7E6', 36.72],
-  ['#7DCBE4', 42.17], ['#8DCEE4', 47.49], ['#98D0E5', 52.81], ['#A6D4E4', 58.12], ['#B0D8E4', 63.57],
-  ['#BCD9E4', 68.89], ['#C5DBE4', 74.21], ['#D0DFE4', 79.66], ['#D6E2E2', 84.98], ['#E2E4E3', 90.3],
-  ['#E8E6E1', 95.75], ['#EAE7E1', 100],
-];
-const glowR = 210;
-const glowCx = W - PAD - 30;
-const glowCy = nameBaseline - nameSize * CAP - 92;
+// ── The dateline, as the site sets it from tablets up: 12px capitals, scaled ─
+const LABEL = 17;
+const labelBaseline = nameBaseline + 0.3 * nameSize - 0.125 * nameSize + LABEL * CAP;
+
+// ── The deck: Neue York in three lines, centred in its framed white box ─────
+const DECK = ['Editorial instincts and', 'creative acuity for', 'work that illuminates'];
+const DECK_SIZE = 38;
+const DECK_LH = DECK_SIZE * 1.25;
+const FRAME = 6;
+const deckW = Math.max(...DECK.map((l) => emWidth(sans, l, 0) * DECK_SIZE));
+const boxW = deckW + 2 * 1.25 * DECK_SIZE + 2 * FRAME;
+const padY = (1.25 - 0.268) * DECK_SIZE;
+const boxH = DECK.length * DECK_LH - (DECK_LH - DECK_SIZE * CAP) + 2 * padY + 2 * FRAME;
+const free = H - PAD - (labelBaseline + 24);
+const boxY = labelBaseline + 24 + (free - boxH) / 2;
+const boxX = (W - boxW) / 2;
+const deckFirst = boxY + FRAME + padY + DECK_SIZE * CAP;
 
 const svg = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <radialGradient id="glow" cx="${glowCx}" cy="${glowCy}" r="${glowR}" gradientUnits="userSpaceOnUse">
-      ${GLOW.map(([c, o]) => `<stop offset="${o}%" stop-color="${c}"/>`).join('')}
-    </radialGradient>
-  </defs>
   <rect width="${W}" height="${H}" fill="${PAPER}"/>
-  <rect width="${W}" height="${H}" fill="url(#glow)"/>
+  <rect x="${PAD}" y="${ruleY}" width="${INNER}" height="1" fill="${INK}"/>
 
-  ${stmtLines
-    .map(
-      (l, i) =>
-        `<text x="${PAD}" y="${(stmtTop + i * stmtLH).toFixed(1)}" font-family="${TEXT}" font-size="${stmtSize}" letter-spacing="${(stmtLS * stmtSize).toFixed(2)}" fill="${INK}">${esc(l)}</text>`
-    )
-    .join('\n  ')}
-
-  <text x="${PAD}" y="${nameBaseline.toFixed(1)}" font-family="${TEXT}" font-size="${nameSize.toFixed(2)}"
+  <text x="${nameX.toFixed(1)}" y="${nameBaseline.toFixed(1)}" font-family="${SERIF}" font-size="${nameSize.toFixed(2)}"
         letter-spacing="${(NAME_LS * nameSize).toFixed(2)}" fill="${INK}">${esc(NAME)}</text>
+
+  <text x="${PAD}" y="${labelBaseline.toFixed(1)}" font-family="${SANS}" font-size="${LABEL}" fill="${INK}">SINGAPORE</text>
+  <text x="${W - PAD}" y="${labelBaseline.toFixed(1)}" text-anchor="end" font-family="${SANS}" font-size="${LABEL}" fill="${INK}">MIGUEL-ESCOBAR.COM</text>
+
+  <rect x="${(boxX + FRAME / 2).toFixed(1)}" y="${(boxY + FRAME / 2).toFixed(1)}" width="${(boxW - FRAME).toFixed(1)}" height="${(boxH - FRAME).toFixed(1)}"
+        fill="${WHITE}" stroke="${INK}" stroke-width="${FRAME}"/>
+  ${DECK.map(
+    (l, i) =>
+      `<text x="${W / 2}" y="${(deckFirst + i * DECK_LH).toFixed(1)}" text-anchor="middle" font-family="${SANS}" font-size="${DECK_SIZE}" fill="${INK}">${esc(l)}</text>`
+  ).join('\n  ')}
 </svg>`;
 
 const png = new Resvg(svg, {
   fitTo: { mode: 'width', value: W },
-  font: { fontFiles: [OTF], loadSystemFonts: false, defaultFontFamily: TEXT },
+  font: { fontFiles: [SERIF_OTF, SANS_OTF], loadSystemFonts: false, defaultFontFamily: SERIF },
 })
   .render()
   .asPng();
 
 writeFileSync(path.join(outDir, 'og-image.png'), png);
-console.log(
-  `Wrote public/og-image.png (${W}x${H}) — statement ${stmtSize}px on ${stmtLines.length} line(s), name fitted at ${nameSize.toFixed(1)}px`
-);
+console.log(`Wrote public/og-image.png (${W}x${H}) — name fitted at ${nameSize.toFixed(1)}px`);
