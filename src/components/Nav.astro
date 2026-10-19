@@ -1,19 +1,31 @@
 ---
 // The nav: a single line, a hairline under a band of paper, held at the top of
 // the screen as the page moves under it (40px down on the phone, a column and
-// its gutter on the desktop). No links: Home is the way round the site, and the
-// footer carries the ways to reach Mig. On Home it lands 30% of the way down the
-// screen, over the name, as the masthead's rule, and rides up with the page
-// until it rests.
+// its gutter on the desktop). On Home it holds nothing: it lands 30% of the way
+// down the screen, over the name, as the masthead's rule, and rides up with the
+// page until it rests. On every other page Mig's name stands centred in the
+// band, set as the hero sets it (Writer capitals, -0.05em), as the way home.
 interface Props {
   home?: boolean;
 }
 const { home = false } = Astro.props;
 ---
 
-<div class:list={['nv', { 'nv-home': home }]} aria-hidden="true" data-nav>
-  <div class="nv-line"></div>
-</div>
+{
+  home ? (
+    <div class="nv nv-home" aria-hidden="true" data-nav>
+      <div class="nv-line" />
+    </div>
+  ) : (
+    <header class="nv" data-nav>
+      <div class="nv-line nv-line-name">
+        <a class="nv-name" href="/">
+          Miguel Escobar
+        </a>
+      </div>
+    </header>
+  )
+}
 
 <style is:global>
   .nv {
@@ -26,6 +38,31 @@ const { home = false } = Astro.props;
     height: var(--navh);
     margin-inline: var(--m);
     border-bottom: var(--hair) solid var(--ink);
+  }
+  /* The name: the hero's face, capitals and tracking, at nav size. */
+  .nv-line-name {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .nv-name {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 1;
+    letter-spacing: -0.05em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    text-decoration: none;
+    transition: opacity 0.25s ease;
+  }
+  .nv-name:hover {
+    opacity: 0.6;
+  }
+  @media (min-width: 900px) {
+    .nv-name {
+      font-size: 24px;
+    }
   }
   .nv-home {
     margin-top: max(0px, calc(var(--navl) - var(--navh)));

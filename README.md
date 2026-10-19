@@ -266,7 +266,7 @@ src/
       [...slug].astro        The template every post uses
     404.astro                "Page not found"
   content/thoughts/          YOUR POSTS live here (one .md file each)
-  components/                Shared pieces: Nav (the rule), Footer, Frame (images), Cta (button),
+  components/                Shared pieces: Nav (the rule; the name as the way home off Home), Footer, Frame (images), Cta (button),
                              MagStack (the magazines)
   scripts/site.ts            Reveals, statements that fill in, the held section, smooth scrolling
   utils/text.ts              Markup for statements (*emphasis*, | line breaks)
