@@ -1,11 +1,9 @@
 // Build-time Open Graph card for each Thoughts post: /og/thoughts/<slug>.png
 //
-// Companion to the site card in scripts/generate-og.mjs, but on paper rather
-// than the blue flood: a shared article is a reading surface, and the tonal
-// split makes a post distinguishable from the site card in a feed.
-//
-// This one keeps the bottom rule and meta the site card dropped — a date is
-// worth carrying on an article and worth nothing on the site card.
+// Companion to the site card in scripts/generate-og.mjs: the same paper and the
+// nav's hairline across the top, then the post as its page sets it (board
+// SkPost) — the headline in Writer at the statement tracking, a hairline, and
+// the date in Neue York capitals under it.
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 import { Resvg } from '@resvg/resvg-js';
@@ -17,20 +15,22 @@ const fontPath = (name: string) =>
   fileURLToPath(new URL(`../../../../scripts/fonts/${name}`, import.meta.url));
 // resvg's font loader only reads OTF/TTF — a woff2 renders a silently blank
 // image — and it matches fonts by internal family name.
-const TEXT_OTF = fontPath('PPNeueMontreal-Regular.otf');
-const fontFiles = [TEXT_OTF];
-const font = openSync(TEXT_OTF) as any;
-const TEXT = font.familyName as string;
+const SERIF_OTF = fontPath('PPWriter-RegularText.otf');
+const SANS_OTF = fontPath('PPNeueYork-NormalMedium.otf');
+const fontFiles = [SERIF_OTF, SANS_OTF];
+const font = openSync(SERIF_OTF) as any;
+const SERIF = font.familyName as string;
+const SANS = (openSync(SANS_OTF) as any).familyName as string;
 
-const PAPER = '#EAE7E1';
-const INK = '#141414';
-const BLUE = '#0047BB';
+const PAPER = '#F8F5D7';
+const INK = '#000000';
 
 const W = 1200;
 const H = 630;
-const PAD = 80;
+const PAD = 56;
 const INNER = W - PAD * 2;
-const CAP = 0.72; // Neue Montreal cap height, in em
+const CAP = 0.71; // Writer's and Neue York's cap height, in em
+const LABEL = 17; // the site's 10px labels, scaled for a card
 
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
@@ -90,54 +90,57 @@ export async function getStaticPaths() {
 export const GET: APIRoute = ({ props }) => {
   const { post } = props as any;
   const date = new Date(post.data.pubDate)
-    .toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
+    .toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })
     .toUpperCase();
 
   // The card is a static image, so it always uses the plain title.
   const titleText = plainTitle(post.data.title);
 
-  // Step the title down until it fits a tidy number of lines.
-  const TITLE_LS = -0.014;
-  let titleSize = 68;
+  // Step the headline down until it fits a tidy number of lines.
+  const TITLE_LS = -0.05;
+  let titleSize = 76;
   let lines = wrapBalanced(titleText, titleSize, INNER, TITLE_LS);
   if (lines.length > 3) {
-    titleSize = 54;
+    titleSize = 60;
     lines = wrapBalanced(titleText, titleSize, INNER, TITLE_LS);
   }
   if (lines.length > 4) {
-    titleSize = 44;
+    titleSize = 48;
     lines = wrapBalanced(titleText, titleSize, INNER, TITLE_LS);
   }
-  const titleLH = Math.round(titleSize * 1.12);
+  const titleLH = titleSize * 1.167;
+  // A headline that opens on a quote mark hangs it in the margin, as on the page.
+  const hang = /^[“‘"']/.test(titleText) ? emWidth(titleText[0], TITLE_LS) * titleSize : 0;
 
-  const eyebrowBaseline = PAD + 20 * CAP;
-  const ruleY = H - 92;
-  // Title hangs off the bottom rule so cards of different lengths stay anchored.
-  const titleLastBaseline = ruleY - 96;
+  const labelTop = PAD + 26 + LABEL * CAP;
+  const dateBaseline = H - PAD;
+  const ruleY = dateBaseline - LABEL * CAP - 22;
+  // The headline hangs off the rule, so cards of different lengths stay anchored.
+  const titleLastBaseline = ruleY - 44;
   const titleTop = titleLastBaseline - (lines.length - 1) * titleLH;
 
   const titleSvg = lines
     .map(
       (l, i) =>
-        `<text x="${PAD}" y="${titleTop + i * titleLH}" font-family="${TEXT}" font-size="${titleSize}" letter-spacing="${(TITLE_LS * titleSize).toFixed(2)}" fill="${INK}">${esc(l)}</text>`
+        `<text x="${(PAD - (i === 0 ? hang : 0)).toFixed(1)}" y="${(titleTop + i * titleLH).toFixed(1)}" font-family="${SERIF}" font-size="${titleSize}" letter-spacing="${(TITLE_LS * titleSize).toFixed(2)}" fill="${INK}">${esc(l)}</text>`
     )
     .join('\n  ');
 
   const svg = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
     <rect width="${W}" height="${H}" fill="${PAPER}"/>
-
-    <text x="${PAD}" y="${eyebrowBaseline}" font-family="${TEXT}" font-size="20" letter-spacing="2.6" fill="${BLUE}">THOUGHTS</text>
+    <rect x="${PAD}" y="${PAD}" width="${INNER}" height="1" fill="${INK}"/>
+    <text x="${PAD}" y="${labelTop}" font-family="${SANS}" font-size="${LABEL}" fill="${INK}">MIGUEL ESCOBAR</text>
+    <text x="${W - PAD}" y="${labelTop}" text-anchor="end" font-family="${SANS}" font-size="${LABEL}" fill="${INK}">THOUGHTS</text>
 
     ${titleSvg}
 
-    <line x1="${PAD}" y1="${ruleY}" x2="${W - PAD}" y2="${ruleY}" stroke="${INK}" stroke-opacity="0.3" stroke-width="1"/>
-    <text x="${PAD}" y="${ruleY + 40}" font-family="${TEXT}" font-size="20" letter-spacing="2.6" fill="${INK}" fill-opacity="0.7">MIGUEL-ESCOBAR.COM</text>
-    <text x="${W - PAD}" y="${ruleY + 40}" text-anchor="end" font-family="${TEXT}" font-size="20" letter-spacing="2.6" fill="${INK}" fill-opacity="0.7">${esc(date)}</text>
+    <rect x="${PAD}" y="${ruleY}" width="${INNER}" height="1" fill="${INK}"/>
+    <text x="${PAD}" y="${dateBaseline}" font-family="${SANS}" font-size="${LABEL}" fill="${INK}">${esc(date)}</text>
   </svg>`;
 
   const png = new Resvg(svg, {
     fitTo: { mode: 'width', value: W },
-    font: { fontFiles, loadSystemFonts: false, defaultFontFamily: TEXT },
+    font: { fontFiles, loadSystemFonts: false, defaultFontFamily: SERIF },
   })
     .render()
     .asPng();

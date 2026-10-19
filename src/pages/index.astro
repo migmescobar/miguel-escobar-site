@@ -1,120 +1,93 @@
 ---
-// Home: one continuous scroll (boards NewHome*/NewHomePlay*). The hero's statement
-// types itself in and the name rises; then Work (a rail of samples), About (the map),
-// Editorial beside Branded (the highlights reel), the pinned Policy stage, the footer.
-// Motion is in src/styles/home.css.
+// Home (boards SkHome / SkHomeMobile): one continuous scroll. The masthead (the
+// nav's rule, the name, the dateline) and the deck; the line on the work and five
+// cards; the editorial and brand panels, with the magazines thrown across their
+// seam and the highlights reel; the last statement, held while it fills in; the
+// footer. Layout and motion are in src/styles/home.css; behaviour in
+// src/scripts/site.ts, MagStack.astro and the reel script below.
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Typed from '../components/Typed.astro';
 import Frame from '../components/Frame.astro';
+import Cta from '../components/Cta.astro';
+import MagStack from '../components/MagStack.astro';
 import { SITE_DESCRIPTION } from '../consts';
-import { typeChars, keepCompounds } from '../utils/typed';
+import { rise, words } from '../utils/text';
 import '../styles/home.css';
-
-import mapDesktop from '../assets/map/map-desktop.svg.html?raw';
-import mapMobile from '../assets/map/map-mobile.svg.html?raw';
 
 import trust from '../assets/images/home-advertising.jpg';
 import ageChecks from '../assets/images/home-age-checks.jpg';
 import eddie from '../assets/images/home-editorial.jpg';
 import whitewash from '../assets/images/home-whitewash.jpg';
-import osc from '../assets/images/osc-phone-57.jpg';
-import nba from '../assets/images/ads-nba.jpg';
 import pulpit from '../assets/images/home-pulpit.jpg';
-import uson from '../assets/images/ph-politics-uson.jpg';
-import magazines from '../assets/images/editorial-magazines.webp';
 
-const STATEMENT = 'Editorial instincts and creative acuity for clarifying a chaotic world';
-const WORK_HEAD = 'My work has been about honest, helpful, human storytelling.';
+// Statements: *emphasis*, | a line break from 900px up,   binds two words
+// (src/utils/text.ts).
+const DECK = 'Editorial instincts and | creative acuity for | work that illuminates';
+const LEDE =
+  'I’ve worked as a journalist, an editor, and a creative strategist | for publications and brands, bringing their stories to light | with *a clear and humanistic voice*.';
+const EDITORIAL = {
+  head: 'My *editorial background* | informs everything I do.',
+  body: 'In Manila, I was an editor at the local edition of Esquire magazine, covering culture, politics, and current affairs. This formative chapter of my career is a core memory — it gave me a journalistic perspective that I’ve since applied in everything I do.',
+};
+const BRAND = {
+  head: 'But I have much more | experience telling | stories *for brands*.',
+  body: 'Of my thirteen years of experience, eleven have been in roles handling advertorials and brand campaigns. My strategic communication senses have been honed and sharpened for over a decade.',
+};
+const NOW = words(
+  'My journalistic worldview, in these | strange times, has led me to obsess | over *technology* and its effects on our | society and institutions. For years, I’ve | been plugged into tech news and | media, reading, listening to, and | engaging with ideas from the frontiers | of that world. Now I’m learning to | apply my editorial skills towards work | in *tech policy* and *trust and safety*.'
+);
 
-// The samples on the rail (after Monocle's rails).
-const rail = [
+// The cards, each in the colour of its half of the work. `kp` is kept on one
+// line (except where five cards share 900–1199px).
+const cards = [
   {
+    half: 'is-brand',
     href: 'https://www.marketing-interactive.com/trust-bank-million-dollars-campaign',
     image: trust,
     alt: 'A woman laughing, a Trust cashback Visa card held over one eye, as banknotes and confetti rain down.',
     label: 'Fintech Campaign',
-    title: 'Trust Bank Singapore: Cashback Launch',
+    title: 'Trust Bank Singapore: Cashback Card',
   },
   {
+    half: 'is-brand',
     href: 'https://www.youtube.com/watch?v=HXkZmhEBnBQ',
     image: ageChecks,
     alt: 'A shopkeeper raising her hand to a boy holding beer beneath an “Under 18” sign, from the Age Assurance Measures campaign',
     label: 'Public Service',
-    title: 'Age Assurance Measures in App Stores',
+    title: 'Age Verification in App Stores',
   },
   {
+    half: 'is-editorial',
     href: 'https://www.youtube.com/watch?v=yY4LLYrMHt8',
     image: eddie,
     alt: 'A dramatic, low-key editorial portrait of an older man against a black background.',
     label: 'Cover Story',
-    title: 'Eddie Garcia for Esquire Philippines',
+    title: 'Eddie Garcia for',
+    kp: 'Esquire Philippines',
   },
   {
+    half: 'is-editorial',
     href: 'https://www.esquiremag.ph/politics/opinion/fighting-for-history-on-the-wikipedia-battlefield-a00207-20170817-lfrm2',
     image: whitewash,
     alt: 'Ferdinand Marcos collaged over a redacted Wikipedia “Martial law” article, for “How to Whitewash a Dictator”',
     label: 'Investigative Feature',
-    title: 'The\u00a0Wikipedians at War Over Truth',
+    title: 'The Wikipedians at War Over Truth',
   },
   {
-    href: 'https://www.osc.gov.sg/',
-    image: osc,
-    alt: 'A hand in the dark, lit by the glow of a phone screen.',
-    label: 'Public Service',
-    title: 'Online Safety Commission Launch',
-  },
-  {
-    href: '/work/#advertising',
-    image: nba,
-    alt: 'A dramatic NBA promotional collage of San Antonio Spurs and New York Knicks players over city skylines, with a golden basketball.',
-    label: 'Branded Newsletter',
-    title: 'NBA Asia-Pacific Weeklies',
-  },
-  {
+    half: 'is-editorial',
     href: 'https://www.esquiremag.ph/long-reads/notes-and-essays/the-rise-of-pastor-culture-and-why-it-must-end-a1513-20170629-lfrm',
     image: pulpit,
     alt: 'Halftone hands reaching toward pixelated images inside retro computer windows, for “A Pulpit for Pastors of Porn.”',
     label: 'Investigative Feature',
     title: 'Exposing Intimate Image Abuse Groups',
   },
-  {
-    href: '/work/#editorial',
-    image: uson,
-    alt: 'Mocha Uson in a black coat, her mouth covered with a strip of grey tape.',
-    label: 'Politics',
-    title: 'Interviews With Controversial Figures',
-  },
 ];
-const ext = (href: string) => href.startsWith('http');
 
-const ABOUT = {
-  head: 'I’m based in Singapore with regional scope.',
-  emph: 'Singapore',
-  body: 'I moved here from Manila and have since worked agency-side, on local and APAC-wide campaigns for clients including the NBA, Trust Bank, and the IMDA.',
+// The dateline's month as built (Singapore time); the site script keeps it current.
+const sgNow = new Date(Date.now() + 8 * 3600 * 1000);
+const issue = {
+  text: sgNow.toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' }),
+  iso: sgNow.toISOString().slice(0, 7),
 };
-const EDITORIAL = {
-  head: 'My editorial background informs everything I do.',
-  emph: 'editorial background',
-  body: 'In Manila, I was an editor at the local edition of Esquire magazine, covering culture, politics, and current affairs. This formative chapter of my career is a core memory — it gave me a journalistic perspective that I’ve since applied in everything I do.',
-};
-const BRANDED = {
-  head: 'But the bigger chunk of my career has been in branded content.',
-  emph: 'branded content',
-  body: 'Of my 12 years of experience, 10 have been in roles handling advertorials and brand campaigns. My strategic communication senses have been honed and sharpened for over a decade.',
-};
-const POLICY = {
-  head: 'Now, I’m learning about content policy and online safety.',
-  emph: 'content policy and online safety',
-  body: 'I’ve learned programming at NUS and have been plugged into tech news, especially global tech policy, for years. I’m looking to apply my editorial and communications skills towards custodianship of the internet.',
-};
-// A paragraph fades in once its headline is 60% typed.
-const fd = (t: { head: string; emph: string }) => `--fd: ${typeChars(t.head, t.emph).fd}ms;`;
-
-const icon = (d: [string, string]) => (s: number) =>
-  `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${d[0]}"></path><path d="${d[1]}"></path></svg>`;
-const arrowRight = icon(['M4 12h16', 'M13.5 5.5 20 12l-6.5 6.5']);
-const arrowLeft = icon(['M20 12H4', 'M10.5 5.5 4 12l6.5 6.5']);
-const arrowDown = icon(['M12 4v16', 'M5.5 13.5 12 20l6.5-6.5']);
 ---
 
 <BaseLayout
@@ -122,256 +95,120 @@ const arrowDown = icon(['M12 4v16', 'M5.5 13.5 12 20l6.5-6.5']);
   description={SITE_DESCRIPTION}
   personSchema
   home
-  current="home"
 >
-  <section id="top" class="me-hero">
-    <div class="me-drift">
-      <Typed as="p" text={STATEMENT} class="t-h1 me-statement me-typeload" t0={350} />
-      <div class="me-grow"></div>
-      <div class="me-cuerow">
-        <span class="me-cueglow" aria-hidden="true"></span>
-        <a class="me-cue" href="#work" aria-label="Scroll to work" set:html={arrowDown(22)} />
-      </div>
-      <h1 class="me-rise me-name"><span>Miguel</span> <span>Escobar</span></h1>
+  <section class="hx wrap" aria-label="Introduction">
+    <h1 class="hx-name">
+      <span class="hx-l hx-l1"><span>Miguel</span></span>
+      <span class="hx-l hx-l2"><span>Escobar</span></span>
+    </h1>
+    <p class="t-label hx-date" data-rv style="--d: 3;">
+      <span>Singapore</span>
+      <time datetime={issue.iso} data-issue>{issue.text}</time>
+    </p>
+    <div class="hx-deck" data-rv style="--d: 4;">
+      <p class="hx-deck-text" data-rise style="--rd: 480ms;" set:html={rise(DECK)} />
     </div>
   </section>
 
-  <div class="me-chapters">
-    <section id="work" class="me-work">
-      <div class="heavy me-headrule me-workrule" aria-hidden="true"></div>
-      <div class="me-workhead">
-        <div class="me-rv">
-          <Typed text={WORK_HEAD} emph="honest helpful human storytelling" class="t-h1 me-hl" />
-        </div>
-        <div class="me-railnav">
-          <button class="me-railbtn" type="button" aria-label="Previous work" data-rail-prev disabled set:html={arrowLeft(18)} />
-          <button class="me-railbtn" type="button" aria-label="More work" data-rail-next set:html={arrowRight(18)} />
-        </div>
-      </div>
-      <div class="me-rv me-gal me-rail" data-rail>
-        {
-          rail.map((c) => (
-            <a
-              class="me-card"
-              href={c.href}
-              target={ext(c.href) ? '_blank' : undefined}
-              rel={ext(c.href) ? 'noopener' : undefined}
-            >
+  <section id="work" class="s2 wrap" aria-label="Selected work">
+    <p class="t-state s2-lede" data-rise set:html={rise(LEDE)} />
+    <ul class="s2-cards" data-rv-row>
+      {
+        cards.map((c, i) => (
+          <li class:list={['s2-item', c.half]} data-rv style={`--d: ${i};`}>
+            <a class="hcard" href={c.href} target="_blank" rel="noopener">
               <Frame
                 image={c.image}
                 alt={c.alt}
-                ratio="1 / 1.4"
-                sizes="(max-width: 899px) 220px, (max-width: 1199px) 30vw, 310px"
-                widths={[220, 310, 440, 620]}
+                ratio="3 / 4"
+                sizes="(max-width: 899px) 264px, 18vw"
+                widths={[264, 400, 528, 800]}
               />
-              <div class="me-cardtext">
-                <p class="t-label me-fade">{c.label}</p>
-                <p class="me-fade me-card-desc" set:html={keepCompounds(c.title)} />
-              </div>
+              <span class="hcard-text">
+                <span class="t-small hcard-label">{c.label}</span>
+                <span class="t-copy hcard-title">
+                  {c.title}
+                  {c.kp && <span class="kp">{c.kp}</span>}
+                </span>
+              </span>
             </a>
-          ))
-        }
-      </div>
-    </section>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
 
-    <section id="about" class="me-about">
-      <div class="me-exit me-aboutgrid">
-        <div class="me-abouttext">
-          <div class="heavy me-headrule" aria-hidden="true"></div>
-          <div class="me-textbox">
-            <div class="me-rv">
-              <Typed text={ABOUT.head} emph={ABOUT.emph} class="t-h2 me-hl" />
-            </div>
-            <div class="me-par-m me-gaptext">
-              <div class="me-rv">
-                <p class="t-bodyl me-fade me-chbody" style={fd(ABOUT)} set:html={keepCompounds(ABOUT.body)} />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="me-par-m me-plateholder">
-          <div class="me-rv me-plate">
-            <div class="me-map-d" set:html={mapDesktop} />
-            <div class="me-map-m" set:html={mapMobile} />
-          </div>
+  <section id="about" class="s3 wrap" aria-label="Background">
+    <div class="s3-grid">
+      <div class="panel bt br s3-p1 is-editorial" data-frame>
+        <h2 class="t-state s3-head" data-rise set:html={rise(EDITORIAL.head)} />
+        <div class="s3-copy">
+          <p class="t-copy" data-rv style="--d: 2;">{EDITORIAL.body}</p>
+          <p class="s3-more" data-rv style="--d: 3;">
+            <Cta href="/work/#editorial" label="More Editorial Work" />
+          </p>
         </div>
       </div>
-    </section>
 
-    <div class="me-pair">
-      <section id="editorial" class="me-editorial">
-        <div class="me-exit-m me-edcol">
-          <div class="heavy me-headrule" aria-hidden="true"></div>
-          <div class="me-textbox">
-            <div class="me-rv">
-              <Typed text={EDITORIAL.head} emph={EDITORIAL.emph} class="t-h2 me-hl" />
-            </div>
-            <div class="me-par-m me-gaptext">
-              <div class="me-rv">
-                <p class="t-bodyl me-fade me-chbody" style={fd(EDITORIAL)}>{EDITORIAL.body}</p>
-              </div>
-            </div>
-          </div>
-          <div class="me-par-m me-edimg">
-            <Frame
-              image={magazines}
-              alt="A pile of magazines, Esquire Philippines on top and Smile beneath it."
-              ratio="5 / 3"
-              cutout
-              sizes="(max-width: 899px) 92vw, 50vw"
-              widths={[480, 720, 960, 1240]}
-            />
-          </div>
-          <div class="me-edspace" aria-hidden="true"></div>
-          <div class="me-rv me-edlink">
-            <div class="me-fade" style={fd(EDITORIAL)}>
-              <a class="me-link" href="/work/#editorial"
-                ><span class="me-link-label">More Editorial Work</span><span class="me-ring"
-                  ><span class="me-arrow" set:html={arrowRight(17)} /></span
-                ></a
-              >
-            </div>
-          </div>
+      <div class="panel bt bl s3-p2 is-brand" data-frame>
+        <MagStack />
+        <div class="s3-side">
+          <h2 class="t-state s3-head s3-head2" data-rise set:html={rise(BRAND.head)} />
+          <p class="s3-more" data-rv style="--d: 3;">
+            <Cta href="/work/#advertising" label="More Brand Work" />
+          </p>
         </div>
-      </section>
-
-      <section id="branded" class="me-branded">
-        <div class="me-reel me-onvideo" data-reel>
-          <div class="me-reelvid">
-            <video
-              autoplay
-              muted
-              loop
-              playsinline
-              preload="auto"
-              poster="/media/highlights-reel-4x5-poster.jpg"
-              aria-hidden="true"
-              tabindex="-1"
+        <div class="s3-reel" data-reel>
+          <video
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="metadata"
+            poster="/media/highlights-reel-4x5-poster.jpg"
+            aria-hidden="true"
+            tabindex="-1"
+          >
+            <source src="/media/highlights-reel-vertical.mp4" type="video/mp4" media="(max-width: 899px)" />
+            <source src="/media/highlights-reel-4x5.mp4" type="video/mp4" />
+          </video>
+          <script is:inline>
+            // Runs as the video is parsed, before playback can start: the phone's
+            // poster, and no autoplay at all with reduced motion.
+            (function () {
+              var v = document.currentScript.previousElementSibling;
+              if (matchMedia('(max-width: 899px)').matches) v.poster = '/media/highlights-reel-vertical-poster.jpg';
+              if (matchMedia('(prefers-reduced-motion: reduce)').matches) v.removeAttribute('autoplay');
+            })();
+          </script>
+          <span class="s3-shade" aria-hidden="true"></span>
+          <p class="t-copy s3-reelbody">{BRAND.body}</p>
+          <button type="button" class="s3-reelbtn" data-reel-btn aria-label="Pause the reel">
+            <svg class="ico-pause" width="12" height="12" viewBox="0 0 16 16" aria-hidden="true"
+              ><rect x="3.5" y="2.5" width="3" height="11" fill="currentColor"></rect><rect x="9.5" y="2.5" width="3" height="11" fill="currentColor"></rect></svg
             >
-              <source src="/media/highlights-reel-vertical.mp4" type="video/mp4" media="(max-width: 899px)" />
-              <source src="/media/highlights-reel-4x5.mp4" type="video/mp4" />
-            </video>
-            <script is:inline>
-              // Runs as the video is parsed, before playback can start: the phone's
-              // poster, and no autoplay at all with reduced motion.
-              (function () {
-                var v = document.currentScript.previousElementSibling;
-                if (matchMedia('(max-width: 899px)').matches) v.poster = '/media/highlights-reel-vertical-poster.jpg';
-                if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
-                  v.removeAttribute('autoplay');
-                  v.preload = 'metadata';
-                }
-              })();
-            </script>
-          </div>
-          <div class="me-rv me-reeltext">
-            <div class="me-reelshade" aria-hidden="true"></div>
-            <div class="me-reelinner">
-              <div class="me-headrule me-reelrule" aria-hidden="true"></div>
-              <Typed text={BRANDED.head} emph={BRANDED.emph} class="t-h2 me-hl" />
-              <p class="t-bodyl me-fade me-reelbody" style={fd(BRANDED)}>{BRANDED.body}</p>
-              <div class="me-fade me-reellink" style={fd(BRANDED)}>
-                <a class="me-link" href="/work/#advertising"
-                  ><span class="me-link-label">More Advertising Work</span><span class="me-ring"
-                    ><span class="me-arrow" set:html={arrowRight(17)} /></span
-                  ></a
-                >
-              </div>
-            </div>
-          </div>
-          <button type="button" class="me-reelbtn" data-reel-btn aria-label="Pause the reel">
-            <svg class="me-ico-pause" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"
-              ><rect x="4" y="3" width="2.25" height="10" fill="currentColor"></rect><rect x="9.75" y="3" width="2.25" height="10" fill="currentColor"></rect></svg
-            >
-            <svg class="me-ico-play" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"
-              ><path d="M5 3.2v9.6L12.6 8z" fill="currentColor"></path></svg
+            <svg class="ico-play" width="12" height="12" viewBox="0 0 16 16" aria-hidden="true"
+              ><path d="M4.5 2.6v10.8L13 8z" fill="currentColor"></path></svg
             >
           </button>
         </div>
-      </section>
+      </div>
     </div>
+  </section>
 
-    <section id="policy" class="me-pol">
-      <div class="me-pol-stage">
-        <div class="me-pol-glow" aria-hidden="true"></div>
-        <div class="me-pol-content">
-          <Typed text={POLICY.head} emph={POLICY.emph} class="t-h1 me-pol-hl me-pol-focus" />
-          <div class="me-pol-focus me-pol-focus-2 me-pol-box">
-            <p>{POLICY.body}</p>
-          </div>
+  <section id="now" class="s4 wrap" aria-label="What’s next" data-hold>
+    <div class="s4-stage" data-hold-stage>
+      <div class="panel bt s4-panel" data-frame>
+        <div class="s4-text words" data-words style={`--n: ${NOW.n};`}>
+          <p class="t-state" set:html={NOW.html} />
         </div>
       </div>
-    </section>
-  </div>
+    </div>
+    <div class="s4-run" aria-hidden="true"></div>
+  </section>
 </BaseLayout>
 
 <script>
-  document.documentElement.classList.add('js-ready');
-
-  // ── Reveals: each part comes into play once, when its top is this far up the
-  // screen (the boards' animation-range starts: 16%, the map 6%, the rail 30%,
-  // Policy 82%). Anything already scrolled past counts as in.
-  const reveal = (selector: string, percent: number) => {
-    const els = document.querySelectorAll(selector);
-    if (!els.length) return;
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const en of entries) {
-          if (en.isIntersecting || en.boundingClientRect.top < 0) {
-            en.target.classList.add('is-in');
-            io.unobserve(en.target);
-          }
-        }
-      },
-      { rootMargin: `0px 0px -${percent}% 0px` }
-    );
-    els.forEach((el) => io.observe(el));
-  };
-  reveal('.me-rv:not(.me-plate):not(.me-gal)', 16);
-  reveal('.me-plate', 6);
-  reveal('.me-gal', 30);
-  reveal('.me-pol', 82);
-
-  // ── The nav's name: in once the Work chapter's rule reaches the nav's foot,
-  // out again above it.
-  const navhome = document.querySelector<HTMLElement>('.me-navhome');
-  const rule = document.querySelector<HTMLElement>('.me-workrule');
-  const nav = document.querySelector<HTMLElement>('.me-nav');
-  if (navhome && rule && nav) {
-    let queued = false;
-    const update = () => {
-      queued = false;
-      navhome.classList.toggle('is-in', rule.getBoundingClientRect().top <= nav.offsetHeight);
-    };
-    const queue = () => {
-      if (!queued) {
-        queued = true;
-        requestAnimationFrame(update);
-      }
-    };
-    window.addEventListener('scroll', queue, { passive: true });
-    window.addEventListener('resize', queue);
-    update();
-  }
-
-  // ── The rail: the rings beside the headline page it, a screen at a time ──
-  const rail = document.querySelector<HTMLElement>('[data-rail]');
-  const prev = document.querySelector<HTMLButtonElement>('[data-rail-prev]');
-  const next = document.querySelector<HTMLButtonElement>('[data-rail-next]');
-  if (rail && prev && next) {
-    const gap = () => parseFloat(getComputedStyle(rail).columnGap) || 0;
-    const page = (dir: number) => rail.scrollBy({ left: dir * (rail.clientWidth + gap()), behavior: 'smooth' });
-    prev.addEventListener('click', () => page(-1));
-    next.addEventListener('click', () => page(1));
-    const sync = () => {
-      prev.disabled = rail.scrollLeft < 8;
-      next.disabled = rail.scrollLeft > rail.scrollWidth - rail.clientWidth - 8;
-    };
-    rail.addEventListener('scroll', sync, { passive: true });
-    window.addEventListener('resize', sync);
-    sync();
-  }
-
   // ── The reel: autoplays muted and loops (the HTML asks for it, the iOS way:
   // autoplay muted loop playsinline). It pauses off screen and resumes on it,
   // never plays with reduced motion, and the button pauses and plays it. If the
@@ -384,7 +221,7 @@ const arrowDown = icon(['M12 4v16', 'M5.5 13.5 12 20l6.5-6.5']);
     video.muted = true;
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     let userPaused = reduce;
-    let onScreen = true;
+    let onScreen = false;
 
     // The button shows what the video is actually doing.
     const sync = () => {
@@ -417,6 +254,7 @@ const arrowDown = icon(['M12 4v16', 'M5.5 13.5 12 20l6.5-6.5']);
         { threshold: 0.1 }
       ).observe(video);
     } else {
+      onScreen = true;
       play();
     }
 

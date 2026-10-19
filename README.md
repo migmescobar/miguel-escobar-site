@@ -134,11 +134,10 @@ Every image on the site lives in `src/assets/images/`. The file names say where 
 
 | File | Where it shows |
 |---|---|
-| `home-*.jpg`, `osc-phone-57.jpg`, `ph-politics-uson.jpg`, `ads-nba.jpg` | the cards on the Home rail (cropped tall, about 5:7) |
-| `editorial-magazines.webp` | Home, beside "My editorial background" (a cut-out with a transparent background) |
-| `home-age-checks.jpg`, `home-whitewash.jpg`, `home-pulpit.jpg`, `osc-phone-43.jpg` | Work → Highlights (4:3) |
-| `ads-*.jpg` | Work → More Advertising Work (4:3) |
-| `editorial-*.jpg`, `ph-politics-uson.jpg`, `work-*.jpg` | Work → More Editorial Work (4:3) |
+| `home-*.jpg` | the five cards on Home (cropped tall, 3:4) |
+| `mag-*.jpg` | the three magazine covers thrown across Home's two panels |
+| `editorial-*.jpg`, `home-whitewash.jpg`, `home-pulpit.jpg`, `ph-politics-uson.jpg`, `work-*.jpg` | Work → Editorial (4:3) |
+| `ads-*.jpg`, `home-age-checks.jpg`, `osc-phone-43.jpg` | Work → Advertising (4:3) |
 
 The highlights reel on Home is a video in `public/media/` (a 4:5 cut for desktops, a vertical cut
 for phones, each with a poster image). Replace those files keeping the same names.
@@ -259,22 +258,25 @@ slightly; look for "DNS settings" or "Custom records"). Add these records:
 ```
 src/
   pages/                     Each file = one web page
-    index.astro              Home (/) — one long scroll: the name, Work, About, Editorial/Branded, Policy
-    work.astro               /work/ — Highlights, More Advertising Work, More Editorial Work
+    index.astro              Home (/) — one long scroll: the name and deck, the work, the editorial
+                             and brand panels (magazines, reel), the last statement
+    work.astro               /work/ — Editorial, the throughlines, Advertising
     thoughts/
       index.astro            Thoughts list (/thoughts/)
       [...slug].astro        The template every post uses
     404.astro                "Page not found"
   content/thoughts/          YOUR POSTS live here (one .md file each)
-  components/                Shared pieces: Nav, Menu, Footer ("Let’s talk"), Frame (images), Typed
+  components/                Shared pieces: Nav (the rule), Footer, Frame (images), Cta (button),
+                             MagStack (the magazines)
+  scripts/site.ts            Reveals, statements that fill in, the held section, smooth scrolling
+  utils/text.ts              Markup for statements (*emphasis*, | line breaks)
   layouts/                   The page shell
   consts.ts                  ← contact details, site description, GoatCounter setting
   styles/global.css          Colours, the typeface, text styles shared by every page
   styles/home.css            Home's layout and all of its scroll motion
   assets/images/             Site images (optimised automatically at build)
-  assets/fonts/              Self-hosted Neue Montreal woff2 (licence in /licenses)
+  assets/fonts/              Self-hosted Writer and Neue York woff2 (Pangram Pangram)
 public/                      Files served as-is: CV, reel videos, favicon, OG image, robots.txt
-redesign-2026/               The approved 2026 design (Claude Design boards) the site is built from
 ```
 
 The old addresses `/about/`, `/editorial-work/` and `/advertising-work/` redirect to Home and to
@@ -286,26 +288,28 @@ the matching sections of Work.
 
 - **Stack:** Astro 5 (static output, `output: 'static'`), zero client framework. Small vanilla
   scripts only (see Motion). `@astrojs/sitemap` for the sitemap.
-- **Design source:** `redesign-2026/` — the approved boards (`boards/*.dc.html`, desktop at
-  1440px and phone at 390px) and the generator that wrote them (`source/gen_v47.py`, whose comments
-  record why each value is what it is). Phone values apply below 900px, desktop values from 900px;
-  desktop display type and margins scale with the viewport below 1440 and stop there, and content
-  never runs wider than 1600px. Light theme only.
-- **Fonts:** one face at one weight — **PP Neue Montreal** Regular (plus its italic for emphasis in
-  posts), self-hosted, `font-display: swap`, the roman preloaded. Pangram Pangram licence in
-  `/licenses`. The retail OTFs carry Cyrillic/Greek this site never renders, so `assets:fonts`
-  subsets them (~83KB to ~26KB a face).
+- **Design source:** the "Sketch rebuild" page of the Claude Design canvas
+  (https://claude.ai/artifact/K1ihWWgnKJb9zWDwyXXzHP; boards `Sk*`, with `SkSystem` setting out the
+  system): paper `#F8F5D7`, white panels, black ink, one grey, cyan for editorial and magenta for
+  brand work; twenty columns from 900px (margin 8.33% of the window, content stops at 1440px), six
+  on phones. Light theme only.
+- **Fonts:** **PP Writer** Regular Text (and Italic) for statements and prose, **PP Neue York**
+  Normal Medium for titles, copy and labels, **PP Neue York Narrow** Extrabold for emphasis
+  (Pangram Pangram, free for personal use, confirmed with the foundry), self-hosted woff2,
+  `font-display: swap`, Writer and Neue York preloaded. OTF copies in `scripts/fonts/` are for the
+  OG image renderer, which can't read woff2.
 - **Images:** `astro:assets` `<Picture>` via `src/components/Frame.astro` → responsive AVIF/WebP
-  with a JPEG fallback (PNG for cut-outs) + `srcset`, explicit dimensions, lazy below the fold.
-- **Motion:** all CSS — scroll-driven animations (`animation-timeline: scroll()` / `view()`) for
-  Home's reveals, typed headlines, the nav's colour changes and name, and the Policy stage; the
-  boards' pixel ranges are re-expressed as fractions of the screen height (`svh`). Every animation
-  has a still end state under `prefers-reduced-motion` and in browsers without scroll timelines.
-  Small vanilla scripts only: the menu, the Home rail's buttons, and the reel (plays only while on
-  screen, never with reduced motion, pause button).
+  with a JPEG fallback + `srcset`, explicit dimensions, lazy below the fold.
+- **Motion:** CSS transitions triggered by small vanilla scripts — parts and words rise into place
+  as they come up the screen, panels' bars draw in, statements fill in as they're read, Home's last
+  statement holds mid-screen (`src/scripts/site.ts`); the magazines are thrown once with the Web
+  Animations API (`MagStack.astro`); the wheel eases the page on desktops. The reel plays only while
+  on screen, never with reduced motion, with a pause button. Everything is still and visible under
+  `prefers-reduced-motion`, and shown anyway if script hasn't run within 4s.
 - **SEO:** per-page title/description, Open Graph + Twitter tags, canonical URLs on
   `www.miguel-escobar.com`, JSON-LD `Person` on the home page, `robots.txt`, generated sitemap,
-  and a design-matched OG image (`public/og-image.png`).
+  a design-matched site card (`public/og-image.png`) and a card per post, drawn at build time
+  (`src/pages/og/thoughts/[slug].png.ts`).
 - **Config knobs:** `src/consts.ts` (contact info, `GOATCOUNTER_CODE`).
 - **Build hook:** `integrations/prune-assets.mjs` deletes the untransformed original images
   Astro emits on import but never references, so `dist/` stays lean.
@@ -313,13 +317,12 @@ the matching sections of Work.
   verified with axe-core on the previous design; re-run it after big changes.
 
 ### One-off asset scripts (already run; outputs are committed)
-These regenerate the derived assets. They need the optional tools (`@resvg/resvg-js`, `fontkit`,
-`wawoff2`, and `fonttools` on PATH for `assets:fonts`). You normally never need these.
+These regenerate the derived assets (with `@resvg/resvg-js`, `fontkit` and `sharp`). You normally
+never need these.
 
 ```bash
-npm run assets:og            # public/og-image.png (1200×630: the Home hero — statement, name, cyan glow)
-npm run assets:icons         # favicon.svg/.png + apple-touch-icon.png: a circle in the glow's cyan (#1AB0E7)
-npm run assets:fonts         # PP OTFs → subsetted, self-hosted woff2 (needs `pip install fonttools`)
+npm run assets:og            # public/og-image.png (1200×630: Home's masthead — rule, name, dateline, deck)
+npm run assets:icons         # favicon.svg/.png + apple-touch-icon.png: a circle in the site's butter paper (#F8F5D7)
 ```
 
 ### Note on `npm audit`

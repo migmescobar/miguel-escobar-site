@@ -18,8 +18,7 @@ yarn-error.log*
 .env.*
 !.env.example
 
-# Raw design hand-off (kept locally for reference / re-running asset scripts;
-# the essentials live in design-reference/, generated outputs are committed).
+# Raw design hand-off, kept locally for reference (generated outputs are committed).
 _source/
 
 # OS / editor
