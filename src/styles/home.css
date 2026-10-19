@@ -125,19 +125,19 @@
   }
 }
 
-/* ── The line on the work, and its cards: a row that scrolls sideways on the
-   phone, five across from 900px. ── */
+/* ── The cards, then the line on the work under them. The cards are a row that
+   scrolls sideways on the phone, five across from 900px; black on white. ── */
 .s2 {
-  padding-top: calc(var(--hx-gap) - var(--trim-s));
-  padding-bottom: var(--sec);
+  padding-top: var(--hx-gap);
+  padding-bottom: calc(var(--sec) - var(--trim-s));
 }
 .s2-lede {
-  margin-inline: calc(var(--mi) - var(--m));
+  margin: calc(40px - var(--trim-s)) calc(var(--mi) - var(--m)) 0;
 }
 .s2-cards {
   display: flex;
   gap: 12px;
-  margin: calc(40px - var(--trim-s)) calc(-1 * var(--m)) -28px;
+  margin: 0 calc(-1 * var(--m)) -28px;
   padding: 0 var(--m) 28px;
   list-style: none;
   overflow-x: auto;
@@ -158,8 +158,8 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  background: var(--ink);
-  color: var(--white);
+  background: var(--white);
+  color: var(--ink);
   text-decoration: none;
 }
 .hcard .frame img {
@@ -175,7 +175,7 @@
 }
 /* The kicker, in the colour of its half of the work. */
 .hcard-label {
-  color: var(--accent, var(--white));
+  color: var(--accent, var(--ink));
 }
 .hcard-title {
   margin-top: calc(14px - var(--tl) - var(--tt));
@@ -200,11 +200,11 @@
 @media (min-width: 900px) {
   .s2-lede {
     max-width: calc((100% + var(--g)) * 17 / 20 - var(--g));
-    margin-inline: 0;
+    margin: calc(var(--pitch) - var(--trim-s)) 0 0;
   }
   .s2-cards {
     gap: 12px;
-    margin: calc(var(--pitch) - var(--trim-s)) 0 0;
+    margin: 0;
     padding: 0;
     overflow: visible;
     scroll-snap-type: none;

@@ -15,7 +15,8 @@ export const CONTACT = {
   email: 'migmescobar@gmail.com',
   // Shown in the footer (rendered with non-breaking spaces so it never wraps mid-digits).
   phoneDisplay: '+65 9851 7897',
-  phoneHref: 'tel:+6598517897',
+  /** The phone number opens a WhatsApp chat (wa.me takes the number without + or spaces). */
+  phoneHref: 'https://wa.me/6598517897',
   linkedin: 'https://www.linkedin.com/in/miguel-escobar-6u56u5',
   /** CV lives in /public. Replace the file there to update the download. */
   cv: '/MiguelEscobar_2026_CV_Resume.pdf',
