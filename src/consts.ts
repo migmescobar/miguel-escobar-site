@@ -17,7 +17,7 @@ export const CONTACT = {
   phoneDisplay: '+65 9851 7897',
   /** The phone number opens a WhatsApp chat (wa.me takes the number without + or spaces). */
   phoneHref: 'https://wa.me/6598517897',
-  linkedin: 'https://www.linkedin.com/in/miguel-escobar-6u56u5',
+  linkedin: 'https://www.linkedin.com/in/mig-escobar',
   /** CV lives in /public. Replace the file there to update the download. */
   cv: '/MiguelEscobar_2026_CV_Resume.pdf',
 };

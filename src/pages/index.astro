@@ -1,7 +1,7 @@
 ---
 // Home (boards SkHome / SkHomeMobile): one continuous scroll. The masthead (the
-// nav's rule, the name, the dateline) and the deck; five cards and the line on
-// the work under them; the editorial and brand panels, with the magazines thrown across their
+// nav's rule, the name, the dateline) and the deck; the line on the work and five
+// cards; the editorial and brand panels, with the magazines thrown across their
 // seam and the highlights reel; the last statement, held while it fills in; the
 // footer. Layout and motion are in src/styles/home.css; behaviour in
 // src/scripts/site.ts, MagStack.astro and the reel script below.
@@ -111,6 +111,7 @@ const issue = {
   </section>
 
   <section id="work" class="s2 wrap" aria-label="Selected work">
+    <p class="t-state s2-lede" data-rise set:html={rise(LEDE)} />
     <ul class="s2-cards" data-rv-row>
       {
         cards.map((c, i) => (
@@ -135,7 +136,6 @@ const issue = {
         ))
       }
     </ul>
-    <p class="t-state s2-lede" data-rise set:html={rise(LEDE)} />
   </section>
 
   <section id="about" class="s3 wrap" aria-label="Background">
