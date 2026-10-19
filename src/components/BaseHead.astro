@@ -1,15 +1,18 @@
 ---
 // Per-page <head>: title, meta description, Open Graph/Twitter, canonical,
-// JSON-LD, the self-hosted font, favicon, and (in production) analytics.
+// JSON-LD, the self-hosted fonts, favicon, and (in production) analytics.
 import { SITE_URL, SITE_TITLE, CONTACT, GOATCOUNTER_CODE, GOATCOUNTER_READY } from '../consts';
 
 import '../styles/global.css';
 
-// Preload the one face used above the fold so the browser fetches it while the
-// CSS is still downloading (otherwise it's only discovered after the CSS parses
-// and text paints in the fallback first). Imported, not hard-coded, so the href
-// tracks Astro's content hash. The italic is left to normal discovery.
-import textSans from '../assets/fonts/neue-montreal-400.woff2?url';
+// Preload the two faces used above the fold (Writer for the name and the
+// statements, Neue York for the deck and the labels) so the browser fetches them
+// while the CSS is still downloading (otherwise they're only discovered after
+// the CSS parses and text paints in the fallback first). Imported, not
+// hard-coded, so the hrefs track Astro's content hashes. The italic and the
+// narrow emphasis face are left to normal discovery.
+import textSerif from '../assets/fonts/writer-text-400.woff2?url';
+import textSans from '../assets/fonts/neue-york-500.woff2?url';
 
 interface Props {
   title: string;
@@ -78,13 +81,14 @@ const blogPosting =
 
 <!-- crossorigin is required even same-origin: fonts fetch in anonymous CORS
      mode, and without it the browser downloads the file a second time. -->
+<link rel="preload" href={textSerif} as="font" type="font/woff2" crossorigin />
 <link rel="preload" href={textSans} as="font" type="font/woff2" crossorigin />
 
 <title>{title}</title>
 <meta name="description" content={description} />
 {noindex && <meta name="robots" content="noindex, follow" />}
 <link rel="canonical" href={canonical} />
-<meta name="theme-color" content="#EAE7E1" />
+<meta name="theme-color" content="#F8F5D7" />
 
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="icon" type="image/png" href="/favicon.png" sizes="512x512" />
@@ -118,8 +122,8 @@ const blogPosting =
   <script type="application/ld+json" set:html={JSON.stringify(blogPosting)} />
 )}
 
-<!-- Scripted reveals on Home: hide their parts only when script runs, and show
-     everything anyway if the page's own script hasn't started within 4s. -->
+<!-- Scripted reveals: hide their parts only when script runs, and show
+     everything anyway if the site script hasn't started within 4s. -->
 <script is:inline>
   (function () {
     var d = document.documentElement;

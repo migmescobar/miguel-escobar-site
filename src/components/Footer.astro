@@ -1,115 +1,127 @@
 ---
-// "Let’s talk": the site's footer and its whole contact surface (four links, no
-// form). Every link leaves the page, so each takes the up-right arrow.
+// The footer, on black: Home's last line ("Let’s talk!") and the ways to reach
+// Mig under a white heavy rule. The arrow comes in as a row is pointed at.
 import { CONTACT } from '../consts';
+import { rise } from '../utils/text';
 
 const rows = [
   { href: `mailto:${CONTACT.email}`, label: CONTACT.email },
-  { href: CONTACT.phoneHref, label: CONTACT.phoneDisplay.replace(/ /g, ' ') },
+  { href: CONTACT.phoneHref, label: CONTACT.phoneDisplay },
   { href: CONTACT.linkedin, label: 'LinkedIn', blank: true },
   { href: CONTACT.cv, label: 'Download my CV', blank: true },
 ];
 ---
 
-<footer id="contact" class="me-foot">
-  <div class="me-foot-top">
-    <div class="me-foot-lede">
-      <h2 class="t-xl me-foot-title">Let’s talk</h2>
-      <p class="t-lead me-foot-sub">Hiring, briefing, or looking to connect?</p>
-    </div>
-    <div class="me-foot-links">
-      <nav aria-label="Contact" class="lrows">
-        {
-          rows.map(({ href, label, blank }) => (
-            <a
-              class="lrow ext"
-              href={href}
-              target={blank ? '_blank' : undefined}
-              rel={blank ? 'noopener' : undefined}
-            >
-              <span class="lrow-label">{label}</span>
-              <span class="lrow-arrow">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M7 17 17 7" />
-                  <path d="M8.5 7H17v8.5" />
-                </svg>
-              </span>
-            </a>
-          ))
-        }
-      </nav>
-    </div>
+<footer id="contact" class="ft">
+  <div class="ft-top">
+    <h2 class="t-state ft-line" data-rise set:html={rise('Hiring, briefing, or | looking to connect? | Let’s talk!')} />
+    <nav class="ft-links" aria-label="Contact" data-rv style="--d: 1;">
+      {
+        rows.map(({ href, label, blank }) => (
+          <a class="ft-link t-copy" href={href} target={blank ? '_blank' : undefined} rel={blank ? 'noopener' : undefined}>
+            <span class="ft-label">{label}</span>
+            <svg class="ft-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" aria-hidden="true">
+              <path d="M7 17 17 7" />
+              <path d="M8.5 7H17v8.5" />
+            </svg>
+          </a>
+        ))
+      }
+    </nav>
   </div>
-  <div class="me-foot-space"></div>
-  <div class="t-label me-foot-base"><span>© 2026 Miguel Escobar</span><span>Ownself vibe code</span></div>
+  <div class="ft-base t-small">
+    <span class="ft-c">© 2026 Miguel Escobar</span>
+    <span class="ft-s">Ownself Vibe Code</span>
+  </div>
 </footer>
 
 <style is:global>
-  .me-foot {
+  .ft {
     position: relative;
-    z-index: 1;
-    /* The boards' footer heights; the spacer takes up the difference. */
-    min-height: 598px;
+    z-index: 2;
+    padding: calc(48px - var(--trim-s)) var(--mi) 38.056px;
+    background: var(--ink);
+    color: var(--white);
+  }
+  .ft-line {
+    max-width: 10em;
+  }
+  .ft-links {
+    margin-top: 40px;
+    border-top: var(--heavy) solid var(--white);
+  }
+  .ft-link {
     display: flex;
-    flex-direction: column;
-    padding: 72px var(--pad) 20px;
-    background: var(--fbg);
-    color: var(--ffg);
-    /* Its own colours for everything inside that reads the page's. */
-    --rule: var(--frule);
-    --fg: var(--ffg);
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: calc(19px - var(--trim)) 0;
+    text-decoration: none;
   }
-  .me-foot-title {
-    white-space: nowrap;
+  .ft-link + .ft-link {
+    border-top: var(--hair) solid var(--grey);
   }
-  .me-foot-sub {
-    margin: 28px 0 0;
-    color: var(--f75);
+  .ft-arrow {
+    flex-shrink: 0;
+    opacity: 0;
+    transform: translate(-6px, 6px);
+    transition:
+      opacity 0.3s ease,
+      transform 0.5s var(--ease);
   }
-  .me-foot-links {
-    margin-top: 48px;
+  .ft-label {
+    transition: transform 0.5s var(--ease);
   }
-  .me-foot-space {
-    flex-grow: 1;
-    min-height: 72px;
+  .ft-link:hover .ft-arrow,
+  .ft-link:focus-visible .ft-arrow {
+    opacity: 1;
+    transform: none;
   }
-  .me-foot-base {
+  .ft-link:hover .ft-label {
+    transform: translateX(4px);
+  }
+  .ft-base {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 8px 24px;
-    border-top: 1px solid var(--frule);
-    padding-top: 14px;
-    color: var(--f70);
+    gap: 10px 24px;
+    margin-top: 56px;
+    padding-top: calc(14px - var(--trim));
+    border-top: var(--hair) solid var(--grey);
   }
+  .ft-s {
+    margin-left: auto;
+  }
+  /* The line in columns 6–11, the rows in 14–20. */
   @media (min-width: 900px) {
-    .me-foot {
-      min-height: 582px;
-      padding: 120px var(--pad) 28px;
+    .ft {
+      padding: calc(var(--pitch) - var(--trim-s)) var(--m) calc(var(--pitch) - 8px * (1.2 - 0.714) / 2);
     }
-    .me-foot-top {
+    .ft-top {
       display: grid;
-      grid-template-columns: repeat(12, minmax(0, 1fr));
-      column-gap: var(--gap);
+      grid-template-columns: repeat(20, minmax(0, 1fr));
+      column-gap: var(--g);
       align-items: start;
     }
-    .me-foot-lede {
-      grid-column: 1 / span 6;
+    .ft-line {
+      grid-column: 6 / span 6;
+      max-width: none;
     }
-    .me-foot-sub {
-      margin-top: 56px;
-      /* Four of the lede's six columns. */
-      max-width: calc((100% - 5 * var(--gap)) / 6 * 4 + 3 * var(--gap));
+    .ft-links {
+      grid-column: 14 / span 7;
+      margin-top: var(--trim-s);
     }
-    .me-foot-links {
-      grid-column: 7 / span 6;
-      margin-top: 13px;
+    .ft-base {
+      display: grid;
+      grid-template-columns: repeat(20, minmax(0, 1fr));
+      column-gap: var(--g);
+      margin-top: var(--pitch);
     }
-    .me-foot-space {
-      min-height: 96px;
+    .ft-c {
+      grid-column: 1 / span 10;
     }
-    .me-foot-base {
-      padding-top: 18px;
+    .ft-s {
+      grid-column: 11 / span 10;
+      justify-self: end;
     }
   }
 </style>

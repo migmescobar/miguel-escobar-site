@@ -1,102 +1,110 @@
 ---
-// Thoughts (boards NewThoughts*): the published posts, newest first, each a
-// headline that comes up to full ink on hover.
+// Thoughts (boards SkThoughts / SkThoughtsMobile): the published posts, newest
+// first, run in as one statement-sized paragraph. Each entry stands in grey, its
+// date before it; the one under the pointer comes up in ink, its date with it.
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { bindWords, parseTitleParts } from '../../utils/postTitle';
+import { rise } from '../../utils/text';
 
 // Published posts only (drafts excluded), newest first.
 const posts = (await getCollection('thoughts', ({ data }) => !data.draft)).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 
-const monthYear = (d: Date) =>
-  d.toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' }).toUpperCase();
-const yearMonth = (d: Date) => d.toISOString().slice(0, 7);
+const dateLong = (d: Date) => d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+const dateISO = (d: Date) => d.toISOString().slice(0, 10);
 ---
 
 <BaseLayout
   title="Thoughts — Miguel Escobar"
   description="Thoughts by Miguel Escobar on communications, editorial craft, content governance, culture, and tech."
-  current="thoughts"
 >
-  <section class="me-thoughts">
-    <div class="me-pagehead me-pagehead-flush">
-      <h1 class="t-xl me-pagetitle">Thoughts</h1>
-      <p class="t-lead me-pagesub">Where I’m at on media, culture, and issues of the day</p>
-    </div>
-
-    <div class="me-entries">
-      {posts.length === 0 && <p class="t-lead me-empty">No posts yet — check back soon.</p>}
+  <div class="pg wrap">
+    <div class="pg-col">
+      <h1 class="t-title pg-title" data-rise set:html={rise('Thoughts')} />
+      <div class="rule th-rule"></div>
+      {posts.length === 0 && <p class="t-lead th-empty">No posts yet — check back soon.</p>}
       {
-        posts.map((post) => (
-          <a class="me-entry" href={`/thoughts/${post.id}/`}>
-            <time class="t-label" datetime={yearMonth(post.data.pubDate)}>
-              {monthYear(post.data.pubDate)}
-            </time>
-            <h2 class="t-h1 me-entry-title">
-              {parseTitleParts(post.data.listTitle ?? post.data.title).map((p) =>
-                p.em ? <em>{bindWords(p.text)}</em> : bindWords(p.text)
-              )}
-            </h2>
-          </a>
-        ))
+        posts.length > 0 && (
+          <ol class="t-state runin" data-rv>
+            {posts.map((post) => (
+              <li class="ri">
+                <time class="ri-d" datetime={dateISO(post.data.pubDate)}>
+                  {dateLong(post.data.pubDate)}
+                </time>{' '}
+                <a class="ri-a" href={`/thoughts/${post.id}/`}>
+                  {parseTitleParts(post.data.listTitle ?? post.data.title).map((p) =>
+                    p.em ? <em>{bindWords(p.text)}</em> : bindWords(p.text)
+                  )}
+                </a>{' '}
+              </li>
+            ))}
+          </ol>
+        )
       }
     </div>
-  </section>
+  </div>
 </BaseLayout>
 
-<style>
-  .me-thoughts {
-    padding: 0 0 112px;
+<style is:global>
+  .th-rule {
+    margin-top: calc(48px - var(--s-title) * (0.94 - 0.714) / 2);
   }
-  .me-pagehead-flush {
-    padding-bottom: 0;
+  .th-empty {
+    margin-top: 24px;
   }
-  .me-entries {
-    margin: 48px var(--pad) 0;
-    border-top: var(--heavy) solid var(--fg);
+  .runin {
+    margin: calc(24px - var(--trim)) 0 0;
+    padding: 0;
+    list-style: none;
+    text-indent: 1.5em;
+    text-wrap: pretty;
   }
-  .me-empty {
-    margin: 24px 0 0;
-    color: var(--fg75);
+  .ri {
+    display: inline;
   }
-  .me-entry {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    padding: 24px 0 28px;
-    border-bottom: 1px solid var(--rule);
-    color: inherit;
+  .ri-a,
+  .ri-d {
+    color: var(--grey);
+    transition: color 0.35s ease;
+  }
+  .ri-a {
     text-decoration: none;
   }
-  .me-entry-title {
-    opacity: 0.62;
-    transition: opacity 0.35s ease;
+  .ri:hover .ri-a,
+  .ri:hover .ri-d,
+  .ri:focus-within .ri-a,
+  .ri:focus-within .ri-d {
+    color: var(--ink);
   }
-  .me-entry:hover .me-entry-title,
-  .me-entry:focus-visible .me-entry-title {
-    opacity: 1;
+  a.ri-a:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.12em;
+  }
+  /* The date: a label, centred on the statement's x-height. */
+  .ri-d {
+    display: inline-block;
+    margin-right: 0.3em;
+    text-indent: 0;
+    font-family: var(--sans);
+    font-weight: 500;
+    font-size: 10px;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    font-feature-settings: 'case';
+    white-space: nowrap;
+    vertical-align: calc(var(--s-state) * 0.71 / 2 - 10px * 0.714 / 2);
   }
   @media (min-width: 900px) {
-    .me-thoughts {
-      padding-bottom: clamp(128px, 13.333vw, 192px);
+    .th-rule {
+      margin-top: calc(80px - var(--s-title) * (0.94 - 0.714) / 2);
     }
-    .me-entries {
-      margin-top: clamp(72px, 7.222vw, 104px);
-    }
-    .me-entry {
-      display: grid;
-      grid-template-columns: repeat(12, minmax(0, 1fr));
-      column-gap: var(--gap);
-      align-items: baseline;
-      padding: 40px 0 46px;
-    }
-    .me-entry time {
-      grid-column: 1 / span 2;
-    }
-    .me-entry-title {
-      grid-column: 7 / span 6;
+    .runin {
+      margin-top: calc(32px - var(--trim));
+      text-indent: 25%;
     }
   }
 </style>

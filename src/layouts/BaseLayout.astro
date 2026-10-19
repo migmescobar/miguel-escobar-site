@@ -1,7 +1,6 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
 import Nav from '../components/Nav.astro';
-import Menu from '../components/Menu.astro';
 import Footer from '../components/Footer.astro';
 
 interface Props {
@@ -14,13 +13,11 @@ interface Props {
   articleHeadline?: string;
   /** Keep this page out of search results (the 404). */
   noindex?: boolean;
-  /** Home: the nav lies over the hero and changes colour with the ground under it. */
+  /** Home: the nav lands lower, as the masthead's rule, and rides up to rest. */
   home?: boolean;
-  /** The menu item for this page. */
-  current?: 'home' | 'work' | 'thoughts';
 }
 
-const { home = false, current } = Astro.props;
+const { home = false } = Astro.props;
 ---
 
 <!doctype html>
@@ -28,81 +25,32 @@ const { home = false, current } = Astro.props;
   <head>
     <BaseHead {...Astro.props} />
   </head>
-  <body id={home ? undefined : 'top'} class:list={{ 'is-home': home, 'is-page': !home }}>
+  <body id="top" class:list={{ 'is-home': home, 'is-page': !home }}>
     <a class="skip-link" href="#main">Skip to content</a>
     <Nav home={home} />
     <main id="main">
       <slot />
     </main>
     <Footer />
-    <Menu current={current} />
 
     <style is:global>
-      main {
-        display: block;
-        background: var(--bg);
-      }
       .skip-link {
         position: absolute;
         left: -9999px;
         top: 0;
-        background: var(--fg);
-        color: var(--bg);
-        padding: 10px 16px;
         z-index: 100;
+        padding: 10px 16px;
+        background: var(--ink);
+        color: var(--paper);
         text-decoration: none;
       }
       .skip-link:focus {
         left: 8px;
         top: 8px;
       }
-
-      /* Pages other than Home: the nav goes paper over the footer, and its veil
-         clears as the footer comes up under it (a paper veil would lay a pale
-         strip across the ink). Browsers without scroll timelines keep the plain
-         veil and ink. */
-      @keyframes me-fg-foot {
-        to {
-          color: var(--ffg);
-        }
-      }
-      @keyframes me-veil-out {
-        to {
-          opacity: 0;
-        }
-      }
-      @supports (animation-timeline: view()) {
-        body.is-page {
-          timeline-scope: --ch-foot;
-        }
-        body.is-page .me-foot {
-          view-timeline-name: --ch-foot;
-        }
-        body.is-page .me-nav {
-          animation-name: me-fg-foot;
-          animation-duration: auto;
-          animation-timing-function: linear(0, 0 44%, 1 56%, 1);
-          animation-fill-mode: both;
-          animation-timeline: --ch-foot;
-          animation-range: cover calc(100svh - var(--navh)) cover 100svh;
-        }
-        body.is-page .me-glass-d .me-veil {
-          animation-name: me-veil-out;
-          animation-duration: auto;
-          animation-timing-function: linear;
-          animation-fill-mode: both;
-          animation-timeline: --ch-foot;
-          animation-range: cover calc(100svh - 112px) cover calc(100svh - 24px);
-        }
-        body.is-page .me-glass-m .me-veil {
-          animation-name: me-veil-out;
-          animation-duration: auto;
-          animation-timing-function: linear;
-          animation-fill-mode: both;
-          animation-timeline: --ch-foot;
-          animation-range: cover calc(100svh - 90px) cover calc(100svh - 18px);
-        }
-      }
     </style>
+    <script>
+      import '../scripts/site.ts';
+    </script>
   </body>
 </html>

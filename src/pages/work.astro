@@ -1,31 +1,32 @@
 ---
-// Work (boards NewWork*): one page in three sections, after Monocle and The
-// Economist — Highlights, More Advertising Work, More Editorial Work. The three
-// are coequal: the same cards (image over words) on the same grid. It replaces
-// the old Editorial Work and Advertising Work pages, which redirect here.
+// Work (boards SkWork / SkWorkMobile): "Some work", in two sections, Editorial
+// and Advertising, each in the colour of its half of the work, with the
+// throughlines between them. Cards: image over kicker, title and words; four to
+// a row on the desktop, three on small laptops, two from 600px, one on phones,
+// with hairlines between the columns. It replaces the old Editorial Work and
+// Advertising Work pages, which redirect to its sections.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Frame from '../components/Frame.astro';
-import { keepCompounds } from '../utils/typed';
+import { keepCompounds, rise, words } from '../utils/text';
 import type { ImageMetadata } from 'astro';
 
-import ageChecks from '../assets/images/home-age-checks.jpg';
+import culture from '../assets/images/editorial-culture.jpg';
 import whitewash from '../assets/images/home-whitewash.jpg';
 import pulpit from '../assets/images/home-pulpit.jpg';
-import osc from '../assets/images/osc-phone-43.jpg';
-import trust from '../assets/images/ads-trust.jpg';
-import nba from '../assets/images/ads-nba.jpg';
-import gotyme from '../assets/images/ads-gotyme.jpg';
-import alcon from '../assets/images/ads-alcon.jpg';
 import uson from '../assets/images/ph-politics-uson.jpg';
-import culture from '../assets/images/editorial-culture.jpg';
 import tatler from '../assets/images/editorial-tatler.jpg';
 import smile from '../assets/images/editorial-smile.jpg';
 import goodmen from '../assets/images/work-goodmen-43.jpg';
 import denim from '../assets/images/work-denim-43.jpg';
+import trust from '../assets/images/ads-trust.jpg';
+import nba from '../assets/images/ads-nba.jpg';
+import gotyme from '../assets/images/ads-gotyme.jpg';
+import alcon from '../assets/images/ads-alcon.jpg';
+import ageChecks from '../assets/images/home-age-checks.jpg';
+import osc from '../assets/images/osc-phone-43.jpg';
 
 /** An inline link in a card's copy. */
-const L = (href: string, text: string) =>
-  `<a class="ul" href="${href}" target="_blank" rel="noopener">${text}</a>`;
+const L = (href: string, text: string) => `<a class="ul" href="${href}" target="_blank" rel="noopener">${text}</a>`;
 
 interface Card {
   /** The whole card links here, unless its copy carries its own links. */
@@ -39,15 +40,14 @@ interface Card {
   desc: string;
 }
 
-const highlights: Card[] = [
+const editorial: Card[] = [
   {
-    href: 'https://www.youtube.com/watch?v=HXkZmhEBnBQ',
-    image: ageChecks,
-    alt: 'A shopkeeper raising her hand to a boy holding beer beneath an “Under 18” sign, from the Age Assurance Measures campaign',
-    position: '50% 35%',
-    label: 'Public Service',
-    title: 'Age Assurance Measures',
-    desc: 'A film, explainers, and ads for the Singapore IMDA, launching age verification in app stores',
+    href: 'https://www.youtube.com/watch?v=yY4LLYrMHt8',
+    image: culture,
+    alt: 'A dramatic, low-key editorial close-up portrait of actor Eddie Garcia in a pinstriped suit against a dark background, from a feature in Esquire Philippines.',
+    label: 'Interview Feature',
+    title: 'Eddie Garcia for Esquire Philippines',
+    desc: 'I wrote and produced Esquire’s biggest and most-viewed celebrity feature ever, on an icon of Filipino cinema’s golden age',
   },
   {
     href: 'https://www.esquiremag.ph/politics/opinion/fighting-for-history-on-the-wikipedia-battlefield-a00207-20170817-lfrm2',
@@ -55,7 +55,7 @@ const highlights: Card[] = [
     alt: 'Ferdinand Marcos collaged over a redacted Wikipedia “Martial law” article, for “How to Whitewash a Dictator”',
     position: '50% 25%',
     label: 'Investigative Feature',
-    title: 'How to Whitewash a\u00a0Dictator on Wikipedia',
+    title: 'How to Whitewash a Dictator on Wikipedia',
     desc: 'A feature on an invisible war for Philippine history, waged by Wikipedia editors through back-and-forth revisions',
   },
   {
@@ -68,12 +68,43 @@ const highlights: Card[] = [
     desc: 'An exposé that sparked a nationwide reckoning, with a subculture of men sharing NCII across a network of Facebook groups',
   },
   {
-    href: 'https://www.osc.gov.sg/',
-    image: osc,
-    alt: 'A hand in the dark, lit by the glow of a phone screen.',
-    label: 'Public Service',
-    title: 'Online Safety Commission Launch',
-    desc: 'Web copy, service articles, and explainer videos about online harms, for Singapore’s new commission',
+    image: uson,
+    alt: 'Mocha Uson in a black coat, her mouth covered with a strip of grey tape.',
+    position: '50% 8%',
+    label: 'Interview Feature',
+    title: 'Politics in Esquire',
+    desc: `Controversial features on ${L('https://www.esquiremag.ph/long-reads/esqa/salvador-panelo-a1513-a1521-20160919-lfrm3', 'Salvador Panelo')}, ${L('https://www.esquiremag.ph/long-reads/what-ive-learned/richard-gordon-what-i-ve-learned-a00207-20170717-lfrm', 'Dick Gordon')}, and ${L('https://www.esquiremag.ph/long-reads/profiles/mocha-uson-full-text-a1521-20161202-lfrm4', 'Mocha Uson')}, published amid the dawn of online culture wars`,
+  },
+  {
+    href: 'https://www.tatlerasia.com/power-purpose/ideas-education/art-influence-and-the-purveyors-responsibility-according-to-top-auctioneer-jonathan-crockett',
+    image: tatler,
+    alt: 'Tatler’s “Asia’s Most Influential” series title, set in white and gold serif lettering on black.',
+    label: 'Profiles',
+    title: 'Tatler Asia’s Most Influential',
+    desc: 'Over 100 microprofiles for the 2021 list, including honourees in Singapore and the Philippines',
+  },
+  {
+    href: 'https://smile.ink-live.com/html5/reader/production/default.aspx?pubname=&edid=029443cb-cf76-46cf-a91b-5360ee2806f0',
+    image: smile,
+    alt: 'A football match on the town plaza pitch in front of the historic Barotac Nuevo church in Iloilo, for the Smile magazine cover story.',
+    label: 'Cover Story',
+    title: 'In Basketball Country, An Oasis for Football',
+    desc: 'Barotac Nuevo, Iloilo, in the February 2020 issue of Smile, Cebu Pacific Air’s in-flight magazine',
+  },
+  {
+    image: goodmen,
+    alt: 'A man in a blue shirt holds a stack of books in front of library shelves.',
+    label: 'Profile Series',
+    title: 'A Few Good Men',
+    desc: `Purpose-driven entrepreneurs, profiled for Esquire: ${L('https://www.esquiremag.ph/long-reads/profiles/quintin-pastrana-is-building-the-public-libraries-we-should-already-have-a00207-20171020-lfrm2', 'Quintin Pastrana')}, ${L('https://www.esquiremag.ph/long-reads/profiles/a-good-man-roy-moore-a00207-20171117-lfrm2', 'Roy Moore')}, ${L('https://www.esquiremag.ph/long-reads/profiles/henry-motte-munoz-a-good-man-a00207-20171026-lfrm', 'Henry Motte-Muñoz')}, and ${L('https://www.esquiremag.ph/long-reads/profiles/carlo-delantar-turns-travel-and-adventure-into-humanitarian-missions-for-clean-water-a00207-20171006-lfrm', 'Carlo Delantar')}`,
+  },
+  {
+    href: 'https://www.esquiremag.ph/style/fashion/local-denimheads-have-produced-the-first-filipino-made-raw-selvedge-jeans-a00207-20171024-lfrm2',
+    image: denim,
+    alt: 'Folded raw selvedge denim stacked in front of bolts of fabric.',
+    label: 'Style Feature',
+    title: 'The First Filipino Selvedge Denim Label',
+    desc: 'The local denimheads behind Léon Denim, the first Filipino-made raw selvedge jeans, for Esquire Philippines',
   },
 ];
 
@@ -83,7 +114,7 @@ const advertising: Card[] = [
     alt: 'A woman laughing as Singapore dollar notes and gold confetti rain around her, holding up a Trust Bank cashback card.',
     label: 'Integrated Campaign',
     title: 'Trust Bank Cashback Card Launch',
-    desc: `An award-winning campaign for the iconic Singapore digital bank: ${L('https://www.youtube.com/watch?v=nhxvOzenBR4', 'film')}, islandwide out-of-home, and ${L('https://advocate.com.sg/portfolio/catch-the-cash/', 'a\u00a0mobile\u00a0cash\u00a0chamber')}`,
+    desc: `An award-winning campaign for the iconic Singapore digital bank: ${L('https://www.youtube.com/watch?v=nhxvOzenBR4', 'film')}, islandwide out-of-home, and ${L('https://advocate.com.sg/portfolio/catch-the-cash/', 'a mobile cash chamber')}`,
   },
   {
     image: nba,
@@ -107,253 +138,210 @@ const advertising: Card[] = [
     title: 'Alcon Contact Lenses',
     desc: 'Film and visuals for PRECISION1™ and TOTAL1® developed for markets across the globe',
   },
-];
-
-const editorial: Card[] = [
   {
-    image: uson,
-    alt: 'Mocha Uson in a black coat, her mouth covered with a strip of grey tape.',
-    position: '50% 8%',
-    label: 'Interview Feature',
-    title: 'Politics in Esquire',
-    desc: `Controversial features on ${L('https://www.esquiremag.ph/long-reads/esqa/salvador-panelo-a1513-a1521-20160919-lfrm3', 'Salvador\u00a0Panelo')}, ${L('https://www.esquiremag.ph/long-reads/what-ive-learned/richard-gordon-what-i-ve-learned-a00207-20170717-lfrm', 'Dick\u00a0Gordon')}, and ${L('https://www.esquiremag.ph/long-reads/profiles/mocha-uson-full-text-a1521-20161202-lfrm4', 'Mocha\u00a0Uson')}, published amid the dawn of online culture wars`,
+    href: 'https://www.youtube.com/watch?v=HXkZmhEBnBQ',
+    image: ageChecks,
+    alt: 'A shopkeeper raising her hand to a boy holding beer beneath an “Under 18” sign, from the Age Assurance Measures campaign',
+    position: '50% 35%',
+    label: 'Public Service',
+    title: 'Age Assurance Measures',
+    desc: 'A film, explainers, and ads for the Singapore IMDA, launching age verification in app stores',
   },
   {
-    href: 'https://www.youtube.com/watch?v=yY4LLYrMHt8',
-    image: culture,
-    alt: 'A dramatic, low-key editorial close-up portrait of actor Eddie Garcia in a pinstriped suit against a dark background, from a feature in Esquire Philippines.',
-    label: 'Interview Feature',
-    title: 'Eddie Garcia for Esquire Philippines',
-    desc: 'I wrote and produced Esquire’s biggest and most-viewed celebrity feature ever, on an icon of Filipino cinema’s golden age',
-  },
-  {
-    href: 'https://www.tatlerasia.com/power-purpose/ideas-education/art-influence-and-the-purveyors-responsibility-according-to-top-auctioneer-jonathan-crockett',
-    image: tatler,
-    alt: 'Tatler’s “Asia’s Most Influential” series title, set in white and gold serif lettering on black.',
-    label: 'Profiles',
-    title: 'Tatler Asia’s Most Influential',
-    desc: 'Over 100 microprofiles for the 2021 list, including honourees in Singapore and the Philippines',
-  },
-  {
-    href: 'https://smile.ink-live.com/html5/reader/production/default.aspx?pubname=&edid=029443cb-cf76-46cf-a91b-5360ee2806f0',
-    image: smile,
-    alt: 'A football match on the town plaza pitch in front of the historic Barotac Nuevo church in Iloilo, for the Smile magazine cover story.',
-    label: 'Cover Story',
-    title: 'In Basketball Country, An\u00a0Oasis for Football',
-    desc: 'Barotac Nuevo, Iloilo, in the February 2020 issue of Smile, Cebu Pacific Air’s in-flight magazine',
-  },
-  {
-    image: goodmen,
-    alt: 'A man in a blue shirt holds a stack of books in front of library shelves.',
-    label: 'Profile Series',
-    title: 'A\u00a0Few Good Men',
-    desc: `Purpose-driven entrepreneurs, profiled for Esquire: ${L('https://www.esquiremag.ph/long-reads/profiles/quintin-pastrana-is-building-the-public-libraries-we-should-already-have-a00207-20171020-lfrm2', 'Quintin\u00a0Pastrana')}, ${L('https://www.esquiremag.ph/long-reads/profiles/a-good-man-roy-moore-a00207-20171117-lfrm2', 'Roy\u00a0Moore')}, ${L('https://www.esquiremag.ph/long-reads/profiles/henry-motte-munoz-a-good-man-a00207-20171026-lfrm', 'Henry\u00a0Motte-Muñoz')}, and ${L('https://www.esquiremag.ph/long-reads/profiles/carlo-delantar-turns-travel-and-adventure-into-humanitarian-missions-for-clean-water-a00207-20171006-lfrm', 'Carlo\u00a0Delantar')}`,
-  },
-  {
-    href: 'https://www.esquiremag.ph/style/fashion/local-denimheads-have-produced-the-first-filipino-made-raw-selvedge-jeans-a00207-20171024-lfrm2',
-    image: denim,
-    alt: 'Folded raw selvedge denim stacked in front of bolts of fabric.',
-    label: 'Style Feature',
-    title: 'The\u00a0First Filipino Selvedge Denim Label',
-    desc: 'The local denimheads behind Léon Denim, the first Filipino-made raw selvedge jeans, for Esquire Philippines',
+    href: 'https://www.osc.gov.sg/',
+    image: osc,
+    alt: 'A hand in the dark, lit by the glow of a phone screen.',
+    label: 'Public Service',
+    title: 'Online Safety Commission Launch',
+    desc: 'Web copy, service articles, and explainer videos about online harms, for Singapore’s new commission',
   },
 ];
 
 const sections = [
-  { id: 'highlights', title: 'Highlights', cards: highlights },
-  { id: 'advertising', title: 'More Advertising Work', cards: advertising },
-  { id: 'editorial', title: 'More Editorial Work', cards: editorial },
+  { id: 'editorial', half: 'is-editorial', title: 'Editorial', cards: editorial },
+  { id: 'advertising', half: 'is-brand', title: 'Advertising', cards: advertising },
 ];
+
+// Between the two sections.
+const THROUGH = words(
+  'The throughlines across my work are | *clear* communication, *cultural* | attunement, and *human* storytelling.'
+);
 ---
 
 <BaseLayout
   title="Work — Miguel Escobar"
-  description="Selected work by Miguel Escobar — launch content for Singapore’s Online Safety Commission and IMDA, campaigns for Trust Bank and the NBA, and features for Esquire Philippines."
-  current="work"
+  description="Selected work by Miguel Escobar — features for Esquire Philippines, campaigns for Trust Bank and the NBA, and launch content for Singapore’s Online Safety Commission and IMDA."
 >
-  <div class="me-pagehead">
-    <h1 class="t-xl me-pagetitle">Work</h1>
-    <p class="t-lead me-pagesub">Twelve years of stories and campaigns, from Manila to Singapore</p>
+  <div class="pg wrap">
+    <div class="pg-col">
+      <h1 class="t-title pg-title" data-rise set:html={rise('Some work')} />
+      {
+        sections.map((s, si) => (
+          <Fragment>
+            {si > 0 && (
+              <div class="wthrough words" data-words style={`--n: ${THROUGH.n};`}>
+                <p class="t-state" set:html={THROUGH.html} />
+              </div>
+            )}
+            <section id={s.id} class:list={['wsec', s.half]} aria-labelledby={`${s.id}-h`}>
+              <div class="rule wsec-rule" />
+              <h2 id={`${s.id}-h`} class="t-state wsec-title" data-rise set:html={rise(s.title)} />
+              <div class="rule-h wsec-heavy" />
+              <div class="wgrid">
+                {s.cards.map((c, i) => {
+                  // The whole card links, unless its copy carries its own links.
+                  const Tag = c.href ? 'a' : 'div';
+                  return (
+                    <Tag
+                      class="wcard"
+                      href={c.href}
+                      target={c.href ? '_blank' : undefined}
+                      rel={c.href ? 'noopener' : undefined}
+                      data-rv
+                      style={`--d: ${i % 4};`}
+                    >
+                      <Frame
+                        image={c.image}
+                        alt={c.alt}
+                        ratio="4 / 3"
+                        position={c.position}
+                        sizes="(max-width: 599px) 90vw, (max-width: 899px) 45vw, (max-width: 1199px) 25vw, 18vw"
+                        widths={[320, 480, 640, 960]}
+                      />
+                      <p class="t-small wcard-label">{c.label}</p>
+                      <h3 class="t-lead wcard-title" set:html={keepCompounds(c.title)} />
+                      <p class="t-body wcard-desc" set:html={keepCompounds(c.desc)} />
+                    </Tag>
+                  );
+                })}
+              </div>
+            </section>
+          </Fragment>
+        ))
+      }
+    </div>
   </div>
-
-  {
-    sections.map((s, i) => (
-      <section
-        id={s.id}
-        class:list={['me-wsec', { 'me-wsec-first': i === 0, 'me-wsec-last': i === sections.length - 1 }]}
-        aria-labelledby={`${s.id}-h`}
-      >
-        <div class="me-wrule" aria-hidden="true" />
-        <h2 id={`${s.id}-h`} class="me-wsec-title">
-          {s.title}
-        </h2>
-        <div class="me-wgrid">
-          {s.cards.map((c) => {
-            // The whole card links, unless its copy carries its own links.
-            const Tag = c.href ? 'a' : 'div';
-            return (
-              <Tag
-                class="me-wcard"
-                href={c.href}
-                target={c.href ? '_blank' : undefined}
-                rel={c.href ? 'noopener' : undefined}
-              >
-                <Frame
-                  image={c.image}
-                  alt={c.alt}
-                  ratio="4 / 3"
-                  position={c.position}
-                  sizes="(max-width: 599px) 92vw, (max-width: 1199px) 46vw, 23vw"
-                  widths={[360, 540, 720, 1080]}
-                />
-                <p class="t-label me-wlabel">{c.label}</p>
-                <div class="me-wbody">
-                  <h3 class="me-wtitle" set:html={keepCompounds(c.title)} />
-                  <p class="me-wdesc" set:html={keepCompounds(c.desc)} />
-                </div>
-              </Tag>
-            );
-          })}
-        </div>
-      </section>
-    ))
-  }
 </BaseLayout>
 
-<style>
-  .me-wsec {
-    padding: 112px var(--pad) 0;
+<style is:global>
+  .wsec-rule {
+    margin-top: 64px;
   }
-  .me-wsec-first {
-    padding-top: 48px;
+  .pg-title + .wsec .wsec-rule {
+    margin-top: calc(80px - var(--s-title) * (0.94 - 0.714) / 2);
   }
-  .me-wsec-last {
-    padding-bottom: 112px;
+  /* The section's name in capitals, centred between a hairline and a heavy rule. */
+  .wsec-title {
+    margin-top: calc(28px - var(--trim));
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    font-feature-settings: 'case';
   }
-  .me-wrule {
-    border-top: 1px solid var(--fg);
+  .wsec-heavy {
+    margin-top: calc(28px - var(--trim-s));
   }
-  .me-wsec-title {
-    margin: 12px 0 0;
-    font-size: 28px;
-    font-weight: 400;
-    line-height: 1.12;
-    letter-spacing: -0.012em;
-  }
-  /* Cards: image over label, title and words; four to a row on the desktop,
-     two on tablets and small laptops, one on phones. */
-  .me-wgrid {
-    margin-top: 28px;
+  .wgrid {
+    --wg: 24px;
     display: grid;
-    gap: 20px;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 40px var(--wg);
+    margin-top: 28px;
   }
-  .me-wcard {
+  .wcard {
+    position: relative;
     display: block;
-    padding-bottom: 12px;
-    color: inherit;
+    padding-bottom: 8px;
     text-decoration: none;
-    border: 1px solid var(--fg);
-    background: var(--bg);
   }
-  a.me-wcard:hover .me-wtitle {
-    text-decoration-line: underline;
+  /* The hairline between columns, drawn down as the card arrives. */
+  .wcard::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(var(--wg) / -2);
+    width: var(--hair);
+    background: var(--ink);
+    transform-origin: 50% 0;
+    transition: transform 1.3s var(--ease);
+    display: none;
+  }
+  .js .wcard[data-rv]:not(.is-in)::before {
+    transform: scaleY(0);
+  }
+  .wcard .frame img {
+    transition: transform 1.2s var(--ease);
+  }
+  @media (hover: hover) and (min-width: 900px) {
+    a.wcard:hover .frame img {
+      transform: scale(1.035);
+    }
+  }
+  .wcard-label {
+    margin-top: calc(20px - var(--trim));
+    color: var(--accent, var(--grey));
+  }
+  .wcard-title {
+    --trim: calc(var(--s-card) * (var(--lh) - 0.71) / 2);
+    margin-top: calc(16px - 8px * (1.2 - 0.714) / 2 - var(--trim));
+    font-size: var(--s-card);
+    text-wrap: balance;
+  }
+  a.wcard:hover .wcard-title {
+    text-decoration: underline;
     text-decoration-thickness: 1px;
     text-underline-offset: 0.14em;
   }
-  .me-wlabel,
-  .me-wbody {
-    padding: 0 12px;
-  }
-  .me-wlabel {
-    margin-top: 16px;
-  }
-  .me-wtitle {
-    margin: 8px 0 0;
-    font-size: 26px;
-    font-weight: 400;
-    line-height: 1.12;
-    letter-spacing: -0.012em;
-    color: var(--fg);
-    text-wrap: balance;
-  }
-  .me-wdesc {
-    margin: 7.6px 0 0;
-    font-size: 15px;
-    line-height: 1.55;
-    letter-spacing: 0.02em;
-    color: var(--fg85);
+  /* Set close, on 20. */
+  .wcard-desc {
+    --trim: 4.32px;
+    margin-top: calc(16px - var(--s-card) * (1.25 - 0.71) / 2 - var(--trim));
+    line-height: 20px;
     text-wrap: pretty;
   }
-  @media (min-width: 600px) and (max-width: 899px) {
-    .me-wgrid {
+  /* The throughlines: the phone's headline size, the statement size on the desktop. */
+  .wthrough {
+    --s-state: var(--s-head);
+    --trim-s: calc(var(--s-state) * 0.23);
+    margin: calc(96px - var(--trim-s)) auto calc(72px - var(--trim-s));
+    max-width: 16.5em;
+    font-size: var(--s-state);
+    text-align: center;
+  }
+  @media (min-width: 600px) {
+    .wgrid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+    .wcard:nth-child(2n)::before {
+      display: block;
+    }
   }
-
   @media (min-width: 900px) {
-    .me-wsec {
-      padding-top: clamp(128px, 13.333vw, 192px);
+    .wgrid {
+      --wg: 36px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      row-gap: 24px;
     }
-    .me-wsec-first {
-      padding-top: clamp(72px, 7.222vw, 104px);
+    .wcard:nth-child(2n)::before {
+      display: none;
     }
-    .me-wsec-last {
-      padding-bottom: clamp(128px, 13.333vw, 192px);
+    .wcard:not(:nth-child(3n + 1))::before {
+      display: block;
     }
-    .me-wsec-title {
-      margin-top: 16px;
-      font-size: 36px;
-      letter-spacing: -0.014em;
-    }
-
-    /* Each card spans three rows of the grid (subgrid), so the images, labels
-       and titles of the cards in a row line up across it; each card's words
-       follow its title. */
-    .me-wgrid {
-      margin-top: 48px;
-      grid-template-columns: repeat(12, minmax(0, 1fr));
-      column-gap: var(--gap);
-      row-gap: 0;
-    }
-    .me-wcard {
-      grid-column: span 3;
-      grid-row: span 3;
-      display: grid;
-      grid-template-rows: subgrid;
-      row-gap: 0;
-      padding-bottom: 0;
-    }
-    .me-wlabel,
-    .me-wbody {
-      padding: 0 20px;
-    }
-    .me-wlabel {
-      margin-top: 20px;
-    }
-    .me-wtitle {
-      margin-top: 10px;
-      line-height: 1.14;
-      letter-spacing: -0.01em;
-    }
-    .me-wdesc {
-      margin-top: 4.52px;
-      margin-bottom: 20px;
-      font-size: 17px;
-      line-height: 1.65;
-      letter-spacing: 0.01em;
-    }
-    /* Rows after the first: the gap goes on the cards, not the grid, since a
-       row gap would also open between the rows each card shares. */
-    .me-wcard:nth-child(n + 5) {
-      margin-top: var(--gap);
+    .wthrough {
+      margin: calc(2 * var(--pitch) - var(--trim-s)) auto calc(1.5 * var(--pitch) - var(--trim-s));
     }
   }
-  @media (min-width: 900px) and (max-width: 1199px) {
-    .me-wcard {
-      grid-column: span 6;
+  @media (min-width: 1200px) {
+    .wgrid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
     }
-    .me-wcard:nth-child(n + 3) {
-      margin-top: var(--gap);
+    .wcard:not(:nth-child(3n + 1))::before {
+      display: none;
+    }
+    .wcard:not(:nth-child(4n + 1))::before {
+      display: block;
     }
   }
 </style>
